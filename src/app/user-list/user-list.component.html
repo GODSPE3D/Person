@@ -17,22 +17,22 @@
     <th>Email</th>
 	<th>Actions</th>
   </tr>
-  <tr *ngFor="let user of p">
+  <tr *ngFor="let user of users">
     <td>{{user.id}}</td>
     <td>{{user.firstname}}</td>
-    <td>{{user.lastname}}</td>
+    <!-- <td>{{user.lastname}}</td>
     <td>{{user.email}}</td>
     <td>{{user.contact}}</td>
     <td>{{user.address}}</td>
     <td>{{user.education}}</td>
     <td>{{user.pwd}}</td>
-    <td>{{user.aadhaar}}</td>
+    <td>{{user.aadhaar}}</td> -->
 	<td>
 		<a routerLink="/person/{{user.id}}">Details</a>
 		 
 		<a routerLink="/update/{{user.id}}">Edit</a>
 		 
-		<!-- <button title="delete user" (click)="delete(user)">x</button> -->
+		<button title="delete user" (click)="delete(user)">x</button>
 	</td>
   </tr>
 </table>

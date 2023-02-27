@@ -31,6 +31,8 @@ export class UserService {
     return this.http.get<User[]>(this.userUrl + '/person/');
   }
 
+  // public deleteUser()
+
   // sayHi() {
   //   this.http.get(this.userUrl + '/person').pipe(map(data => {}))
   // }
