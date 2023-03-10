@@ -1,0 +1,12 @@
+<p>person-detail works!</p>
+<h2>{{newP.firstname}} Detail</h2>
+<div>Id: {{newP._id}}</div>
+<label for="hero-name">Name: </label>
+<input type="text" id="hero-name" [(ngModel)]="newP.firstname">
+
+<label for="hero-power">Phone: </label>
+<input type="text" for="hero-name" [(ngModel)]="newP.contact">
+
+<button type="button" (click)="goBack()">go back</button>
+<button type="button" (click)="save()">save</button>
+<!-- <p>Person Detail: {{newP}}</p> -->

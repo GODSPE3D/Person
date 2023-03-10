@@ -10,7 +10,7 @@ export interface Person {
     aadhaar: number;
 
     // constructor(
-    //     public id: number,
+    //     public _id: number,
     //     public firstname: string,
     //     public lastname: string,
     //     public email: string,
@@ -21,3 +21,7 @@ export interface Person {
     //     public aadhaar: number
     // ) { }
 }
+
+// const p = {} as Person;
+
+// let person = {} as Person;
