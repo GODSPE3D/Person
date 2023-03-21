@@ -1,203 +1,49 @@
-<!-- <p>person-list works!</p> -->
-<!-- <div class="card">
-  <p-toolbar styleClass="mb-4 gap-2">
-    <ng-template pTemplate="left">
-      <button pButton pRipple label="New" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNew()"></button>
-    </ng-template>
-  </p-toolbar>
+<!-- <app-person-detail (newNameEvent)="addName($event)"></app-person-detail>
+{{newPerson.firstname}} -->
+
+<!-- <app-person-detail [newP]="currentItem"></app-person-detail> -->
+
+<!-- <ul>
+    <li *ngFor="let p of person">
+        <a routerLink="/person/{{p._id}}">
+            <span class="badge">{{p._id}}</span> {{p.firstname}}
+        </a>
+    </li>
+</ul> -->
+
+<!-- <div class="person-menu">
+    <a *ngFor="let p of person" routerLink="/person/{{p._id}}">{{p.firstname}}</a>
 </div> -->
-
-<!-- <p-toolbar>
-  <div class="p-toolbar-group-start">
-      <p-button label="New" icon="pi pi-plus"></p-button>
-      <p-button label="Upload" icon="pi pi-upload" styleClass="p-button-success"></p-button>
-
-      <i class="pi pi-bars"></i>
-
-      <p-splitButton label="Save" icon="pi pi-check" [model]="items" styleClass="p-button-warning"></p-splitButton>
-  </div>
-
-  <div class="p-toolbar-group-end">
-      <p-button icon="pi pi-search"></p-button>
-      <p-button icon="pi pi-calendar" styleClass="p-button-success"></p-button>
-      <p-button icon="pi pi-times" styleClass="p-button-danger"></p-button>
-  </div>
-</p-toolbar> -->
-
-<!-- <div>
-  <label for="new-hero">Person name: </label> -->
-<!-- <input id="new-hero" #personName /> -->
-<!-- <button type="button" class="add-button" (click)="addPerson()"></button> -->
-<!-- </div> -->
-
-<!-- <p-accordion>
-  <p-accordionTab *ngFor="let px of person" header="{{px._id}}">
-  <h1>{{px.firstname}}</h1>
-  </p-accordionTab>
-</p-accordion> -->
-
-<!-- <p-table [value]="person">
-  <ng-template pTemplate="header">
-    <tr>
-      <th style="width:20%">ID</th>
-      <th style="width:20%">Firstname</th>
-      <th style="width:20%">Lastname</th>
-      <th style="width:20%">Email</th>
-      <th style="width:20%">Actions</th>
-    </tr>
-  </ng-template>
-  <ng-template pTemplate="body" let-product>
-    <tr>
-      <p-accordion>
-        <p-accordionTab *ngFor="let px of person" header="{{px._id}}">
-        <h1>{{px.firstname}}</h1>
-        <td>{{product._id}}</td>
-      <td>{{product.firstname}}</td>
-      <td>{{product.lastname}}</td>
-      <td>{{product.email}}</td>
-      <td><button pButton pRipple type="button" icon="pi pi-pencil"
-          class="p-button-rounded p-button-info p-button-text"></button><button pButton pRipple type="button"
-          icon="pi pi-times" class="p-button-rounded p-button-danger p-button-text"></button></td>
-        </p-accordionTab>
-      </p-accordion>
-    </tr>
-  </ng-template>
-</p-table> -->
-
 <!-- <button pButton pRipple label="New" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNew()"></button> -->
+<!-- <ul>
+    <li *ngFor="let hero of person">
+        {{hero._id}} -->
+        <!-- <button type="button" (click)="selectPerson(hero); showchildModal()">
+            {{hero.firstname}}
+        </button> -->
+        <!-- <button [routerLink]="['/person/{{hero._id}}']">{{hero.firstname}}</button> -->
+        <!-- <a routerLink="/person/{{hero._id}}">{{hero.firstname}}</a> -->
+        <!-- <app-person-detail *ngIf="currentItem" [newP]="currentItem"></app-person-detail> -->
+    <!-- </li>
+</ul> -->
+<!-- <app-person-detail *ngIf="currentItem" [newP]="currentItem"></app-person-detail> -->
+<!-- <a *ngFor="let hero of person" routerLink="/person/{{hero._id}}">{{hero.firstname}}</a> -->
+<!-- <h2>My Heroes</h2>
+<ul class="heroes">
+  <li *ngFor="let hero of person">
+    <a routerLink="/person/{{hero._id}}">
+      <span class="badge">{{hero._id}}</span> {{hero.firstname}}
+    </a>
+  </li>
+</ul> -->
 
-<!-- <p-dialog [(visible)]="personDialog" [style]="{width: '450px'}" header="Product Details" [modal]="true"
-  styleClass="p-fluid">
-  <ng-template pTemplate="content"> -->
-<!-- <img [src]="'https://primefaces.org/cdn/primeng/images/demo/product/' + person.image" [alt]="product.image" class="product-image" *ngIf="product.image">  -->
-<!-- <div class="field">
-      <label for="name">Firstname</label>
-      <input type="text" pInputText id="name" [(ngModel)]="p.firstname" required autofocus />
-      <small class="p-error" *ngIf="submitted && !p.firstname">Name is required.</small>
-    </div>
-
-    <div class="field">
-      <label for="name">Lastname</label>
-      <input type="text" pInputText id="name" [(ngModel)]="p.lastname" required autofocus />
-      <small class="p-error" *ngIf="submitted && !p.lastname">Name is required.</small>
-    </div>
-
-    <div class="field">
-      <label for="email">Email</label>
-      <input type="text" pInputText id="email" [(ngModel)]="p.email" required autofocus />
-      <small class="p-error" *ngIf="submitted && !p.email">Email is required.</small>
-    </div> -->
-
-<!-- <div class="field">
-      <label for="name">Contact</label>
-      <p-inputNumber inputId="integeronly" [(ngModel)]="p.contact">
-      </p-inputNumber>
-      <small class="p-error" *ngIf="submitted && !p.contact">Name is required.</small>
-    </div> -->
-
-<!-- <divs -->
-
-<!-- <div class="field">
-          <label for="inventoryStatus">Inventory Status</label>
-          <p-dropdown [(ngModel)]="product.inventoryStatus" inputId="inventoryStatus" [options]="statuses" placeholder="Select">
-              <ng-template let-option pTemplate="item">
-                  <span [class]="'product-badge status-' + option.value">{{option.label}}</span>
-              </ng-template>
-          </p-dropdown>
-      </div> -->
-
-<!-- <div class="field">
-          <label class="mb-3">Category</label>
-          <div class="formgrid grid">
-              <div class="field-radiobutton col-6">
-                  <p-radioButton id="category1" name="category" value="Accessories" [(ngModel)]="p.category"></p-radioButton>
-                  <label for="category1">Accessories</label>
-              </div>
-              <div class="field-radiobutton col-6">
-                  <p-radioButton id="category2" name="category" value="Clothing" [(ngModel)]="product.category"></p-radioButton>
-                  <label for="category2">Clothing</label>
-              </div>
-              <div class="field-radiobutton col-6">
-                  <p-radioButton id="category3" name="category" value="Electronics" [(ngModel)]="product.category"></p-radioButton>
-                  <label for="category3">Electronics</label>
-              </div>
-              <div class="field-radiobutton col-6">
-                  <p-radioButton id="category4" name="category" value="Fitness" [(ngModel)]="product.category"></p-radioButton>
-                  <label for="category4">Fitness</label>
-              </div>
-          </div>
-      </div> -->
-
-<!-- <div class="formgrid grid">
-      <div class="field col">
-        <label for="price">Price</label>
-        <p-inputNumber id="price" [(ngModel)]="p.price" mode="currency" currency="USD"
-          locale="en-US"></p-inputNumber>
-      </div>
-      <div class="field col">
-        <label for="quantity">Quantity</label>
-        <p-inputNumber id="quantity" [(ngModel)]="product.quantity"></p-inputNumber>
-      </div>
-    </div> -->
-<!-- </ng-template>
-
-  <ng-template pTemplate="footer">
-    <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button> -->
-<!-- <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text" (click)="saveProduct()"></button> -->
-<!-- </ng-template>
-</p-dialog> -->
-
-
-
-<h3>Users</h3>
-<div>
-  <a routerLink="/person">
-    Add New User
+<h2>Top Heroes</h2>
+<div class="heroes-menu">
+  <a *ngFor="let hero of person"
+    routerLink="/person/{{hero._id}}">
+    {{hero.firstname}}
   </a>
 </div>
-
-<!-- <table>
-  <tr>
-    <th>ID</th>
-    <th>Name</th>
-    <th>Email</th>
-    <th>Actions</th>
-  </tr>
-  <tr *ngFor="let user of person">
-    <td>{{user._id}}</td>
-    <td>{{user.firstname}}</td>
-    <td>{{user.email}}</td>
-    <a [routerLink]="['/person', user._id]">Details -->
-      <!-- <span class="badge">{{ user._id }}</span>{{ user.firstname }} -->
-    <!-- </a>
-    <td> -->
-      <!-- <a routerLink="/{{user._id}}" id="">Detail </a>
-		<a routerLink="/{{user._id}}" style="text-decoration: none;">Edit</a> -->
-      <!-- <a [routerLink]="[user._id]">Heroes</a> -->
-      <!-- <button title="delete user" (click)="delete(user)">x</button> -->
-    <!-- </td>
-  </tr>
-</table> -->
-
-<ul>
-  <li *ngFor="let hero of person">
-    <button type="button" (click)="selectPerson(hero)">
-      {{hero.firstname}}
-    </button>
-  </li>
-</ul>
-
-<app-person-detail *ngIf="currentItem" [newP]="currentItem"></app-person-detail>
-<!-- <div *ngIf="p">
-  <h2>{{p.firstname | uppercase}} Details</h2>
-  <div><span>Id: </span>{{p._id}}</div>
-  <div>
-    <p>
-      Name: {{p.firstname}}
-    </p>
-    <p>
-      Email: {{p.email}}
-    </p>
-  </div>
-  <button (click)="goBack()">go back</button>
-</div> -->
+<!-- <app-person-detail></app-person-detail> -->
+<!-- <app-person-detail *ngFor="let hero of person" [newP]="hero"></app-person-detail> -->
+<!-- <app-person-detail #child></app-person-detail> -->

@@ -4,20 +4,11 @@ import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
+import { ButtonModule } from 'primeng/button';
 import { TableModule } from 'primeng/table';
 import { ToolbarModule } from 'primeng/toolbar';
-import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
-import { AccordionModule } from 'primeng/accordion';
-import { PanelModule } from 'primeng/panel';
-import { PanelMenuModule } from 'primeng/panelmenu';
-import { RadioButtonModule } from 'primeng/radiobutton';
-import {InputTextModule} from 'primeng/inputtext';
-import {InputNumberModule} from 'primeng/inputnumber';
-import {InputTextareaModule} from 'primeng/inputtextarea';
-import {PasswordModule} from 'primeng/password';
-
-
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
 
 @NgModule({
   declarations: [
@@ -26,21 +17,14 @@ import {PasswordModule} from 'primeng/password';
     FormsModule,
     CommonModule,
     HttpClientModule,
-    TableModule,
-    AccordionModule,
-    PanelModule,
-    ButtonModule,
-    RadioButtonModule,
-    DialogModule,
     BrowserAnimationsModule,
-    ToolbarModule,
-    PanelMenuModule,
-    InputTextModule,
-    InputNumberModule,
-    InputTextareaModule,
-    PasswordModule,
   ],
   exports: [
+    TableModule,
+    ButtonModule,
+    ToolbarModule,
+    DialogModule,
+    ConfirmDialogModule
   ]
 })
 export class PersonModule { }

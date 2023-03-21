@@ -1,4 +1,6 @@
-export interface Person {
+const _id = '_id' as string;
+
+export interface IPerson {
     _id: number;
     firstname: string;
     lastname: string;
@@ -21,7 +23,3 @@ export interface Person {
     //     public aadhaar: number
     // ) { }
 }
-
-// const p = {} as Person;
-
-// let person = {} as Person;

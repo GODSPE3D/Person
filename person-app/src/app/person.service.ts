@@ -1,13 +1,14 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { map, Observable, tap } from 'rxjs';
-import { Person } from './person';
+import { IPerson } from './person';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PersonService {
 
+  childModal!: Boolean;
   private personUrl = 'http://127.0.0.1:5000/person';
 
   httpOptions = {
@@ -20,30 +21,32 @@ export class PersonService {
   //   return this.http.get<Person[]>(this.personUrl);
   // }
 
-  // getPer(id: number): Observable<Person> {
-  //   return this.http.get<Person>(this.personUrl + `/${id}`);
-  // }
-
   // public addPerson(singlePerson: Person): Observable<Person> {
   //   return this.http.post<Person>(this.personUrl, singlePerson);
   // }
 
-  getPerson(): Observable<Person[]> {
-    return this.http.get<Person[]>(this.personUrl);
+  getPersonAll(): Observable<IPerson[]> {
+    return this.http.get<IPerson[]>(this.personUrl);
   }
 
-  addPerson(p: Person): Observable<Person> {
-    return this.http.post<Person>(this.personUrl, p);
+  getPerson(id: number): Observable<IPerson> {
+    const url = `${this.personUrl}/${id}`;
+    return this.http.get<IPerson>(url).pipe(map((p: IPerson) => p));
   }
 
-  deletePerson(id: number): Observable<Person> {
+  addPerson(p: IPerson): Observable<IPerson> {
+    return this.http.post<IPerson>(this.personUrl, p);
+  }
+
+  deletePerson(id: number): Observable<IPerson> {
     const url = `${this.personUrl}/${id}`;
 
-    return this.http.delete<Person>(url, this.httpOptions);
+    return this.http.delete<IPerson>(url, this.httpOptions);
   }
 
-  updatePerson(p: Person): Observable<any> {
-    return this.http.put(this.personUrl, p, this.httpOptions);
+  updatePerson(id: number, p: IPerson): Observable<IPerson> {
+    const url = `${this.personUrl}/${id}`;
+    return this.http.put<IPerson>(url, p, this.httpOptions);
   }
 
   // getP(id: number): Observable<Person> {
