@@ -1,7 +1,7 @@
 <!-- <p>person-detail works!</p> -->
 <!-- <h2>{{x.firstname}} Detail</h2>
-<div>Id: {{x._id | json}}</div> -->
-<!-- <label for="hero-name">Name: </label>
+<div>Id: {{x._id | json}}</div>
+<label for="hero-name">Name: </label>
 <input type="text" id="hero-name" [(ngModel)]="x.firstname">
 
 <label for="hero-power">Phone: </label>
@@ -25,23 +25,84 @@
     </article>
 </div> -->
 
-<div *ngIf="x">
+<!-- <div *ngIf="x">
+    <h1>{{x._id}}</h1>
     <p>Without JSON pipe:</p>
     <p>{{x}}</p>
     <pre>{{x}}</pre>
     <p>With JSON pipe:</p>
     <pre>{{x | json}}</pre>
+
+    {{x | json}}
+</div> -->
+
+<!-- <p-toast></p-toast>
+<div *ngFor="let y of x">
+    <h2>{{y.firstname | uppercase}} Details</h2>
+    <div><span>ID: </span>{{y._id}}</div>
+    <div>
+        <label for="person-name">Person name: </label> -->
+<!-- <input type="text" pInputText [(ngModel)]="y.firstname" placeholder="Person name"/> -->
+<!-- <input pInputText type="text" class="p-inputtext-sm" placeholder="Firstname" [(ngModel)]="y.firstname" />
+    </div> -->
+<!-- <br> -->
+<!-- <button type="button" (click)="goBack()">go back</button> -->
+<!-- <p-button label="Go Back" styleClass="p-button-sm p-button-secondary" icon="pi pi-arrow-left" (onClick)="goBack()"></p-button> -->
+<!-- <button type="button" pButton pRipple (click)="save()" label="Save" icon="pi pi-check" class="p-button-sm p-button-success"></button> -->
+<!-- </div> -->
+
+<h1 mat-dialog-title>Dialog with elements</h1>
+<div mat-dialog-content>
+    <mat-form-field appearance="fill">
+        <mat-label>Firstname</mat-label>
+        <input matInput [(ngModel)]="x.firstname">
+    </mat-form-field>
+    <mat-form-field>
+        <mat-label>Lastname</mat-label>
+        <input matInput [(ngModel)]="x.lastname">
+    </mat-form-field>
+    <mat-form-field>
+        <mat-label>Email</mat-label>
+        <input type="email" matInput [(ngModel)]="x.email" [formControl]="emailFormControl">
+        <mat-error *ngIf="emailFormControl.hasError('email') && !emailFormControl.hasError('required')">
+            Please enter a valid email address
+        </mat-error>
+        <mat-error *ngIf="emailFormControl.hasError('required')">
+            Email is <strong>required</strong>
+        </mat-error>
+    </mat-form-field>
 </div>
+<div mat-dialog-actions align="end">
+    <button mat-raised-button mat-dialog-close>Save</button>
+    <button mat-raised-button mat-dialog-close color="accent">Close</button>
+</div>
+
+
+<!-- <h1 mat-dialog-title>Hi</h1>
+<div mat-dialog-content>
+  <p>What's your favorite animal?</p>
+  <mat-form-field appearance="fill">
+    <mat-label>Favorite Animal</mat-label>
+    <input matInput [(ngModel)]="data.animal">
+  </mat-form-field>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="onNoClick()">No Thanks</button>
+  <button mat-button [mat-dialog-close]="data.animal" cdkFocusInitial>Ok</button>
+</div> -->
+
+
+
 
 <!-- <p-button (click)="showModalDialog(true)" icon="pi pi-external-link" label="Show"></p-button> -->
 <!-- <p-dialog header="Header" [(visible)]="displayModal" [modal]="true" [style]="{width: '50vw'}" [draggable]="false" [resizable]="false"> -->
-    <!-- <p class="m-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
+<!-- <p class="m-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
         et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
         laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
         cillum dolore eu fugiat nulla pariatur.
         Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
     </p> -->
-    <!-- <ng-template pTemplate="footer">
+<!-- <ng-template pTemplate="footer">
         <h2>{{newP.firstname}} Detail</h2>
         <div>Id: {{newP._id}}</div>
         <label for="hero-name">Name: </label>

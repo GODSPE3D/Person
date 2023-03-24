@@ -1,7 +1,5 @@
-const _id = '_id' as string;
-
-export interface IPerson {
-    _id: number;
+export interface Person {
+    isSelected: boolean;
     firstname: string;
     lastname: string;
     email: string;
@@ -10,16 +8,50 @@ export interface IPerson {
     education: string;
     pwd: string;
     aadhaar: number;
-
-    // constructor(
-    //     public _id: number,
-    //     public firstname: string,
-    //     public lastname: string,
-    //     public email: string,
-    //     public contact: number,
-    //     public address: string,
-    //     public education: string,
-    //     public pwd: string,
-    //     public aadhaar: number
-    // ) { }
+    isEdit: boolean;
+    _id?: number;
 }
+
+export const PersonColumns = [
+    {
+        key: 'isSelected',
+        type: 'isSelected',
+        label: '',
+    },
+    {
+        key: 'firstname',
+        type: 'text',
+        label: 'First Name',
+    },
+    {
+        key: 'lastname',
+        type: 'text',
+        label: 'Last Name',
+    },
+    {
+        key: 'email',
+        type: 'email',
+        label: 'Email',
+        required: true,
+    },
+    {
+        key: 'contact',
+        type: 'number',
+        label: 'Contact',
+    },
+    {
+        key: 'address',
+        type: 'text',
+        label: 'Address',
+    },
+    {
+        key: 'education',
+        type: 'text',
+        label: 'Education',
+    },
+    {
+        key: 'isEdit',
+        type: 'isEdit',
+        label: '',
+    },
+];

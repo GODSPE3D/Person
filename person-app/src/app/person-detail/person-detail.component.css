@@ -1,18 +1,24 @@
-:host ::ng-deep .p-button {
-    margin: 0 .5rem 0 0;
-    min-width: 10rem;
+mat-form-field {
+    margin-right: 8px;
 }
 
-p {
-    margin: 0;
+mat-dialog-content mat-form-field {
+    width: 220px;
 }
 
-.confirmation-content {
+mat-dialog-content form {
+    margin-bottom: 20px;
+}
+
+.mat-dialog-content form > * {
+    margin: 12px 0;
+}
+
+/* .mat-dialog-content .mat-radio-button {
+    margin: 0 12px;
+} */
+
+.mat-dialog-content {
     display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-:host ::ng-deep .p-dialog .p-button {
-    min-width: 6rem;
+    align-items: flex-start;
 }

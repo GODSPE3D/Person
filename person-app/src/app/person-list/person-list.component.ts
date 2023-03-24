@@ -1,12 +1,15 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 
-import { IPerson } from '../person';
+import { Person, PersonColumns } from '../person';
 import { PersonService } from '../person.service';
 import { ConfirmationService, MessageService } from 'primeng/api';
 // import { ActivatedRoute, Router } from '@angular/router';
 // import { Observable, switchMap } from 'rxjs';
 import { Location } from '@angular/common';
 import { PersonDetailComponent } from '../person-detail/person-detail.component';
+import { SelectionModel } from '@angular/cdk/collections';
+import { MatTableDataSource } from '@angular/material/table';
+import {MatDialog} from '@angular/material/dialog';
 
 @Component({
   selector: 'app-person-list',
@@ -16,23 +19,113 @@ import { PersonDetailComponent } from '../person-detail/person-detail.component'
 })
 export class PersonListComponent implements OnInit {
   personDialog!: boolean;
-  person: IPerson[] = [];
-  newPerson = {} as IPerson;
-  selectedPeople: IPerson[] = [];
-  currentItem!: IPerson;
+  person: Person[] = [];
+  newPerson = {} as Person;
+  selectedPeople: Person[] = [];
+  currentItem!: Person;
   yes!: true;
   submitted: boolean | undefined;
+
   // @ViewChild(PersonDetailComponent, {static: true}) child!: PersonDetailComponent;
 
-  constructor(private personService: PersonService, private confirmationService: ConfirmationService, private messageService: MessageService, private location: Location) { }
+  selection = new SelectionModel<Person>(false, []);
+
+  constructor(private personService: PersonService, public dialog: MatDialog) { }
+
+  displayedColumns: string[] = PersonColumns.map((col) => col.key);
+  dataSource = new MatTableDataSource<Person>();
+  columnsSchema: any = PersonColumns;
+  valid: any = {}
 
   ngOnInit(): void {
     this.getPersonAll();
   }
 
+  // onNoClick(): void {
+  //   this.dialogRef.close();
+  // }
+
+  openDialog() {
+    this.dialog.open(PersonDetailComponent);
+  }
+
+  onPersonToggled(person: Person) {
+    this.selection.toggle(person);
+    console.log(this.selection.selected);
+  }
+
+  // isAnySelected() {
+  //   return this.dataSource.((item: any) => item.isSelected);
+  // }
+
   getPersonAll(): void {
-    this.personService.getPersonAll()
-    .subscribe(person => this.person = person);
+    // this.personService.getPersonAll()
+    //   .subscribe(person => this.person = person);
+    this.personService.getPersonAll().subscribe((res: any) => {
+      this.dataSource.data = res;
+      console.log(this.dataSource.data);
+    })
+  }
+
+  editPerson(newP: Person) {
+    // this.personService.updatePerson(person._id, person).subscribe(() => person.isEdit = false);
+    if (newP._id == null) {
+      this.personService.addPerson(newP).subscribe((newPerson: Person) => {
+        newP._id = newPerson._id;
+        newP.isEdit = false;
+      });
+    } else {
+      this.personService.updatePerson(newP._id, newP).subscribe(() => newP.isEdit = false);
+    }
+  }
+
+  addPerson() {
+    const newRow: Person = {
+      firstname: '',
+      lastname: '',
+      email: '',
+      contact: 0,
+      address: '',
+      education: '',
+      pwd: '',
+      aadhaar: 0,
+      isEdit: true,
+      isSelected: false,
+    };
+    this.personService.addPerson(newRow);
+  }
+
+  onRowClicked(row: number) {
+    console.log('Row clicked: ', row);
+  }
+
+  inputHandler(e: any, id: number, key: string) {
+    if (!this.valid[id]) {
+      this.valid[id] = {}
+    }
+    this.valid[id][key] = e.target.validity.valid
+  }
+
+  disableSubmit(id: number) {
+    if (this.valid[id]) {
+      return Object.values(this.valid[id]).some((item) => item === false)
+    }
+    return false
+  }
+
+  isAllSelected() {
+    return this.dataSource.data.every((item) => item.isSelected)
+  }
+
+  isAnySelected() {
+    return this.dataSource.data.some((item) => item.isSelected)
+  }
+
+  selectAll(event: any) {
+    this.dataSource.data = this.dataSource.data.map((item) => ({
+      ...item,
+      isSelected: event.checked,
+    }))
   }
 
   // openNew() {
@@ -127,14 +220,19 @@ export class PersonListComponent implements OnInit {
   //   }
   // }
 
-  selectPerson(x: IPerson) {
+  selectPerson(x: Person) {
     this.currentItem = x;
   }
 
-  // delete(newP: Person) {
-  //   this.person = this.person.filter(p => p !== newP);
-  //   this.personService.deletePerson(newP._id).subscribe();
-  // }
+  deletePerson(id: number) {
+    // this.person = this.person.filter(p => p !== newP);
+    // this.personService.deletePerson(newP._id).subscribe();
+    this.personService.deletePerson(id).subscribe(() => {
+      this.dataSource.data = this.dataSource.data.filter(
+        (p: Person) => p._id !== id
+      );
+    });
+  }
 
   // selectPerson(newP: Person) { this.selectedPerson = newP; }
 
