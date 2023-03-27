@@ -1,15 +1,11 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-
+import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { Person, PersonColumns } from '../person';
 import { PersonService } from '../person.service';
 import { ConfirmationService, MessageService } from 'primeng/api';
-// import { ActivatedRoute, Router } from '@angular/router';
-// import { Observable, switchMap } from 'rxjs';
-import { Location } from '@angular/common';
 import { PersonDetailComponent } from '../person-detail/person-detail.component';
 import { SelectionModel } from '@angular/cdk/collections';
 import { MatTableDataSource } from '@angular/material/table';
-import {MatDialog} from '@angular/material/dialog';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-person-list',
@@ -25,12 +21,34 @@ export class PersonListComponent implements OnInit {
   currentItem!: Person;
   yes!: true;
   submitted: boolean | undefined;
+  status: boolean = false;
 
-  // @ViewChild(PersonDetailComponent, {static: true}) child!: PersonDetailComponent;
+  @ViewChild('addP', {static: true}) addP!: TemplateRef<any>;
+  @ViewChild(PersonDetailComponent) child!: PersonDetailComponent;
 
   selection = new SelectionModel<Person>(false, []);
 
   constructor(private personService: PersonService, public dialog: MatDialog) { }
+
+  @ViewChild('secondDialog', { static: true }) secondDialog!: TemplateRef<any>;
+  @ViewChild('this.child.customDialog') print!: TemplateRef<any>;
+  
+  openDialogWithTemplateRef(templateRef: TemplateRef<any>) {
+    this.dialog.open(templateRef);
+  }
+
+  buttonClick() {
+    this.child.openDialog();
+  }
+
+  buttonClick2() {
+    this.child.openDialog2();
+  }
+
+  openDialogWithoutRef() {
+    this.dialog.open(this.secondDialog);
+    console.log(this.secondDialog);
+  }
 
   displayedColumns: string[] = PersonColumns.map((col) => col.key);
   dataSource = new MatTableDataSource<Person>();
@@ -39,14 +57,6 @@ export class PersonListComponent implements OnInit {
 
   ngOnInit(): void {
     this.getPersonAll();
-  }
-
-  // onNoClick(): void {
-  //   this.dialogRef.close();
-  // }
-
-  openDialog() {
-    this.dialog.open(PersonDetailComponent);
   }
 
   onPersonToggled(person: Person) {
