@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, DoCheck, ViewChild, Directive } from '@angular/core';
+import { Component, Input, Output, EventEmitter, DoCheck, TemplateRef, ViewChild, Directive, HostListener } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 import { MessageService } from 'primeng/api';
@@ -18,6 +18,8 @@ export class PersonDetailComponent {
 
   @Input() newP!: Person;
   x = {} as Person;
+  // @Output() clicks: EventEmitter<any> = new EventEmitter();
+  // @Output() clicks2: EventEmitter<any> = new EventEmitter();
 
   // displayModal!: boolean;
   // @Output() newPersonEvent = new EventEmitter<Person>();
@@ -30,12 +32,17 @@ export class PersonDetailComponent {
   //   this.newPersonEvent.emit(newPerson);
   // }
 
+  // childClick(){
+  //   this.clicks.emit();
+  //   // this.dialog.open(this.customDialog2);
+  // }
+
   constructor(
     private route: ActivatedRoute,
     private personService: PersonService,
     private messageService: MessageService,
     private location: Location,
-    public dialogRef: MatDialogRef<PersonDetailComponent>
+    private dialog: MatDialog
   ) { }
 
   // @ViewChild('childModal') childModal!: Directive;
@@ -45,6 +52,23 @@ export class PersonDetailComponent {
   }
 
   emailFormControl = new FormControl('', [Validators.required, Validators.email]);
+
+  @ViewChild('addP') customDialog!: TemplateRef<any>;
+  @ViewChild('editPerson') customDialog2!: TemplateRef<any>;
+
+  openDialog() {
+    this.dialog.open(this.customDialog);
+  }
+
+  openDialog2() {
+    this.dialog.open(this.customDialog2);
+  }
+
+  // addP!: TemplateRef<any>;
+
+  // openDialogWithoutRef(templateRef: TemplateRef<any>) {
+  //   this.dialog.open(templateRef);
+  // }
 
   // openDialog(): void {
   //   // const dialogRef = this.dialog.open(PersonListComponent, {
