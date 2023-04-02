@@ -6,6 +6,7 @@ import { PersonDetailComponent } from '../person-detail/person-detail.component'
 import { SelectionModel } from '@angular/cdk/collections';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
+import {Sort} from '@angular/material/sort';
 
 @Component({
   selector: 'app-person-list',
@@ -22,6 +23,7 @@ export class PersonListComponent implements OnInit {
   yes!: true;
   submitted: boolean | undefined;
   status: boolean = false;
+  // Object: Object;
 
   @ViewChild('addP', {static: true}) addP!: TemplateRef<any>;
   @ViewChild(PersonDetailComponent) child!: PersonDetailComponent;
@@ -59,6 +61,34 @@ export class PersonListComponent implements OnInit {
     this.getPersonAll();
   }
 
+  sortedPerson: Person[] = [];
+
+  sortData(sort: Sort) {
+    const data = this.person.slice();
+    if (!sort.active || sort.direction === '') {
+      this.sortedPerson = data;
+      return;
+    }
+
+    // this.sortedPerson = data.sort((a, b) => {
+    //   const isAsc = sort.direction === 'asc';
+    //   switch (sort.active) {
+    //     case 'firstname':
+    //       return compare(a.name, b.name, isAsc);
+    //     case 'lastname':
+    //       return compare(a.calories, b.calories, isAsc);
+    //     case 'fat':
+    //       return compare(a.fat, b.fat, isAsc);
+    //     case 'carbs':
+    //       return compare(a.carbs, b.carbs, isAsc);
+    //     case 'protein':
+    //       return compare(a.protein, b.protein, isAsc);
+    //     default:
+    //       return 0;
+    //   }
+    // });
+  }
+
   onPersonToggled(person: Person) {
     this.selection.toggle(person);
     console.log(this.selection.selected);
@@ -69,25 +99,25 @@ export class PersonListComponent implements OnInit {
   // }
 
   getPersonAll(): void {
-    // this.personService.getPersonAll()
-    //   .subscribe(person => this.person = person);
+    this.personService.getPersonAll()
+      .subscribe(person => this.person = person);
     this.personService.getPersonAll().subscribe((res: any) => {
       this.dataSource.data = res;
       console.log(this.dataSource.data);
     })
   }
 
-  editPerson(newP: Person) {
-    // this.personService.updatePerson(person._id, person).subscribe(() => person.isEdit = false);
-    if (newP._id == null) {
-      this.personService.addPerson(newP).subscribe((newPerson: Person) => {
-        newP._id = newPerson._id;
-        newP.isEdit = false;
-      });
-    } else {
-      this.personService.updatePerson(newP._id, newP).subscribe(() => newP.isEdit = false);
-    }
-  }
+  // editPerson(newP: Person) {
+  //   // this.personService.updatePerson(person._id, person).subscribe(() => person.isEdit = false);
+  //   if (newP._id == null) {
+  //     this.personService.addPerson(newP).subscribe((newPerson: Person) => {
+  //       newP._id = newPerson._id;
+  //       newP.isEdit = false;
+  //     });
+  //   } else {
+  //     this.personService.updatePerson(newP._id, newP).subscribe(() => newP.isEdit = false);
+  //   }
+  // }
 
   addPerson() {
     const newRow: Person = {
@@ -99,8 +129,6 @@ export class PersonListComponent implements OnInit {
       education: '',
       pwd: '',
       aadhaar: 0,
-      isEdit: true,
-      isSelected: false,
     };
     this.personService.addPerson(newRow);
   }
@@ -121,14 +149,6 @@ export class PersonListComponent implements OnInit {
       return Object.values(this.valid[id]).some((item) => item === false)
     }
     return false
-  }
-
-  isAllSelected() {
-    return this.dataSource.data.every((item) => item.isSelected)
-  }
-
-  isAnySelected() {
-    return this.dataSource.data.some((item) => item.isSelected)
   }
 
   selectAll(event: any) {
