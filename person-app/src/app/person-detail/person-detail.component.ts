@@ -3,58 +3,41 @@ import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 import { MessageService } from 'primeng/api';
 
-import {FormControl, Validators} from '@angular/forms';
-import { Person } from '../person';
+import { FormControl, Validators } from '@angular/forms';
+import { MatTableDataSource } from '@angular/material/table';
+import { Person, PersonColumns, P } from '../person';
 import { PersonService } from '../person.service';
-import { MatDialog, MatDialogConfig, MatDialogRef} from '@angular/material/dialog';
+import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
-  selector: 'app-person-detail',
+  selector: 'app-person-detail, [app-person-detail]',
   templateUrl: './person-detail.component.html',
   styleUrls: ['./person-detail.component.css'],
   providers: [MessageService]
 })
 export class PersonDetailComponent {
 
-  @Input() newP!: Person;
-  x = {} as Person;
-  // @Output() clicks: EventEmitter<any> = new EventEmitter();
-  // @Output() clicks2: EventEmitter<any> = new EventEmitter();
+  visible!: boolean;
+  newP = {} as Person;
 
-  // displayModal!: boolean;
-  // @Output() newPersonEvent = new EventEmitter<Person>();
+  @Input() x = {} as Person;
 
-  // @Output() newNameEvent = new EventEmitter<string>();
-  // newP: Person | undefined;
-  // person = {} as Person | undefined;
-
-  // addNewPerson(newPerson: Person) {
-  //   this.newPersonEvent.emit(newPerson);
-  // }
-
-  // childClick(){
-  //   this.clicks.emit();
-  //   // this.dialog.open(this.customDialog2);
-  // }
 
   constructor(
-    private route: ActivatedRoute,
-    private personService: PersonService,
-    private messageService: MessageService,
-    private location: Location,
-    private dialog: MatDialog
+    private route: ActivatedRoute, private personService: PersonService, private messageService: MessageService, private location: Location, private dialog: MatDialog
   ) { }
-
-  // @ViewChild('childModal') childModal!: Directive;
 
   ngOnInit(): void {
     // this.getPerson();
   }
-
+  
   emailFormControl = new FormControl('', [Validators.required, Validators.email]);
 
   @ViewChild('addP') customDialog!: TemplateRef<any>;
   @ViewChild('editPerson') customDialog2!: TemplateRef<any>;
+  // @ViewChild('MatTable') customTable!: TemplateRef<any>;
+
+  // displayedColumns: string[] = PersonColumns.map((col) => col.key);
 
   openDialog() {
     this.dialog.open(this.customDialog);
@@ -63,6 +46,41 @@ export class PersonDetailComponent {
   openDialog2() {
     this.dialog.open(this.customDialog2);
   }
+
+  IntParser() {
+    const entries = Object.keys(this.x);
+  }
+
+  //   makeTable (x: Person) {
+  //     // Check type
+  //     // if ( typeof x !== 'object' ) return false;
+
+  //     // Start our HTML
+  //     var html = "<table><tr><th>F</th><th>L</th></tr><tr>";
+  //     // Loop through members of the object
+  //     for ( var key in x ) {
+  //         // https://jslinterrors.com/the-body-of-a-for-in-should-be-wrapped-in-an-if-statement
+  //         // if ( !x.hasOwnProperty(key) ) continue;
+  //         // Add our row:
+
+  //         html += "<td>" + x.firstname + "</td>";
+  //     }
+  //     for ( var key in x ) {
+  //       // https://jslinterrors.com/the-body-of-a-for-in-should-be-wrapped-in-an-if-statement
+  //       // if ( !x.hasOwnProperty(key) ) continue;
+  //       // Add our row:
+
+  //       html += "<td>" + x.lastname + "</td>";
+  //   }
+  //     // Finish the table:
+  //     html += "</tr></table>";
+  //     // Return the table
+  //     return html;
+  // }
+
+  // getValue(index: string) {
+  //   return this.x[index];
+  // }
 
   // addP!: TemplateRef<any>;
 
@@ -86,6 +104,11 @@ export class PersonDetailComponent {
   //       dialogConfig.autoFocus = true;
 
   //       this.dialog.open(PersonDetailComponent, dialogConfig);
+  // }
+
+  // getPerson(): void {
+  //   // const id = parseInt(this.route.snapshot.paramMap.get("id")!, 10);
+  //   this.personService.getPerson(this.newP._id)
   // }
 
   // getPerson(): void {

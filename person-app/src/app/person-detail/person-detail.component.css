@@ -1,9 +1,26 @@
-.parent {
-    margin-left: 8px;
+ng-template.td {
+    border-right: 1px solid black;
 }
 
+:host{display:contents; }
+
 mat-form-field {
+    margin-top: 5px;
     margin-right: 8px;
+}
+
+.example-form {
+    min-width: 200px;
+    max-width: 730px;
+    width: 100%;
+}
+
+.example-full-width {
+    width: 100%;
+}
+
+.btn-edit {
+    padding: 0;
 }
 
 mat-dialog-content mat-form-field {
@@ -14,13 +31,9 @@ mat-dialog-content form {
     margin-bottom: 20px;
 }
 
-.mat-dialog-content form > * {
+.mat-dialog-content form>* {
     margin: 12px 0;
 }
-
-/* .mat-dialog-content .mat-radio-button {
-    margin: 0 12px;
-} */
 
 .mat-dialog-content {
     display: flex;

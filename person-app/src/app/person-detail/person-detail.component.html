@@ -1,90 +1,159 @@
-<!-- <p>person-detail works!</p> -->
-<!-- <h2>{{x.firstname}} Detail</h2>
-<div>Id: {{x._id | json}}</div>
-<label for="hero-name">Name: </label>
-<input type="text" id="hero-name" [(ngModel)]="x.firstname">
+<ng-container *ngTemplateOutlet="content"></ng-container>
 
-<label for="hero-power">Phone: </label>
-<input type="text" for="hero-power" [(ngModel)]="x.contact"> -->
+<ng-template #content>
+    {{x.firstname}}
+    <td>{{x.lastname}}</td>
+    <td>{{x.email}}</td>
+    <td>{{x.contact}}</td>
+    <td>
+        <button type="button" class="m-2 btn btn-primary" (click)="openDialog2()"><i
+                class="bi bi-pencil-square"></i></button>
+        <button type="button" class="m-1 btn btn-danger"><i class="bi bi-trash"></i></button>
+    </td>
+</ng-template>
 
-<!-- <button type="button" (click)="goBack()">go back</button>
-<button type="button" (click)="save()">save</button>
-<div *ngIf="x">
-    <h2>{{x.firstname | uppercase}} Details</h2>
-  <div><span>id: </span>{{x._id}}</div>
-  <div>
-    <label for="hero-name">Hero name: </label>
-    <input id="hero-name" [(ngModel)]="x.firstname" placeholder="Hero name"/>
-  </div>
-  <button type="button" (click)="goBack()">go back</button>
-</div> -->
-
-<!-- <div class="person-details">
-    <article>
-        <h2>{{x.firstname}}</h2>
-    </article>
-</div> -->
-
-<!-- <div *ngIf="x">
-    <h1>{{x._id}}</h1>
-    <p>Without JSON pipe:</p>
-    <p>{{x}}</p>
-    <pre>{{x}}</pre>
-    <p>With JSON pipe:</p>
-    <pre>{{x | json}}</pre>
-
-    {{x | json}}
-</div> -->
-
-<!-- <p-toast></p-toast>
-<div *ngFor="let y of x">
-    <h2>{{y.firstname | uppercase}} Details</h2>
-    <div><span>ID: </span>{{y._id}}</div>
-    <div>
-        <label for="person-name">Person name: </label> -->
-<!-- <input type="text" pInputText [(ngModel)]="y.firstname" placeholder="Person name"/> -->
-<!-- <input pInputText type="text" class="p-inputtext-sm" placeholder="Firstname" [(ngModel)]="y.firstname" />
-    </div> -->
-<!-- <br> -->
-<!-- <button type="button" (click)="goBack()">go back</button> -->
-<!-- <p-button label="Go Back" styleClass="p-button-sm p-button-secondary" icon="pi pi-arrow-left" (onClick)="goBack()"></p-button> -->
-<!-- <button type="button" pButton pRipple (click)="save()" label="Save" icon="pi pi-check" class="p-button-sm p-button-success"></button> -->
-<!-- </div> -->
-
-<!-- Dialog template to Edit Person -->
+<!-- Dialog template to Add Person -->
 <ng-template #addP>
-    <h1 mat-dialog-title>Dialog with elements</h1>
-    <mat-dialog-content>
-        <mat-form-field appearance="fill">
-            <mat-label>Firstname</mat-label>
-            <input matInput [(ngModel)]="x.firstname">
-        </mat-form-field>
-        <mat-form-field>
-            <mat-label>Lastname</mat-label>
-            <input matInput [(ngModel)]="x.lastname">
-        </mat-form-field>
-        <mat-form-field>
-            <mat-label>Email</mat-label>
-            <input type="email" matInput [(ngModel)]="x.email" [formControl]="emailFormControl">
-            <mat-error *ngIf="emailFormControl.hasError('email') && !emailFormControl.hasError('required')">
-                Please enter a valid email address
-            </mat-error>
-            <mat-error *ngIf="emailFormControl.hasError('required')">
-                Email is <strong>required</strong>
-            </mat-error>
-        </mat-form-field>
-    </mat-dialog-content>
-    <mat-dialog-actions align="end">
-        <button mat-raised-button mat-dialog-close>Save</button>
-        <button mat-raised-button mat-dialog-close color="warn">Close</button>
-    </mat-dialog-actions>
+    <h2 mat-dialog-title>Add Person</h2>
+    <form class="example-form">
+        <mat-dialog-content>
+            <table class="example-full-width" cellspacing="0">
+                <tr>
+                    <td>
+                        <mat-form-field appearance="outline">
+                            <mat-label>First name</mat-label>
+                            <input matInput [(ngModel)]="newP.firstname" placeholder="John" name="first">
+                        </mat-form-field>
+                    </td>
+                    <td>
+                        <mat-form-field appearance="outline">
+                            <mat-label>Last name</mat-label>
+                            <input matInput [(ngModel)]="newP.lastname" placeholder="Doe" name="first">
+                        </mat-form-field>
+                    </td>
+                </tr>
+            </table>
+
+            <p>
+                <mat-form-field appearance="outline">
+                    <mat-label>Email</mat-label>
+                    <input type="email" matInput [formControl]="emailFormControl" placeholder="Ex. pat@example.com">
+                    <mat-error *ngIf="emailFormControl.hasError('email') && !emailFormControl.hasError('required')">
+                        Please enter a valid email address
+                    </mat-error>
+                    <mat-error *ngIf="emailFormControl.hasError('required')">
+                        Email is <strong>required</strong>
+                    </mat-error>
+                </mat-form-field>
+                <mat-form-field appearance="outline">
+                    <mat-label>Contact</mat-label>
+                    <input matInput [(ngModel)]="newP.contact" placeholder="John" name="first">
+                </mat-form-field>
+                <mat-form-field appearance="outline">
+                    <mat-label>Address</mat-label>
+                    <textarea matInput [(ngModel)]="newP.address" placeholder="Ex. 100 Main St" name="first"></textarea>
+                </mat-form-field>
+                <mat-form-field appearance="outline">
+                    <mat-label>Education</mat-label>
+                    <textarea matInput></textarea>
+                </mat-form-field>
+            </p>
+            <table class="example-full-width" cellspacing="0">
+                <tr>
+                    <td>
+                        <mat-form-field appearance="outline">
+                            <mat-label>City</mat-label>
+                            <input matInput placeholder="Ex. San Francisco">
+                        </mat-form-field>
+                    </td>
+                    <td>
+                        <mat-form-field appearance="outline">
+                            <mat-label>State</mat-label>
+                            <input matInput placeholder="Ex. California">
+                        </mat-form-field>
+                    </td>
+                </tr>
+            </table>
+
+            <mat-dialog-actions align="end" class="btn-edit">
+                <button mat-raised-button mat-dialog-close>Create</button>
+                <button mat-raised-button mat-dialog-close color="warn">Close</button>
+            </mat-dialog-actions>
+        </mat-dialog-content>
+    </form>
 </ng-template>
 
 
 <!-- Dialog template to Edit Person -->
 <ng-template #editPerson>
-    <h1 mat-dialog-title>Editing</h1>
-    <div mat-dialog-content>
+    <h2 mat-dialog-title>{{x.firstname}} Details</h2>
+    <form class="example-form">
+        <mat-dialog-content>
+            <table class="example-full-width" cellspacing="0">
+                <tr>
+                    <td>
+                        <mat-form-field appearance="outline">
+                            <mat-label>First name</mat-label>
+                            <input matInput [(ngModel)]="newP.firstname" placeholder="John" name="first">
+                        </mat-form-field>
+                    </td>
+                    <td>
+                        <mat-form-field appearance="outline">
+                            <mat-label>Last name</mat-label>
+                            <input matInput [(ngModel)]="newP.lastname" placeholder="Doe" name="first">
+                        </mat-form-field>
+                    </td>
+                </tr>
+            </table>
+
+            <p>
+                <mat-form-field appearance="outline">
+                    <mat-label>Email</mat-label>
+                    <input type="email" matInput [formControl]="emailFormControl" placeholder="Ex. pat@example.com">
+                    <mat-error *ngIf="emailFormControl.hasError('email') && !emailFormControl.hasError('required')">
+                        Please enter a valid email address
+                    </mat-error>
+                    <mat-error *ngIf="emailFormControl.hasError('required')">
+                        Email is <strong>required</strong>
+                    </mat-error>
+                </mat-form-field>
+                <mat-form-field appearance="outline">
+                    <mat-label>Contact</mat-label>
+                    <input matInput [(ngModel)]="newP.contact" placeholder="John" name="first">
+                </mat-form-field>
+                <mat-form-field appearance="outline">
+                    <mat-label>Address</mat-label>
+                    <textarea matInput [(ngModel)]="newP.address" placeholder="Ex. 100 Main St" name="first"></textarea>
+                </mat-form-field>
+                <mat-form-field appearance="outline">
+                    <mat-label>Education</mat-label>
+                    <textarea matInput></textarea>
+                </mat-form-field>
+            </p>
+            <table class="example-full-width" cellspacing="0">
+                <tr>
+                    <td>
+                        <mat-form-field appearance="outline">
+                            <mat-label>City</mat-label>
+                            <input matInput placeholder="Ex. San Francisco">
+                        </mat-form-field>
+                    </td>
+                    <td>
+                        <mat-form-field appearance="outline">
+                            <mat-label>State</mat-label>
+                            <input matInput placeholder="Ex. California">
+                        </mat-form-field>
+                    </td>
+                </tr>
+            </table>
+
+            <mat-dialog-actions align="end" class="btn-edit">
+                <button mat-raised-button mat-dialog-close>Save</button>
+                <button mat-raised-button mat-dialog-close color="warn">Close</button>
+            </mat-dialog-actions>
+        </mat-dialog-content>
+    </form>
+    <!-- <div mat-dialog-content>
         <mat-form-field appearance="fill">
             <mat-label>Firstname</mat-label>
             <input matInput [(ngModel)]="x.firstname">
@@ -107,141 +176,5 @@
     <div mat-dialog-actions align="end">
         <button mat-raised-button mat-dialog-close>Save</button>
         <button mat-raised-button mat-dialog-close color="warn">Close</button>
-    </div>
+    </div> -->
 </ng-template>
-
-
-<!-- <h1 mat-dialog-title>Hi</h1>
-<div mat-dialog-content>
-  <p>What's your favorite animal?</p>
-  <mat-form-field appearance="fill">
-    <mat-label>Favorite Animal</mat-label>
-    <input matInput [(ngModel)]="data.animal">
-  </mat-form-field>
-</div>
-<div mat-dialog-actions>
-  <button mat-button (click)="onNoClick()">No Thanks</button>
-  <button mat-button [mat-dialog-close]="data.animal" cdkFocusInitial>Ok</button>
-</div> -->
-
-
-
-
-<!-- <p-button (click)="showModalDialog(true)" icon="pi pi-external-link" label="Show"></p-button> -->
-<!-- <p-dialog header="Header" [(visible)]="displayModal" [modal]="true" [style]="{width: '50vw'}" [draggable]="false" [resizable]="false"> -->
-<!-- <p class="m-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
-        et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
-        laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-        cillum dolore eu fugiat nulla pariatur.
-        Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-    </p> -->
-<!-- <ng-template pTemplate="footer">
-        <h2>{{newP.firstname}} Detail</h2>
-        <div>Id: {{newP._id}}</div>
-        <label for="hero-name">Name: </label>
-        <input type="text" id="hero-name" [(ngModel)]="newP.firstname">
-
-        <label for="hero-power">Phone: </label>
-        <input type="text" for="hero-power" [(ngModel)]="newP.contact">
-
-        <button type="button" (click)="goBack()">go back</button>
-        <button type="button" (click)="save()">save</button>
-        <p-button icon="pi pi-check" (click)="displayModal=false; save()" label="Ok" styleClass="p-button-text"></p-button>
-    </ng-template>
-</p-dialog> -->
-
-<!-- <ng-template pTemplate="footer">
-    <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="goBack()"></button>
-    <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text" (click)="save()"></button>
-</ng-template> -->
-
-<!-- <p>
-    Person: {{newP}}
-</p> -->
-
-<!-- <label for="person-input">Add name: </label>
-<input type="text" id="person-input" #newPerson>
-<button type="button" (click)="addNewPerson(newPerson.value)"></button> -->
-<!-- <p>Person Detail: {{newP}}</p> -->
-
-<!-- <label for="firstname">Enter name:</label>
-<input type="text" id="firstname" #newName>
-<button type="button" (click)="addNewName(newName.value)">Add to parent's list</button> -->
-
-<!-- <div *ngIf="person">
-    <h2>{{person.firstname}} Details</h2>
-    <div><span>id: </span>{{person._id}}</div>
-    <div>
-        <label for="person-name">Person name: </label>
-        <input id="person-name" type="text" [(ngModel)]="person.firstname" placeholder="{{person.firstname}}" />
-    </div>
-    <button type="button" (click)="goBack()">go back</button>
-</div> -->
-
-<!-- <div *ngIf="newP">
-    <h2>{{newP.firstname | uppercase}} Details</h2>
-    <div><span>Id: </span>{{newP._id}}</div>
-    <div>
-        <p>
-            Name: {{newP.lastname}}
-        </p>
-        <p>
-            Email: {{newP.email}}
-        </p>
-    </div>
-    <button (click)="goBack()">go back</button>
-</div> -->
-
-<!-- <p-dialog [(visible)]="personDialog" [style]="{width: '450px'}" header="Product Details" [modal]="true" styleClass="p-fluid">
-    <ng-template pTemplate="content">
-        <div class="field">
-            <label for="name">Name</label>
-            <input type="text" pInputText id="firstname" [(ngModel)]="newP.firstname" required autofocus />
-            <small class="p-error" *ngIf="submitted && !newP.firstname">Name is required.</small>
-        </div> -->
-<!-- <div class="field">
-            <label for="description">Description</label>
-            <textarea id="description" pInputTextarea [(ngModel)]="newP.description" required rows="3" cols="20"></textarea>
-        </div> -->
-
-<!-- <div class="field">
-            <label class="mb-3">Category</label>
-            <div class="formgrid grid">
-                <div class="field-radiobutton col-6">
-                    <p-radioButton id="category1" name="category" value="Accessories" [(ngModel)]="product.category"></p-radioButton>
-                    <label for="category1">Accessories</label>
-                </div>
-                <div class="field-radiobutton col-6">
-                    <p-radioButton id="category2" name="category" value="Clothing" [(ngModel)]="product.category"></p-radioButton>
-                    <label for="category2">Clothing</label>
-                </div>
-                <div class="field-radiobutton col-6">
-                    <p-radioButton id="category3" name="category" value="Electronics" [(ngModel)]="product.category"></p-radioButton>
-                    <label for="category3">Electronics</label>
-                </div>
-                <div class="field-radiobutton col-6">
-                    <p-radioButton id="category4" name="category" value="Fitness" [(ngModel)]="product.category"></p-radioButton>
-                    <label for="category4">Fitness</label>
-                </div>
-            </div>
-        </div>
-
-        <div class="formgrid grid">
-            <div class="field col">
-                <label for="price">Price</label>
-                <p-inputNumber id="price" [(ngModel)]="product.price" mode="currency" currency="USD" locale="en-US"></p-inputNumber>
-            </div>
-            <div class="field col">
-                <label for="quantity">Quantity</label>
-                <p-inputNumber id="quantity" [(ngModel)]="product.quantity"></p-inputNumber>
-            </div>
-        </div> -->
-<!-- </ng-template>
-
-    <ng-template pTemplate="footer">
-        <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
-        <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text" (click)="save()"></button>
-    </ng-template>
-</p-dialog>
-
-<p-confirmDialog [style]="{width: '450px'}"></p-confirmDialog> -->

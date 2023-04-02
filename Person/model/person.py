@@ -22,7 +22,7 @@ class Person(db.Model):
     address = db.Column(db.String(200), nullable=False)
     education = db.Column(db.String(500))
     password = db.Column(db.String(200), nullable=False)
-    aadhaar = db.Column(db.BigInteger, nullable=False) # unique
+    aadhaar = db.Column(db.BigInteger, nullable=False)  # unique
 
     # def create(self, data):
     #     self.firstname = (data["firstname"],)

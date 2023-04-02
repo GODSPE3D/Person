@@ -5,6 +5,11 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MatListModule } from '@angular/material/list';
+import { MatTableModule } from '@angular/material/table';
+import { DialogModule } from 'primeng/dialog';
+import { ButtonModule } from 'primeng/button';
+import { TableModule } from 'primeng/table';
 
 @NgModule({
   declarations: [],
@@ -13,15 +18,25 @@ import { MatInputModule } from '@angular/material/input';
     MatDialogModule,
     MatFormFieldModule,
     MatInputModule,
+    MatListModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    DialogModule,
+    ButtonModule,
+    TableModule,
+    MatTableModule
   ],
   exports: [
     MatDialogModule,
     MatFormFieldModule,
     MatInputModule,
+    MatListModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    DialogModule,
+    ButtonModule,
+    TableModule,
+    MatTableModule
   ]
 })
 export class PersonDetailModule { }

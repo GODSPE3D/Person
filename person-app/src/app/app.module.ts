@@ -31,7 +31,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     // MatDialogModule,
     PersonListModule,
     PersonDetailModule,
-    BrowserAnimationsModule,
+    BrowserAnimationsModule
     // MatButtonModule,
     // MatIconModule,
     // MatFormFieldModule

@@ -1,5 +1,5 @@
 export interface Person {
-    isSelected: boolean;
+    _id?: number;
     firstname: string;
     lastname: string;
     email: string;
@@ -8,16 +8,16 @@ export interface Person {
     education: string;
     pwd: string;
     aadhaar: number;
-    isEdit: boolean;
-    _id?: number;
 }
 
+export type P = keyof Person;
+
 export const PersonColumns = [
-    {
-        key: 'isSelected',
-        type: 'isSelected',
-        label: '',
-    },
+    // {
+    //     key: 'isSelected',
+    //     type: 'isSelected',
+    //     label: '',
+    // },
     {
         key: 'firstname',
         type: 'text',
@@ -49,9 +49,9 @@ export const PersonColumns = [
         type: 'text',
         label: 'Education',
     },
-    {
-        key: 'isEdit',
-        type: 'isEdit',
-        label: '',
-    },
+    // {
+    //     key: 'isEdit',
+    //     type: 'isEdit',
+    //     label: '',
+    // },
 ];
