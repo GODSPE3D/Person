@@ -1,3 +1,12 @@
 .table.table-bordered.table-hover {
     border: 1px solid black;
+    border-radius: 5px;
 }
+
+.text-center .td {
+    border-right: 1px solid black;
+}
+
+/* .text-center.td {
+    border-right: 1px solid black;
+} */

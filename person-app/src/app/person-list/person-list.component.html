@@ -3,8 +3,17 @@
 <!-- <button class="parent" mat-fab extended (click)="child.openDialog()"><mat-icon aria-hidden="false"
     aria-label="Add person" fontIcon="person_add"></mat-icon>Add Person</button><br> -->
 
+
 <div class="p-2 table-responsive">
-  <table class="table table-bordered table-hover" id="table" data-search="true" data-toggle="table">
+  <div class="input-group mb-3 p-2">
+    <input type="text" class="form-control"
+      placeholder="Start searching for a person by firstname or lastname or country" [(ngModel)]="searchText"
+      aria-label="search" aria-describedby="basic-addon1">
+    <div class="input-group-prepend">
+      <span class="input-group-text" id="basic-addon1"><i class="bi bi-search"></i></span>
+    </div>
+  </div>
+  <table class="table table-bordered table-hover" *ngIf="person && person.length">
     <thead>
       <tr class="text-center">
         <th data-field="firstname">Firstname</th>
@@ -15,10 +24,9 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let p of person" class="text-center">
-        <td>
-          <app-person-detail [x]="p"></app-person-detail>
-        </td>
+      <tr *ngFor="let p of person | filter:searchText" class="text-center">
+        <app-person-detail [x]="p" class="td"></app-person-detail>
+
         <!-- <app-person-detail [x]="p"></app-person-detail> -->
         <!-- <td></td> -->
         <!-- <td data-field="firstname">{{p.firstname}}</td>

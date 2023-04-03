@@ -6,7 +6,7 @@ import { PersonDetailComponent } from '../person-detail/person-detail.component'
 import { SelectionModel } from '@angular/cdk/collections';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
-import {Sort} from '@angular/material/sort';
+import { Sort } from '@angular/material/sort';
 
 @Component({
   selector: 'app-person-list',
@@ -15,96 +15,24 @@ import {Sort} from '@angular/material/sort';
   providers: [MessageService, ConfirmationService]
 })
 export class PersonListComponent implements OnInit {
-  personDialog!: boolean;
+
   person: Person[] = [];
   newPerson = {} as Person;
   selectedPeople: Person[] = [];
   currentItem!: Person;
-  yes!: true;
-  submitted: boolean | undefined;
-  status: boolean = false;
-  // Object: Object;
+  searchText!: string;
 
-  @ViewChild('addP', {static: true}) addP!: TemplateRef<any>;
   @ViewChild(PersonDetailComponent) child!: PersonDetailComponent;
 
-  selection = new SelectionModel<Person>(false, []);
-
-  constructor(private personService: PersonService, public dialog: MatDialog) { }
-
-  @ViewChild('secondDialog', { static: true }) secondDialog!: TemplateRef<any>;
-  @ViewChild('this.child.customDialog') print!: TemplateRef<any>;
-  
-  openDialogWithTemplateRef(templateRef: TemplateRef<any>) {
-    this.dialog.open(templateRef);
-  }
-
-  buttonClick() {
-    this.child.openDialog();
-  }
-
-  buttonClick2() {
-    this.child.openDialog2();
-  }
-
-  openDialogWithoutRef() {
-    this.dialog.open(this.secondDialog);
-    console.log(this.secondDialog);
-  }
-
-  displayedColumns: string[] = PersonColumns.map((col) => col.key);
-  dataSource = new MatTableDataSource<Person>();
-  columnsSchema: any = PersonColumns;
-  valid: any = {}
+  constructor(private personService: PersonService, public dialog: MatDialog) {}
 
   ngOnInit(): void {
     this.getPersonAll();
   }
 
-  sortedPerson: Person[] = [];
-
-  sortData(sort: Sort) {
-    const data = this.person.slice();
-    if (!sort.active || sort.direction === '') {
-      this.sortedPerson = data;
-      return;
-    }
-
-    // this.sortedPerson = data.sort((a, b) => {
-    //   const isAsc = sort.direction === 'asc';
-    //   switch (sort.active) {
-    //     case 'firstname':
-    //       return compare(a.name, b.name, isAsc);
-    //     case 'lastname':
-    //       return compare(a.calories, b.calories, isAsc);
-    //     case 'fat':
-    //       return compare(a.fat, b.fat, isAsc);
-    //     case 'carbs':
-    //       return compare(a.carbs, b.carbs, isAsc);
-    //     case 'protein':
-    //       return compare(a.protein, b.protein, isAsc);
-    //     default:
-    //       return 0;
-    //   }
-    // });
-  }
-
-  onPersonToggled(person: Person) {
-    this.selection.toggle(person);
-    console.log(this.selection.selected);
-  }
-
-  // isAnySelected() {
-  //   return this.dataSource.((item: any) => item.isSelected);
-  // }
-
   getPersonAll(): void {
     this.personService.getPersonAll()
       .subscribe(person => this.person = person);
-    this.personService.getPersonAll().subscribe((res: any) => {
-      this.dataSource.data = res;
-      console.log(this.dataSource.data);
-    })
   }
 
   // editPerson(newP: Person) {
@@ -131,31 +59,6 @@ export class PersonListComponent implements OnInit {
       aadhaar: 0,
     };
     this.personService.addPerson(newRow);
-  }
-
-  onRowClicked(row: number) {
-    console.log('Row clicked: ', row);
-  }
-
-  inputHandler(e: any, id: number, key: string) {
-    if (!this.valid[id]) {
-      this.valid[id] = {}
-    }
-    this.valid[id][key] = e.target.validity.valid
-  }
-
-  disableSubmit(id: number) {
-    if (this.valid[id]) {
-      return Object.values(this.valid[id]).some((item) => item === false)
-    }
-    return false
-  }
-
-  selectAll(event: any) {
-    this.dataSource.data = this.dataSource.data.map((item) => ({
-      ...item,
-      isSelected: event.checked,
-    }))
   }
 
   // openNew() {
@@ -254,15 +157,10 @@ export class PersonListComponent implements OnInit {
     this.currentItem = x;
   }
 
-  deletePerson(id: number) {
-    // this.person = this.person.filter(p => p !== newP);
-    // this.personService.deletePerson(newP._id).subscribe();
-    this.personService.deletePerson(id).subscribe(() => {
-      this.dataSource.data = this.dataSource.data.filter(
-        (p: Person) => p._id !== id
-      );
-    });
-  }
+  // deletePerson(id: number) {
+  //   this.person = this.person.filter(p => p !== newP);
+  //   this.personService.deletePerson(newP._id).subscribe();
+  // }
 
   // selectPerson(newP: Person) { this.selectedPerson = newP; }
 

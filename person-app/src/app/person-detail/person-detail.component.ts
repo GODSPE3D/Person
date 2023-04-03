@@ -16,12 +16,14 @@ import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dial
   providers: [MessageService]
 })
 export class PersonDetailComponent {
+  
+  @Input() x = {} as Person;
+  @ViewChild('addP') customDialog!: TemplateRef<any>;
+  @ViewChild('editPerson') customDialog2!: TemplateRef<any>;
 
   visible!: boolean;
   newP = {} as Person;
-
-  @Input() x = {} as Person;
-
+  emailFormControl = new FormControl('', [Validators.required, Validators.email]);
 
   constructor(
     private route: ActivatedRoute, private personService: PersonService, private messageService: MessageService, private location: Location, private dialog: MatDialog
@@ -31,14 +33,6 @@ export class PersonDetailComponent {
     // this.getPerson();
   }
   
-  emailFormControl = new FormControl('', [Validators.required, Validators.email]);
-
-  @ViewChild('addP') customDialog!: TemplateRef<any>;
-  @ViewChild('editPerson') customDialog2!: TemplateRef<any>;
-  // @ViewChild('MatTable') customTable!: TemplateRef<any>;
-
-  // displayedColumns: string[] = PersonColumns.map((col) => col.key);
-
   openDialog() {
     this.dialog.open(this.customDialog);
   }
@@ -46,65 +40,6 @@ export class PersonDetailComponent {
   openDialog2() {
     this.dialog.open(this.customDialog2);
   }
-
-  IntParser() {
-    const entries = Object.keys(this.x);
-  }
-
-  //   makeTable (x: Person) {
-  //     // Check type
-  //     // if ( typeof x !== 'object' ) return false;
-
-  //     // Start our HTML
-  //     var html = "<table><tr><th>F</th><th>L</th></tr><tr>";
-  //     // Loop through members of the object
-  //     for ( var key in x ) {
-  //         // https://jslinterrors.com/the-body-of-a-for-in-should-be-wrapped-in-an-if-statement
-  //         // if ( !x.hasOwnProperty(key) ) continue;
-  //         // Add our row:
-
-  //         html += "<td>" + x.firstname + "</td>";
-  //     }
-  //     for ( var key in x ) {
-  //       // https://jslinterrors.com/the-body-of-a-for-in-should-be-wrapped-in-an-if-statement
-  //       // if ( !x.hasOwnProperty(key) ) continue;
-  //       // Add our row:
-
-  //       html += "<td>" + x.lastname + "</td>";
-  //   }
-  //     // Finish the table:
-  //     html += "</tr></table>";
-  //     // Return the table
-  //     return html;
-  // }
-
-  // getValue(index: string) {
-  //   return this.x[index];
-  // }
-
-  // addP!: TemplateRef<any>;
-
-  // openDialogWithoutRef(templateRef: TemplateRef<any>) {
-  //   this.dialog.open(templateRef);
-  // }
-
-  // openDialog(): void {
-  //   // const dialogRef = this.dialog.open(PersonListComponent, {
-  //   //   // data: {name: this.name, animal: this.animal},
-  //   // });
-
-  //   // dialogRef.afterClosed().subscribe(result => {
-  //   //   console.log('The dialog was closed');
-  //   //   // this.animal = result;
-  //   // });
-
-  //   const dialogConfig = new MatDialogConfig();
-
-  //       dialogConfig.disableClose = true;
-  //       dialogConfig.autoFocus = true;
-
-  //       this.dialog.open(PersonDetailComponent, dialogConfig);
-  // }
 
   // getPerson(): void {
   //   // const id = parseInt(this.route.snapshot.paramMap.get("id")!, 10);
@@ -127,20 +62,6 @@ export class PersonDetailComponent {
   //   //     console.log(JSON.stringify(this.x));
   //   //     console.log(JSON.parse(JSON.stringify(this.x)));
   //   //   });
-  // }
-
-  // ngDoCheck() {
-  //   this.showChildModal();
-  // }
-
-  // showChildModal(): void {
-  //   if (this.personService.childModal == true) {
-  //     this.childModal
-  //   }
-  // }
-
-  // showModalDialog() {
-  //   this.displayModal = true;
   // }
 
   goBack(): void {

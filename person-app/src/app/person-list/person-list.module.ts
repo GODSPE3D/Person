@@ -12,6 +12,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatSortModule } from '@angular/material/sort';
 import { ButtonModule } from 'primeng/button';
 import { TableModule } from 'primeng/table';
+import { Ng2SearchPipeModule } from 'ng2-search-filter';
 
 @NgModule({
   declarations: [],
@@ -27,7 +28,8 @@ import { TableModule } from 'primeng/table';
     MatIconModule,
     MatSortModule,
     ButtonModule,
-    TableModule
+    TableModule,
+    Ng2SearchPipeModule
   ],
   exports: [
     NgbModule,
@@ -39,7 +41,8 @@ import { TableModule } from 'primeng/table';
     MatIconModule,
     MatSortModule,
     ButtonModule,
-    TableModule
+    TableModule,
+    Ng2SearchPipeModule
   ]
 })
 export class PersonListModule { }

@@ -1,10 +1,10 @@
 <ng-container *ngTemplateOutlet="content"></ng-container>
 
 <ng-template #content>
-    {{x.firstname}}
-    <td>{{x.lastname}}</td>
-    <td>{{x.email}}</td>
-    <td>{{x.contact}}</td>
+    <td class="data-border">{{x.firstname}}</td>
+    <td class="data-border">{{x.lastname}}</td>
+    <td class="data-border">{{x.email}}</td>
+    <td class="data-border">{{x.contact}}</td>
     <td>
         <button type="button" class="m-2 btn btn-primary" (click)="openDialog2()"><i
                 class="bi bi-pencil-square"></i></button>
@@ -47,7 +47,7 @@
                 </mat-form-field>
                 <mat-form-field appearance="outline">
                     <mat-label>Contact</mat-label>
-                    <input matInput [(ngModel)]="newP.contact" placeholder="John" name="first">
+                    <input matInput [(ngModel)]="newP.contact" placeholder="123456789" name="first" required>
                 </mat-form-field>
                 <mat-form-field appearance="outline">
                     <mat-label>Address</mat-label>
@@ -87,20 +87,20 @@
 <!-- Dialog template to Edit Person -->
 <ng-template #editPerson>
     <h2 mat-dialog-title>{{x.firstname}} Details</h2>
-    <form class="example-form">
+    <!-- <form class="example-form">
         <mat-dialog-content>
             <table class="example-full-width" cellspacing="0">
                 <tr>
                     <td>
-                        <mat-form-field appearance="outline">
+                            <mat-form-field appearance="fill">
                             <mat-label>First name</mat-label>
-                            <input matInput [(ngModel)]="newP.firstname" placeholder="John" name="first">
+                            <input matInput [(ngModel)]="x.firstname">
                         </mat-form-field>
                     </td>
                     <td>
                         <mat-form-field appearance="outline">
                             <mat-label>Last name</mat-label>
-                            <input matInput [(ngModel)]="newP.lastname" placeholder="Doe" name="first">
+                            <input matInput [(ngModel)]="x.lastname" placeholder="Doe" name="first">
                         </mat-form-field>
                     </td>
                 </tr>
@@ -152,15 +152,15 @@
                 <button mat-raised-button mat-dialog-close color="warn">Close</button>
             </mat-dialog-actions>
         </mat-dialog-content>
-    </form>
-    <!-- <div mat-dialog-content>
+    </form> -->
+    <div mat-dialog-content>
         <mat-form-field appearance="fill">
             <mat-label>Firstname</mat-label>
-            <input matInput [(ngModel)]="x.firstname">
+            <input matInput [(ngModel)]="x.firstname" required>
         </mat-form-field>
         <mat-form-field>
             <mat-label>Lastname</mat-label>
-            <input matInput [(ngModel)]="x.lastname">
+            <input matInput [(ngModel)]="x.lastname" required>
         </mat-form-field>
         <mat-form-field>
             <mat-label>Email</mat-label>
@@ -176,5 +176,5 @@
     <div mat-dialog-actions align="end">
         <button mat-raised-button mat-dialog-close>Save</button>
         <button mat-raised-button mat-dialog-close color="warn">Close</button>
-    </div> -->
+    </div>
 </ng-template>
