@@ -1,12 +1,12 @@
 export interface Person {
-    _id?: number;
+    _id: number;
     firstname: string;
     lastname: string;
     email: string;
     contact: number;
     address: string;
     education: string;
-    pwd: string;
+    password: string;
     aadhaar: number;
 }
 

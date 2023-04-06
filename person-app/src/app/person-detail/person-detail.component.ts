@@ -5,9 +5,10 @@ import { MessageService } from 'primeng/api';
 
 import { FormControl, Validators } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material/table';
-import { Person, PersonColumns, P } from '../person';
+import { Person } from '../person';
 import { PersonService } from '../person.service';
 import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-person-detail, [app-person-detail]',
@@ -16,7 +17,7 @@ import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dial
   providers: [MessageService]
 })
 export class PersonDetailComponent {
-  
+
   @Input() x = {} as Person;
   @ViewChild('addP') customDialog!: TemplateRef<any>;
   @ViewChild('editPerson') customDialog2!: TemplateRef<any>;
@@ -26,13 +27,13 @@ export class PersonDetailComponent {
   emailFormControl = new FormControl('', [Validators.required, Validators.email]);
 
   constructor(
-    private route: ActivatedRoute, private personService: PersonService, private messageService: MessageService, private location: Location, private dialog: MatDialog
+    private route: ActivatedRoute, private personService: PersonService, private messageService: MessageService, private location: Location, private dialog: MatDialog, private _snackBar: MatSnackBar
   ) { }
 
   ngOnInit(): void {
     // this.getPerson();
   }
-  
+
   openDialog() {
     this.dialog.open(this.customDialog);
   }
@@ -42,39 +43,64 @@ export class PersonDetailComponent {
   }
 
   // getPerson(): void {
-  //   // const id = parseInt(this.route.snapshot.paramMap.get("id")!, 10);
-  //   this.personService.getPerson(this.newP._id)
+  //   this.newP = this.x;
+  //   const id = parseInt(this.route.snapshot.paramMap.get('id')!, 10);
+  //   this.personService.getPerson(id)
+  //     .subscribe(hero => this.x = hero);
   // }
 
-  // getPerson(): void {
-  //   // const id = this.route.snapshot.params['id'];
-  //   const id = parseInt(this.route.snapshot.paramMap.get("id")!, 10);
-  //   this.personService.getPerson(id)
-  //     .subscribe(p => this.x = p);
-  //   console.log(this.x);
-  //   // console.log(id);
-  //   // this.personService.getPerson(id)
-  //   //   .subscribe(person => {
-  //   //     this.x = person;
-  //   //     console.log('', this.x);
-  //   //     // console.log(this.x.prototype.toString());
-  //   //     // console.log(this.x[K1]);
-  //   //     console.log(JSON.stringify(this.x));
-  //   //     console.log(JSON.parse(JSON.stringify(this.x)));
-  //   //   });
-  // }
+  addPerson() {
+    // john
+    // does
+    // john@doe.com
+    // 1234567896
+    // India
+    // PhD
+    // password
+    // 123245685464
+
+    console.log(this.newP);
+    this.personService.addPerson(this.newP).subscribe();
+  }
 
   goBack(): void {
     this.location.back();
   }
 
-  // save(): void {
-  //   if (this.x) {
-  //     this.personService.updatePerson(this.x[0]._id, this.x[0]).subscribe();
-  //     this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Updated successfully!' });
+  // editPerson(newP: Person) {
+  //     // this.personService.updatePerson(person._id, person).subscribe(() => person.isEdit = false);
+  //     newP = this.x;
+  //     if (newP._id == null) {
+  //       this.personService.addPerson(newP).subscribe((newPerson: Person) => {
+  //         newP._id = newPerson._id;
+  //         // newP.isEdit = false;
+  //       });
+  //     } else {
+  //       this.personService.updatePerson(newP._id, newP).subscribe();
+  //     }
   //   }
-  // }
 
+  save(): void {
+    // this.newP = this.x;
+    if (this.x) {
+      this.personService.updatePerson(this.x).subscribe();
+      this._snackBar.open('Profile updated', 'Close', {
+        horizontalPosition: 'right',
+        verticalPosition: 'top',
+        duration: 4000,
+        panelClass: ['green-snack']
+      });
+      // this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Updated successfully!' });
+    }
+  }
 
-
+  deletePerson(delP: Person): void {
+    // if (this.newP._id = id) {
+    //   this.personService.deletePerson(this.newP._id).subscribe();
+    // }
+    // this.x = this.x; 
+    console.log(delP);
+    this.personService.deletePerson(delP._id).subscribe();
+    console.log("successful");
+  }
 }

@@ -34,6 +34,21 @@ class Person(db.Model):
     #     self.password = (data["password"],)
     #     self.aadhaar = data["aadhaar"]
 
+    @property
+    def serialize(self):
+       # """Return object data in easily serializable format"""
+        return {
+            'Id': self.id,
+            'firstname': self.firstname,
+            'lastname': self.lastname,
+            'email': self.email,
+            'contact': self.contact,
+            'address': self.address,
+            'education': self.education,
+            'password': self.password,
+            'aadhaar': self.aadhaar,
+        }
+
     # Check ID
     def sameID(self, id):
         # try:
@@ -100,16 +115,17 @@ class Person(db.Model):
 
     # POST
     def create(self, data):
+        print(data)
         try:
-            if (
-                not "firstname" in data
-                or not "lastname" in data
-                or not "email" in data
-                or not "aadhaar" in data
-                or not "contact" in data
-                or not "address" in data
-            ):
-                raise NoResultFound
+            # if (
+            #     not "firstname" in data
+            #     or not "lastname" in data
+            #     or not "email" in data
+            #     or not "aadhaar" in data
+            #     or not "contact" in data
+            #     or not "address" in data
+            # ):
+            #     raise NoResultFound
             if (
                 len(data["firstname"]) < 4
                 or len(data["lastname"]) < 4
@@ -125,20 +141,27 @@ class Person(db.Model):
                 # return msg.duplicate("aadhaar")
                 raise SameValue
 
-            self.firstname = (data["firstname"],)
-            self.lastname = (data["lastname"],)
-            self.email = (data["email"],)
-            self.contact = (data["contact"],)
-            self.address = (data["address"],)
-            self.education = (data["education"],)
-            self.password = (data["password"],)
-            self.aadhaar = data["aadhaar"]
+            newP = Person()
+            newP.firstname = data["firstname"]
+            newP.lastname = data["lastname"]
+            newP.email = data["email"]
+            newP.contact = data["contact"]
+            newP.address = data["address"]
+            newP.education = data["education"]
+            newP.password = data["password"]
+            newP.aadhaar = data["aadhaar"]
 
-            db.session.add(self)
+            db.session.add(newP)
             db.session.commit()
+            # person = Person.query.filter_by(
+            #     email=data['email'], aadhaar=data['aadhaar']).first()
+            # return Person.displayOne(data, data.id)
+            # return person.serialize
 
-            print(self.firstname)
-            return Person.displayOne(self, self.id)
+            # print(newP)
+            # return
+            return Person.displayOne(newP, newP.id)
+            # return Person.display(self)
 
         except NoResultFound:
             return "data doesn't exist"
@@ -162,11 +185,13 @@ class Person(db.Model):
     #     return exist
 
     def update(self, id, data):
+        # print("Update: ", self, id, data)
         try:
-            if (
-                "email" in data
-            ):
-                raise NoResultFound
+            # if (
+            #     "email" in data
+            # ):
+            #     print(data)
+            #     raise NoResultFound
             if self.sameID(id):
                 self = Person.query.filter_by(id=id).first()
 
@@ -182,19 +207,20 @@ class Person(db.Model):
                     self.contact = data["contact"]
 
                 db.session.commit()
-
+                # print(self)
                 return self.displayOne(id)
             raise NoResultFound
         except NoResultFound:
             return "No such ID/data exists"
 
     def personDelete(self, id):
+        print(id)
         try:
-            if self.sameID(id):
-                self = Person.query.filter_by(id=id).first()
-                db.session.delete(self)
-                db.session.commit()
-                return "Data deleted successfully!"
-            raise NoResultFound
+            # if self.sameID(id):
+            self = Person.query.filter_by(id=id).first()
+            db.session.delete(self)
+            db.session.commit()
+            return "Data deleted successfully!"
+            # raise NoResultFound
         except NoResultFound:
             return "No such ID exists"

@@ -2,7 +2,9 @@ td.data-border {
     border-right: 1px solid black;
 }
 
-:host{display:contents; }
+:host {
+    display: contents;
+}
 
 mat-form-field {
     margin-top: 5px;

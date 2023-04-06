@@ -1,4 +1,5 @@
-from flask import Flask, request, jsonify
+import json
+from flask import Flask, request, jsonify, Response
 from model.person import db, Person
 from flask_cors import CORS, cross_origin
 
@@ -9,6 +10,7 @@ app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 person = Person()
 db.init_app(app)
+# cors = CORS(app, resources={r"/person": {"origins": "*"}})
 CORS(app)
 
 with app.app_context():
@@ -35,9 +37,24 @@ def get_person(id):
 
 # POST
 @app.route("/person", methods=["POST"])
+# @cross_origin(headers=['Content-Type','Authorization'])
 def create_user():
-    data = request.get_json()
-    return person.create(data)
+    try:
+        data = request.get_json()
+        return person.create(data)
+#    return jsonify(person.create(data))
+    #     p = person.create(data)
+    #     #p.create(data)
+        # response = Response(json.dumps(person),201,mimetype='application/json')
+        # response.headers['Person'] = "/person/" + str(data['firstname'])
+    except Exception as e:
+        print (e)
+        ErrorMessage = {
+                "error": str(e)  ,
+                "helpString": " Refer the Client Model for Details "
+        }
+        response = Response(json.dumps(ErrorMessage), status=400, mimetype='application/json')
+    return response
 
 
 # PUT
@@ -49,10 +66,21 @@ def update_user(id):
 
 
 # DELETE
-@app.route("/person/<int:id>", methods=["DELETE"])
+@app.route("/person/<id>", methods=["DELETE"])
+# @cross_origin(headers=['Content-Type','Authorization'])
 def delete_user(id):
-    return person.personDelete(id)
+    print(id)
+    try:
+        return person.personDelete(id)
+    except Exception as e:
+        print (e)
+        ErrorMessage = {
+                "error": str(e)  ,
+                "helpString": " Refer the Client Model for Details "
+        }
+        response = Response(json.dumps(ErrorMessage), status=400, mimetype='application/json')
+    return response
 
 
 if __name__ == "__main__":
-    app.run(port=5002)
+    app.run()
