@@ -33,6 +33,7 @@ export class PersonListComponent implements OnInit {
   getPersonAll(): void {
     this.personService.getPersonAll()
       .subscribe(person => this.person = person);
+      console.log(this.person);
   }
 
   // editPerson(newP: Person) {
@@ -47,19 +48,24 @@ export class PersonListComponent implements OnInit {
   //   }
   // }
 
+  // addPerson() {
+  //   const newRow: Person = {
+  //     firstname: '',
+  //     lastname: '',
+  //     email: '',
+  //     contact: 0,
+  //     address: '',
+  //     education: '',
+  //     pwd: '',
+  //     aadhaar: 0,
+  //   };
+  //   this.personService.addPerson(newRow);
+  // }
+
   addPerson() {
-    const newRow: Person = {
-      firstname: '',
-      lastname: '',
-      email: '',
-      contact: 0,
-      address: '',
-      education: '',
-      pwd: '',
-      aadhaar: 0,
-    };
-    this.personService.addPerson(newRow);
+    this.person.push(this.child.newP);
   }
+  
 
   // openNew() {
   //   this.newPerson;
