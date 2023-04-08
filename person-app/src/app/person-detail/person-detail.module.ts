@@ -11,6 +11,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
 import { TableModule } from 'primeng/table';
+import { ToastModule } from 'primeng/toast';
 
 @NgModule({
   declarations: [],
@@ -26,7 +27,8 @@ import { TableModule } from 'primeng/table';
     ButtonModule,
     TableModule,
     MatTableModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    ToastModule
   ],
   exports: [
     MatDialogModule,
@@ -39,7 +41,8 @@ import { TableModule } from 'primeng/table';
     ButtonModule,
     TableModule,
     MatTableModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    ToastModule
   ]
 })
 export class PersonDetailModule { }

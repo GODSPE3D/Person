@@ -30,6 +30,8 @@ export class PersonDetailComponent {
     private route: ActivatedRoute, private personService: PersonService, private messageService: MessageService, private location: Location, private dialog: MatDialog, private _snackBar: MatSnackBar
   ) { }
 
+  @Output() delEvent = new EventEmitter();
+
   ngOnInit(): void {
     // this.getPerson();
   }
@@ -99,8 +101,14 @@ export class PersonDetailComponent {
     //   this.personService.deletePerson(this.newP._id).subscribe();
     // }
     // this.x = this.x; 
-    console.log(delP);
-    this.personService.deletePerson(delP._id).subscribe();
-    console.log("successful");
+    
+    // console.log(delP);
+    // this.personService.deletePerson(delP._id).subscribe();
+    // this.personService.getPersonAll().subscribe();
+    // console.log("successful");
+    this.personService.deletePerson(delP._id).subscribe(result => {
+      console.log(result);
+      this.delEvent.emit(result);
+    })
   }
 }

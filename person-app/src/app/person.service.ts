@@ -21,30 +21,18 @@ export class PersonService {
   }
 
   getPerson(id: number): Observable<Person> {
-    const url = `${this.personUrl}/${id}`;
-    return this.http.get<Person>(url);
+    return this.http.get<Person>(this.personUrl + `/${id}`);
   }
 
   addPerson(p: Person): Observable<Person> {
     return this.http.post<Person>(this.personUrl, p, this.httpOptions);
-
-    // return this.http.post<Person>(this.personUrl, p, this.httpOptions).pipe(
-    //   tap((newHero: Person) => this.log(`added hero w/ id=${newHero._id}`)),
-    //   catchError(this.handleError<Person>('addHero'))
-    // );
   }
 
   deletePerson(id: number): Observable<Person> {
-    const url = `${this.personUrl}/${id}`;
-    return this.http.delete<Person>(url, this.httpOptions);
+    return this.http.delete<Person>(this.personUrl + `/${id}`, this.httpOptions);
   }
 
   updatePerson(p: Person): Observable<Person> {
-    const url = `${this.personUrl}/${p._id}`;
-    return this.http.put<Person>(url, p, this.httpOptions);
-    // return this.http.put<Person>(url, p, this.httpOptions)
-    // .pipe(
-    //   catchError(this.handleError('updateHero', p))
-    // );
+    return this.http.put<Person>(this.personUrl + `/${p._id}`, p, this.httpOptions);
   }
 }

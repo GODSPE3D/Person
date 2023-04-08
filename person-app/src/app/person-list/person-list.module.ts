@@ -14,6 +14,7 @@ import { ButtonModule } from 'primeng/button';
 import { TableModule } from 'primeng/table';
 import { Ng2SearchPipeModule } from 'ng2-search-filter';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { ToastModule } from 'primeng/toast';
 
 @NgModule({
   declarations: [],
@@ -31,7 +32,8 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     ButtonModule,
     TableModule,
     Ng2SearchPipeModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    ToastModule
   ],
   exports: [
     NgbModule,
@@ -45,7 +47,8 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     ButtonModule,
     TableModule,
     Ng2SearchPipeModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    ToastModule
   ]
 })
 export class PersonListModule { }
