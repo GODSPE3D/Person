@@ -22,7 +22,7 @@ class Person(db.Model):
     address = db.Column(db.String(200), nullable=False)
     education = db.Column(db.String(500))
     password = db.Column(db.String(200), nullable=False)
-    aadhaar = db.Column(db.BigInteger, nullable=False)  # unique
+    # aadhaar = db.Column(db.BigInteger, nullable=False)  # unique
 
     # def create(self, data):
     #     self.firstname = (data["firstname"],)
@@ -46,7 +46,7 @@ class Person(db.Model):
             'address': self.address,
             'education': self.education,
             'password': self.password,
-            'aadhaar': self.aadhaar,
+            # 'aadhaar': self.aadhaar,
         }
 
     # Check ID
@@ -77,7 +77,7 @@ class Person(db.Model):
                             "contact": person.contact,
                             "address": person.address,
                             "education": person.education,
-                            "aadhaar": person.aadhaar,
+                            # "aadhaar": person.aadhaar,
                         }
                         for person in Person.query.all()
                     ]
@@ -105,7 +105,7 @@ class Person(db.Model):
                             "contact": self.contact,
                             "address": self.address,
                             "education": self.education,
-                            "aadhaar": self.aadhaar,
+                            # "aadhaar": self.aadhaar,
                         }
                     ]
                 )
@@ -137,9 +137,9 @@ class Person(db.Model):
             if Person.email_or_aadhaar(self, Person.email, data["email"]):
                 # return msg.duplicate("email")
                 raise SameValue
-            if Person.email_or_aadhaar(self, Person.aadhaar, data["aadhaar"]):
-                # return msg.duplicate("aadhaar")
-                raise SameValue
+            # if Person.email_or_aadhaar(self, Person.aadhaar, data["aadhaar"]):
+            #     # return msg.duplicate("aadhaar")
+            #     raise SameValue
 
             newP = Person()
             newP.firstname = data["firstname"]
@@ -149,7 +149,7 @@ class Person(db.Model):
             newP.address = data["address"]
             newP.education = data["education"]
             newP.password = data["password"]
-            newP.aadhaar = data["aadhaar"]
+            # newP.aadhaar = data["aadhaar"]
 
             db.session.add(newP)
             db.session.commit()

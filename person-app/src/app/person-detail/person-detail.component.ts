@@ -22,8 +22,8 @@ export class PersonDetailComponent {
   @ViewChild('addP') customDialog!: TemplateRef<any>;
   @ViewChild('editPerson') customDialog2!: TemplateRef<any>;
 
-  visible!: boolean;
   newP = {} as Person;
+  @Output() outP = new EventEmitter<Person>();
   emailFormControl = new FormControl('', [Validators.required, Validators.email]);
 
   constructor(
@@ -51,7 +51,7 @@ export class PersonDetailComponent {
   //     .subscribe(hero => this.x = hero);
   // }
 
-  addPerson() {
+  addPerson(newP: Person) {
     // john
     // does
     // john@doe.com
@@ -61,8 +61,11 @@ export class PersonDetailComponent {
     // password
     // 123245685464
 
-    console.log(this.newP);
-    this.personService.addPerson(this.newP).subscribe();
+    // console.log(this.newP);
+    // this.personService.addPerson(this.newP).subscribe();
+    // this.personService.getPersonAll();
+    this.personService.addPerson(newP).subscribe();
+    this.outP.emit(newP);
   }
 
   goBack(): void {
@@ -86,19 +89,21 @@ export class PersonDetailComponent {
     // this.newP = this.x;
     if (this.x) {
       this.personService.updatePerson(this.x).subscribe();
-      this._snackBar.open('Profile updated', 'Close', {
-        horizontalPosition: 'right',
-        verticalPosition: 'top',
-        duration: 4000,
-        panelClass: ['green-snack']
-      });
+      // this._snackBar.open('Profile updated', 'Close', {
+      //   horizontalPosition: 'right',
+      //   verticalPosition: 'top',
+      //   duration: 4000,
+      //   panelClass: ['green-snack']
+      // });
       // this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Updated successfully!' });
     }
   }
 
   deletePerson(delP: Person): void {
     // if (this.newP._id = id) {
-    //   this.personService.deletePerson(this.newP._id).subscribe();
+      // this.personService.deletePerson(delP._id).subscribe(() => {
+      //   this.personService.getPersonAll().subscribe();
+      // });
     // }
     // this.x = this.x; 
     
@@ -106,9 +111,24 @@ export class PersonDetailComponent {
     // this.personService.deletePerson(delP._id).subscribe();
     // this.personService.getPersonAll().subscribe();
     // console.log("successful");
-    this.personService.deletePerson(delP._id).subscribe(result => {
-      console.log(result);
-      this.delEvent.emit(result);
-    })
+    // this.personService.deletePerson(delP._id).subscribe(result => {
+    //   console.log(result);
+    //   this.delEvent.emit(this.personService.getPersonAll());
+    // })
+
+    this.personService.deletePerson(delP._id).subscribe(person => {
+      console.log(person);
+      this.x = person
+      this.delEvent.emit(this.x);
+    });
+    // if(confirm("Are you sure to delete the project?")) {
+    //   this.personService.deletePerson(id)
+    //     .subscribe(result =>{        
+    //      if(result.status == 204){
+    //        console.log('removed');
+    //        this.someEvent.emit(null);
+    //      };
+    //    }); 
+    // } 
   }
 }

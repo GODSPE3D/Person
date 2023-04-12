@@ -71,7 +71,7 @@ def update_user(id):
 def delete_user(id):
     print(id)
     try:
-        return person.personDelete(id)
+        response = person.personDelete(id)
     except Exception as e:
         print (e)
         ErrorMessage = {

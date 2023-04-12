@@ -13,20 +13,24 @@
 </div>
 
 <div class="p-2 table-responsive">
-  <table class="table table-bordered table-hover">
+  <table id="example" class="table table-bordered" data-auto-refresh="true">
     <thead>
       <tr class="text-center">
         <th data-field="firstname">Firstname</th>
         <th data-field="lastname">Lastname</th>
         <th data-field="email">Email</th>
         <th data-field="contact">Contact</th>
-        <th>Action</th>
+        <th colspan="2">Action</th>
       </tr>
     </thead>
     <tbody>
       <tr *ngFor="let p of person | filter:searchText" class="text-center">
-        <app-person-detail [x]="p" class="td" (delEvent)="getPersonAll()"></app-person-detail>
+        <app-person-detail [x]="p" class="td" (delEvent)="getPersonAll()" (outP)="addPerson($event)"></app-person-detail>
+        <td><button type="button" class="m-1 btn btn-danger" (click)="delete(p)"><i class="bi bi-trash"></i></button>
+        </td>
       </tr>
     </tbody>
+    <!-- <mat-paginator [pageSize]="2" [pageSizeOptions]="[2, 20, 30]">
+    </mat-paginator> -->
   </table>
 </div>

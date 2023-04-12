@@ -24,16 +24,19 @@ export class PersonListComponent implements OnInit {
 
   @ViewChild(PersonDetailComponent) child!: PersonDetailComponent;
 
-  constructor(private personService: PersonService, public dialog: MatDialog) {}
+  constructor(private personService: PersonService, public dialog: MatDialog) { }
 
-  ngOnInit(): void {
+  ngOnInit() {
     this.getPersonAll();
   }
 
-  getPersonAll(): void {
+  getPersonAll() {
     this.personService.getPersonAll()
-      .subscribe(person => this.person = person);
-      console.log(this.person);
+      .subscribe(person => {
+        console.log(person);
+        this.person = person
+      });
+    // console.log(this.person);
   }
 
   // editPerson(newP: Person) {
@@ -62,10 +65,16 @@ export class PersonListComponent implements OnInit {
   //   this.personService.addPerson(newRow);
   // }
 
-  addPerson() {
-    this.person.push(this.child.newP);
+  addPerson(outP: Person) {
+    this.person.push(outP);
+    // this.personService.addPerson(outP).subscribe();
+    // this.person.push(this.child.newP);
   }
-  
+
+  delete(p: Person): void {
+    this.person = this.person.filter(h => h !== p);
+    this.personService.deletePerson(p._id).subscribe();
+  }
 
   // openNew() {
   //   this.newPerson;

@@ -1,4 +1,4 @@
-.table.table-bordered.table-hover {
+.table.table-bordered {
     border: 1px solid black;
     border-radius: 5px;
 }

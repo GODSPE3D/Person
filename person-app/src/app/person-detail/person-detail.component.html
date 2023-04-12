@@ -8,7 +8,7 @@
     <td>
         <button type="button" class="m-2 btn btn-primary" (click)="openDialog2()"><i
                 class="bi bi-pencil-square"></i></button>
-        <button type="button" class="m-1 btn btn-danger" (click)="deletePerson(x)"><i class="bi bi-trash"></i></button>
+        <!-- <button type="button" class="m-1 btn btn-danger" (click)="deletePerson(x)"><i class="bi bi-trash"></i></button> -->
     </td>
 </ng-template>
 
@@ -61,27 +61,15 @@
                     <mat-label>Education</mat-label>
                     <textarea matInput [(ngModel)]="newP.education"  name="education"></textarea>
                 </mat-form-field>
+                <mat-form-field appearance="outline">
+                    <mat-label>Password</mat-label>
+                    <input matInput placeholder="Ex. San Francisco" [(ngModel)]="newP.password" name="password">
+                </mat-form-field>
             </p>
-            <table class="example-full-width" cellspacing="0">
-                <tr>
-                    <td>
-                        <mat-form-field appearance="outline">
-                            <mat-label>Password</mat-label>
-                            <input matInput placeholder="Ex. San Francisco" [(ngModel)]="newP.password" name="password">
-                        </mat-form-field>
-                    </td>
-                    <td>
-                        <mat-form-field appearance="outline">
-                            <mat-label>Aadhaar</mat-label>
-                            <input matInput placeholder="Ex. California" [(ngModel)]="newP.aadhaar" name="aadhaar">
-                        </mat-form-field>
-                    </td>
-                </tr>
-            </table>
 
             <mat-dialog-actions align="end" class="btn-edit">
-                <button mat-raised-button mat-dialog-close (click)="addPerson()">Create</button>
-                <button mat-raised-button mat-dialog-close color="warn">Close</button>
+                <button mat-raised-button mat-dialog-close (click)="addPerson(newP)">Create</button>
+                <button mat-raised-button mat-dialog-close>Cancel</button>
             </mat-dialog-actions>
         <!-- </mat-dialog-content> -->
         </div>
