@@ -12,6 +12,7 @@ import { PersonDetailModule } from './person-detail/person-detail.module';
 import { PersonListComponent } from './person-list/person-list.component';
 import { PersonDetailComponent } from './person-detail/person-detail.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { LoginComponent } from './login/login.component';
 // import { MatDialogModule } from '@angular/material/dialog';
 // import { MatButtonModule } from '@angular/material/button';
 // import { MatIconModule } from '@angular/material/icon';
@@ -21,7 +22,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
   declarations: [
     AppComponent,
     PersonListComponent,
-    PersonDetailComponent
+    PersonDetailComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,

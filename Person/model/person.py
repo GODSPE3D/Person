@@ -48,6 +48,22 @@ class Person(db.Model):
             'password': self.password,
             # 'aadhaar': self.aadhaar,
         }
+    
+    def to_json(self):
+        return {"name": self.name,
+                "email": self.email}
+
+    def is_authenticated(self):
+        return True
+
+    def is_active(self):
+        return True
+
+    def is_anonymous(self):
+        return False
+
+    def get_id(self):
+        return str(self.id)
 
     # Check ID
     def sameID(self, id):
@@ -77,6 +93,7 @@ class Person(db.Model):
                             "contact": person.contact,
                             "address": person.address,
                             "education": person.education,
+                            "password": person.password,
                             # "aadhaar": person.aadhaar,
                         }
                         for person in Person.query.all()
@@ -179,6 +196,42 @@ class Person(db.Model):
     def email_or_aadhaar(self, x, data):
         exist = db.session.query(db.exists().where(x == data)).scalar()
         return exist
+    
+    def loginPerson(self, data):
+        # if data["username"] in Person.email:
+        #     return "Present"
+        # if Person.query.filter_by(email=data["username"], password=data["password"]).first():
+        #     return "Present"
+        # else:
+        #     return "Not present"
+        try:
+            # self.email == Person.query.filter_by(email=data["username"]).first()
+            if Person.query.filter_by(email=data["username"],  password=data["password"]).first():
+                # Person.query.filter_by(id=id).first()
+                # Person.id
+                x = Person.query.filter_by(email=data["username"]).first()
+                return jsonify(
+                    [
+                        {
+                            "_id": x.id,
+                            "firstname": x.firstname,
+                            "lastname": x.lastname,
+                            "email": x.email,
+                            "contact": x.contact,
+                            "address": x.address,
+                            "education": x.education,
+                            # "aadhaar": self.aadhaar,
+                        }
+                    ]
+                )
+                return print(Person.id, "present")
+            # if self.email_or_aadhaar(Person.email, data["username"]):
+            #     return self
+            raise NoResultFound
+        except NoResultFound:
+            return "data doesn't exist"
+        
+
 
     # def existAadhaar(self, data):
     #     exist = db.session.query(db.exists().where(Person.aadhaar == data)).scalar()

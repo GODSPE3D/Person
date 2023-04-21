@@ -25,7 +25,7 @@
     </thead>
     <tbody>
       <tr *ngFor="let p of person | filter:searchText" class="text-center">
-        <app-person-detail [x]="p" class="td" (delEvent)="getPersonAll()" (outP)="addPerson($event)"></app-person-detail>
+        <app-person-detail [x]="p" class="td" (delEvent)="getPersonAll()" (addP)="addPerson($event)"></app-person-detail>
         <td><button type="button" class="m-1 btn btn-danger" (click)="delete(p)"><i class="bi bi-trash"></i></button>
         </td>
       </tr>

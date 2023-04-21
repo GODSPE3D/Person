@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
-import { map, Observable, tap, catchError, of } from 'rxjs';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+
+import { Observable } from 'rxjs';
+
 import { Person } from './person';
 
 @Injectable({
@@ -16,7 +18,7 @@ export class PersonService {
 
   constructor(private http: HttpClient) { }
 
-  getPersonAll(): Observable<Person[]> {
+  getAll(): Observable<Person[]> {
     return this.http.get<Person[]>(this.personUrl);
   }
 
@@ -24,15 +26,15 @@ export class PersonService {
     return this.http.get<Person>(this.personUrl + `/${id}`);
   }
 
-  addPerson(p: Person): Observable<Person> {
-    return this.http.post<Person>(this.personUrl, p, this.httpOptions);
+  addPerson(person: Person): Observable<Person> {
+    return this.http.post<Person>(this.personUrl, person, this.httpOptions);
   }
 
-  deletePerson(id: number): Observable<Person> {
-    return this.http.delete<Person>(this.personUrl + `/${id}`, this.httpOptions);
+  deletePerson(id: number) {
+    return this.http.delete(this.personUrl + `/` + id, {responseType: 'text'});
   }
 
-  updatePerson(p: Person): Observable<Person> {
-    return this.http.put<Person>(this.personUrl + `/${p._id}`, p, this.httpOptions);
+  updatePerson(person: Person): Observable<Person> {
+    return this.http.put<Person>(this.personUrl + `/${person._id}`, person, this.httpOptions);
   }
 }

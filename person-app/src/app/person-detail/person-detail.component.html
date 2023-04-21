@@ -68,7 +68,7 @@
             </p>
 
             <mat-dialog-actions align="end" class="btn-edit">
-                <button mat-raised-button mat-dialog-close (click)="addPerson(newP)">Create</button>
+                <button mat-raised-button mat-dialog-close (click)="addPerson(newP)" color="primary">Create</button>
                 <button mat-raised-button mat-dialog-close>Cancel</button>
             </mat-dialog-actions>
         <!-- </mat-dialog-content> -->
@@ -156,8 +156,8 @@
             <input matInput [(ngModel)]="x.lastname" name="lastname">
         </mat-form-field>
         <div mat-dialog-actions align="end">
-            <button mat-raised-button mat-dialog-close (click)="save()">Save</button>
-            <button mat-raised-button mat-dialog-close color="warn">Close</button>
+            <button mat-raised-button mat-dialog-close (click)="save()" color="primary">Save</button>
+            <button mat-raised-button mat-dialog-close>Close</button>
         </div>
     </div>
 </ng-template>
