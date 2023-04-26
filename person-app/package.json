@@ -26,6 +26,8 @@
     "bootstrap-icons": "^1.10.3",
     "bootstrap-table": "^1.21.4",
     "jquery": "^3.6.4",
+    "keycloak-angular": "^13.0.0",
+    "keycloak-js": "^20.0.5",
     "ng-bootstrap": "^0.46.0",
     "ng2-search-filter": "^0.5.1",
     "ngx-bootstrap": "^10.2.0",
