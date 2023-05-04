@@ -5,12 +5,19 @@ export function initializeKeycloak(keycloak: KeycloakService): () => Promise<boo
         keycloak.init({
             config: {
                 url: 'http://localhost:8080',
-                realm: 'personRealm',
+                realm: 'person',
                 clientId: 'myClient'
             },
             initOptions: {
-                checkLoginIframe: true,
-                checkLoginIframeInterval: 25
+                onLoad: 'login-required',
+                flow: 'standard',
             }
         });
 }
+
+// async ngOnInit(): void {
+//     // Get user's email
+//     await this.getUserEmail();
+//     // Get user's data by email
+//     this.getUserByEmail();
+//  }

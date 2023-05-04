@@ -9,7 +9,7 @@ import { User } from './user';
 })
 export class LoginService {
 
-  private loginUrl = 'http://127.0.0.1:5000/login';
+  private loginUrl = 'http://127.0.0.1:5000/person';
 
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })

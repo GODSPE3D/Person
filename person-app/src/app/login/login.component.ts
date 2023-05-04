@@ -5,6 +5,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { User } from '../user';
 import { PersonService } from '../person.service';
 import { LoginService } from '../login.service';
+import { KeycloakService } from 'keycloak-angular';
+import { KeycloakProfile, KeycloakRoles } from 'keycloak-js';
 
 @Component({
   selector: 'app-login',
@@ -17,15 +19,21 @@ export class LoginComponent implements OnInit {
   submitted = false;
   returnUrl!: string;
   user = {} as User;
+  public isLogged = false;
+  public userProfile: KeycloakProfile | null = null;
 
-  constructor(private formBuilder: FormBuilder, private route: ActivatedRoute, private router: Router, private loginService: LoginService) {}
+  constructor(private formBuilder: FormBuilder, private route: ActivatedRoute, private router: Router, private loginService: LoginService, private readonly keycloak: KeycloakService) {}
 
-  ngOnInit(): void {
+  public async ngOnInit() {
       // this.loginForm = this.formBuilder.group({
       //   username: ['', Validators.required],
       //   password: ['', Validators.required]
       // })
       this.getLog();
+      this.isLogged = await this.keycloak.isLoggedIn();
+      if (this.isLogged) {
+        this.userProfile = await this.keycloak.loadUserProfile();
+      }
   }
 
   getLog(): void {
@@ -35,5 +43,13 @@ export class LoginComponent implements OnInit {
   loginPerson(user: User): void {
     console.log(user. username, user.password);
     this.loginService.login(user.username, user.password).subscribe();
+  }
+
+  public loginSession() {
+    this.keycloak.login();
+  }
+
+  public logoutSession() {
+    this.keycloak.logout();
   }
 }

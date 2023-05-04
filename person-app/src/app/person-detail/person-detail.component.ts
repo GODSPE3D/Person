@@ -2,11 +2,15 @@ import { Component, Input, Output, EventEmitter, TemplateRef, ViewChild } from '
 import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 
+import { User } from '../user';
 import { FormControl, Validators } from '@angular/forms';
 import { Person } from '../person';
 import { PersonService } from '../person.service';
+import { LoginService } from '../login.service';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { KeycloakService } from 'keycloak-angular';
+import { KeycloakProfile } from 'keycloak-js';
 
 @Component({
   selector: 'app-person-detail, [app-person-detail]',
@@ -20,17 +24,54 @@ export class PersonDetailComponent {
   @ViewChild('addP') customDialog!: TemplateRef<any>;
   @ViewChild('editPerson') customDialog2!: TemplateRef<any>;
 
+  public isLogged = false;
+  public userProfile: KeycloakProfile | null = null;
+
+  user = {} as User;
+
   newP = {} as Person;
   @Output() addP = new EventEmitter<Person>();
   emailFormControl = new FormControl('', [Validators.required, Validators.email]);
 
   constructor(
-    private route: ActivatedRoute, private personService: PersonService, private location: Location, private dialog: MatDialog, private _snackBar: MatSnackBar
+    private route: ActivatedRoute, private loginService: LoginService, private readonly keycloak: KeycloakService, private personService: PersonService, private location: Location, private dialog: MatDialog, private _snackBar: MatSnackBar
   ) { }
 
   @Output() delEvent = new EventEmitter();
 
-  ngOnInit(): void {
+  public async ngOnInit() {
+      // this.loginForm = this.formBuilder.group({
+      //   username: ['', Validators.required],
+      //   password: ['', Validators.required]
+      // })
+      this.getLog();
+      this.isLogged = await this.keycloak.isLoggedIn();
+      if (this.isLogged) {
+        this.userProfile = await this.keycloak.loadUserProfile();
+      }
+      console.log(this.userProfile);
+      this.user = this.userProfile as User;
+  }
+
+  getLog(): void {
+    this.loginService.get_login().subscribe();
+  }
+
+  loginPerson(user: User): void {
+    console.log(user. username, user.password);
+    this.loginService.login(user.username, user.password).subscribe();
+  }
+
+  public loginSession() {
+    this.keycloak.login();
+  }
+
+  public logoutSession() {
+    this.keycloak.logout();
+  }
+
+  public registerUser() {
+    this.keycloak.register();
   }
 
   openDialog() {

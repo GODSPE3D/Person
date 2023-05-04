@@ -9,11 +9,14 @@ import { AuthGuard } from './utility/app.guard';
 
 const routes: Routes = [
   { path: '', redirectTo: '/person', pathMatch: 'full' },
-  // { path: '', component: LoginComponent , canActivate: [AuthGuard]},
+  // { path: 'person', component: LoginComponent, canActivate: [AuthGuard]},
+  { path: 'person', component: PersonListComponent},
   // { path: '**', redirectTo: '' }
   // { path: 'login', component: LoginComponent },
-  { path: 'person', component: PersonListComponent, loadChildren: () => import('./person-list/person-list.module').then(m => m.PersonListModule), canActivate: [AuthGuard]},
-  // { path: 'person/:id', component: PersonDetailComponent }
+  // { path: 'person', component: PersonListComponent, loadChildren: () => import('./person-list/person-list.module').then(m => m.PersonListModule), canActivate: [AuthGuard] },
+  { path: 'person/:id', component: PersonDetailComponent }
+  // { path: 'person', component: PersonDetailComponent, loadChildren: () => import('./person-detail/person-detail.module').then(m => m.PersonDetailModule), canActivate: [AuthGuard]}
+  // { path: 'person', component: PersonDetailComponent, loadChildren: () => import('./person-detail/person-detail.module').then(m => m.PersonDetailModule), canActivate: [AuthGuard]},
 ];
 
 @NgModule({

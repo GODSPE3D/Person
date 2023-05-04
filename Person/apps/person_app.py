@@ -25,8 +25,8 @@ def create_user():
         data = request.get_json()
         return person.create(data)
 #    return jsonify(person.create(data))
-    #     p = person.create(data)
-    #     #p.create(data)
+        response = person.create(data)
+        #p.create(data)
         # response = Response(json.dumps(person),201,mimetype='application/json')
         # response.headers['Person'] = "/person/" + str(data['firstname'])
     except Exception as e:

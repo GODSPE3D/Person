@@ -1,6 +1,9 @@
 from flask import jsonify
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.exc import NoResultFound, IntegrityError
+from keycloak.keycloak_admin import KeycloakAdmin
+
+keycloak_admin = KeycloakAdmin(server_url='http://localhost:8080/', username='myuser', password='myuser', realm_name='person', verify=True)
 
 
 db = SQLAlchemy()
@@ -170,6 +173,8 @@ class Person(db.Model):
 
             db.session.add(newP)
             db.session.commit()
+            users = keycloak_admin.create_user({"username": data["firstname"], "enabled": True})
+            print(keycloak_admin.get_users({"username": data["firstname"]}))
             # person = Person.query.filter_by(
             #     email=data['email'], aadhaar=data['aadhaar']).first()
             # return Person.displayOne(data, data.id)
