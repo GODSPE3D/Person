@@ -1,10 +1,10 @@
-from .person_app import *
+# from .person_app import *
 from model.person import Person
 from flask import Blueprint, request, redirect, url_for
 from flask_cors import cross_origin
 from model.user import *
-# from ..app import login_manager
-from flask_login import current_user, LoginManager, login_user, logout_user, login_required
+# from ..app import s
+# from flask_login import current_user, LoginManager, login_user, logout_user, login_required
 
 # login_manager = LoginManager()
 # login_manager.init_app(app)
@@ -20,7 +20,6 @@ def get_all():
 @auth.route("/login", methods=["POST"])
 @cross_origin(allow_headers=['Content-Type','Authorization'])
 # @login_manager.login_required
-# @login_required
 def sign_in():
     data = request.get_json()
     # data.check_presence(data)

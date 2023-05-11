@@ -1,24 +1,33 @@
 import json
 from flask_cors import cross_origin
+from flask_login import login_required
 from model.person import Person
 from flask import Blueprint, request, Response
+from .middleware import token_required
+# from flask_oidc import OpenIDConnect
 
 home = Blueprint("home", __name__)
 person = Person()
+# oidc = OpenIDConnect()
 
 @home.route("/")
 def index():
     return {"message": "Welcome to API"}, 200
 
 @home.route("/person")
+# @login_required
 def get_all():
     return person.display()
 
 @home.route("/person/<int:id>")
+@token_required
+# @login_required
+# @oidc.accept_token()
 def get_id(id):
     return person.displayOne(id)
 
 @home.route("/person", methods=["POST"])
+@login_required
 @cross_origin(allow_headers=['Content-Type','Authorization'])
 def create_user():
     try:
@@ -39,12 +48,14 @@ def create_user():
     return response
 
 @home.route("/person/<id>", methods=["PUT"])
+@login_required
 def update_user(id):
     data = request.get_json()
     print(data)
     return person.update(id, data)
 
 @home.route("/person/<id>", methods=["DELETE"])
+@login_required
 # @cross_origin(allow_headers=['Content-Type','Authorization'])
 def delete_user(id):
     print(id)

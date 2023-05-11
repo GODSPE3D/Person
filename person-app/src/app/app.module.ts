@@ -1,7 +1,7 @@
 import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -15,6 +15,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LoginComponent } from './login/login.component';
 import { KeycloakAngularModule, KeycloakService } from 'keycloak-angular';
 import { initializeKeycloak } from './utility/app.init';
+import { ExampleInterceptorInterceptor } from './example-interceptor.interceptor';
 // import { MatDialogModule } from '@angular/material/dialog';
 // import { MatButtonModule } from '@angular/material/button';
 // import { MatIconModule } from '@angular/material/icon';
@@ -42,6 +43,11 @@ import { initializeKeycloak } from './utility/app.init';
     // MatFormFieldModule
   ],
   providers: [PersonService, 
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: ExampleInterceptorInterceptor,
+      multi: true
+    }, 
     {
       provide: APP_INITIALIZER,
       useFactory: initializeKeycloak,

@@ -198,9 +198,10 @@
 from flask import Flask
 from flask_cors import CORS
 from flask_login import LoginManager
+# from flask_oidc import OpenIDConnect
 from model.person import db, Person
-from apps.login_app import *
-from apps.person_app import *
+from apps.login_app import auth
+from apps.person_app import home
 # from 
 
 def create_app():
@@ -210,6 +211,7 @@ def create_app():
     db.init_app(app)
     CORS(app)
     login_manager = LoginManager(app)
+    # oidc = OpenIDConnect(app)
 
     # login_manager.init_app(app)
     with app.app_context():
