@@ -4,7 +4,7 @@ from sqlalchemy.exc import NoResultFound, IntegrityError
 from sqlalchemy.sql import func
 from keycloak.keycloak_admin import KeycloakAdmin
 
-keycloak_admin = KeycloakAdmin(server_url='http://localhost:8080/', username='myuser', password='myuser', realm_name='person', verify=True)
+# keycloak_admin = KeycloakAdmin(server_url='http://localhost:8080/', username='myuser', password='myuser', realm_name='person', verify=True)
 
 
 db = SQLAlchemy()
@@ -56,6 +56,7 @@ class Person(db.Model):
             'education': self.education,
             # 'password': self.password,
             'created_at': self.created_at,
+            'status': self.status,
             # 'aadhaar': self.aadhaar,
         }
 
@@ -113,6 +114,7 @@ class Person(db.Model):
                             "address": self.address,
                             "education": self.education,
                             'created_at': self.created_at,
+                            'status': self.status,
                             # "aadhaar": self.aadhaar,
                         }
                     ]
@@ -128,11 +130,8 @@ class Person(db.Model):
             print(self)
             if p:
                 return True
-                # return self.displayOne(p.id)
             return False
-            # return "No such Email exists"
         except NoResultFound:
-            # return "No such Email exists"
             return False
 
     # POST
@@ -172,6 +171,7 @@ class Person(db.Model):
             newP.education = data["education"]
             # newP.password = data["password"]
             newP.created_at = func.now()
+            newP.status = "new"
             # newP.aadhaar = data["aadhaar"]
 
             db.session.add(newP)
@@ -260,6 +260,8 @@ class Person(db.Model):
                     self.lastname = data["lastname"]
                 if "contact" in data:
                     self.contact = data["contact"]
+                
+                self.status = "old"
 
                 db.session.commit()
                 # print(self)
@@ -271,11 +273,16 @@ class Person(db.Model):
     def personDelete(self, id):
         print(id)
         try:
-            # if self.sameID(id):
-            self = Person.query.filter_by(id=id).first()
-            db.session.delete(self)
-            db.session.commit()
-            return "Data deleted successfully!"
-            # raise NoResultFound
+            if self.sameID(id):
+                self = Person.query.filter_by(id=id).first()
+                if self.status == "tbd":
+                    db.session.delete(self)
+                    db.session.commit()
+                    return "Data deleted successfully!"
+                else:
+                    self.status = "tbd"
+                    db.session.commit()
+                    return "Data set for deletion"
+            raise NoResultFound
         except NoResultFound:
             return "No such ID exists"
