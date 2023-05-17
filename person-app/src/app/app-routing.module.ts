@@ -17,6 +17,11 @@ const routes: Routes = [
   // { path: 'person/:id', component: PersonDetailComponent }
   // { path: 'person/:id', component: PersonDetailComponent, loadChildren: () => import('./person-detail/person-detail.module').then(m => m.PersonDetailModule), canActivate: [AuthGuard]}
   { path: 'person', component: PersonDetailComponent, loadChildren: () => import('./person-detail/person-detail.module').then(m => m.PersonDetailModule), canActivate: [AuthGuard]},
+  // { path: 'person', component: PersonListComponent, children: [
+  //   {
+  //     path: ':id', component: PersonDetailComponent, loadChildren: () => import('./person-detail/person-detail.module').then(m => m.PersonDetailModule), canActivate: [AuthGuard]
+  //   }
+  // ]}
 ];
 
 @NgModule({

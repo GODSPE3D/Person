@@ -1,17 +1,28 @@
 <!-- <td class="data-border">{{user.username}}</td>  -->
-<button type="button" class="m-2 btn btn-primary" (click)="logoutSession()">Logout</button>
-<br>
-<td class="data-border">{{user.firstName}}</td>
-<td class="data-border">{{user.lastName}}</td>
-<td class="data-border">{{user.email}}</td>
-<button type="button" class="m-2 btn btn-primary" (click)="openDialog2()"><i class="bi bi-pencil-square"></i></button>
-<button type="button" class="m-1 btn btn-danger" (click)="deletePerson(x)"><i class="bi bi-trash"></i></button>
+<!-- <button type="button" class="m-2 btn btn-primary" (click)="logoutSession()">Logout</button> -->
+<!-- <br> -->
+<div *ngIf="newP">
+    <p>{{newP | json}}</p>
+    <p>{{newP._id}}</p>
+    {{newP.education}}
+    {{newP.firstname}}
+    {{newP.lastname}}
+    {{newP.email}}
+    <td class="data-border">{{newP.lastname}}</td>
+</div>
+
+<!-- <ng-container *ngIf="newP">
+    {{newP.email}}
+</ng-container> -->
+
+<!-- <button type="button" class="m-2 btn btn-primary" (click)="openDialog2()"><i class="bi bi-pencil-square"></i></button>
+<button type="button" class="m-1 btn btn-danger" (click)="deletePerson(x)"><i class="bi bi-trash"></i></button> -->
 
 <!-- <button type="button" class="m-2 btn btn-primary" (click)="logoutSession()">Logout</button>
-<ng-container *ngTemplateOutlet="content"></ng-container>
+<ng-container *ngTemplateOutlet="content"></ng-container> -->
 
 <ng-template #content>
-    <td class="data-border">{{x.firstname}}</td>
+    <td class="data-border">{{x.education}}</td>
     <td class="data-border">{{x.lastname}}</td>
     <td class="data-border">{{x.email}}</td>
     <td class="data-border">{{x.contact}}</td>

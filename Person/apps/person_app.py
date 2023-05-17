@@ -2,7 +2,7 @@ import json
 from flask_cors import cross_origin
 from flask_login import login_required
 from model.person import Person
-from flask import Blueprint, request, Response
+from flask import Blueprint, request, Response, jsonify
 from .middleware import token_required
 # from flask_oidc import OpenIDConnect
 
@@ -15,19 +15,36 @@ def index():
     return {"message": "Welcome to API"}, 200
 
 @home.route("/person")
+@cross_origin(allow_headers=['Content-Type','Authorization'])
 # @login_required
 def get_all():
     return person.display()
 
-@home.route("/person/<int:id>")
-@token_required
+@home.route("/person/<id>")
+# @cross_origin(allow_headers=['Content-Type','Authorization'])
+# @token_required
 # @login_required
 # @oidc.accept_token()
 def get_id(id):
     return person.displayOne(id)
 
+@home.route("/person/login", methods=["POST"])
+@cross_origin(allow_headers=['Content-Type','Authorization'])
+# @token_required
+# @login_required
+# @oidc.accept_token()
+def get_email():
+    data = request.get_json()
+    if person.displayEmail(data):
+        print(data)
+        print(person.displayEmail(data))
+    # return jsonify(data)
+    return person.displayEmail(data)
+    # return jsonify({"firstname": "Success"})
+    # return person.display()
+
 @home.route("/person", methods=["POST"])
-@login_required
+# @login_required
 @cross_origin(allow_headers=['Content-Type','Authorization'])
 def create_user():
     try:
@@ -55,7 +72,7 @@ def update_user(id):
     return person.update(id, data)
 
 @home.route("/person/<id>", methods=["DELETE"])
-@login_required
+# @login_required
 # @cross_origin(allow_headers=['Content-Type','Authorization'])
 def delete_user(id):
     print(id)

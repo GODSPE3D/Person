@@ -1,6 +1,7 @@
 from flask import jsonify
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.exc import NoResultFound, IntegrityError
+from sqlalchemy.sql import func
 from keycloak.keycloak_admin import KeycloakAdmin
 
 keycloak_admin = KeycloakAdmin(server_url='http://localhost:8080/', username='myuser', password='myuser', realm_name='person', verify=True)
@@ -21,10 +22,15 @@ class Person(db.Model):
     firstname = db.Column(db.String(100), nullable=False)
     lastname = db.Column(db.String(100), nullable=False)
     email = db.Column(db.String(80), unique=True, nullable=False)
-    contact = db.Column(db.Integer, nullable=False)
-    address = db.Column(db.String(200), nullable=False)
+    contact = db.Column(db.Integer)
+    address = db.Column(db.String(200))
     education = db.Column(db.String(500))
-    password = db.Column(db.String(200), nullable=False)
+    # password = db.Column(db.String(200), nullable=False)
+    created_at = db.Column(db.DateTime(timezone=True),
+                           onupdate=func.current_timestamp())
+    status = db.Column(db.String(3), nullable=False)
+    # default
+    # time, user type
     # aadhaar = db.Column(db.BigInteger, nullable=False)  # unique
 
     # def create(self, data):
@@ -48,39 +54,19 @@ class Person(db.Model):
             'contact': self.contact,
             'address': self.address,
             'education': self.education,
-            'password': self.password,
+            # 'password': self.password,
+            'created_at': self.created_at,
             # 'aadhaar': self.aadhaar,
         }
-    
-    def to_json(self):
-        return {"name": self.name,
-                "email": self.email}
-
-    def is_authenticated(self):
-        return True
-
-    def is_active(self):
-        return True
-
-    def is_anonymous(self):
-        return False
-
-    def get_id(self):
-        return str(self.id)
 
     # Check ID
     def sameID(self, id):
-        # try:
         s = db.session.query(
             db.session.query(Person).filter_by(id=id).exists()
         ).scalar()
         if s is True:
-            # return self.displayOne(id)
             return True
         return False
-        #     raise NoResultFound
-        # except NoResultFound:
-        #     return "No such ID exists"
 
     # GET
     def display(self):
@@ -96,7 +82,8 @@ class Person(db.Model):
                             "contact": person.contact,
                             "address": person.address,
                             "education": person.education,
-                            "password": person.password,
+                            # "password": person.password,
+                            'created_at': person.created_at,
                             # "aadhaar": person.aadhaar,
                         }
                         for person in Person.query.all()
@@ -125,6 +112,7 @@ class Person(db.Model):
                             "contact": self.contact,
                             "address": self.address,
                             "education": self.education,
+                            'created_at': self.created_at,
                             # "aadhaar": self.aadhaar,
                         }
                     ]
@@ -132,6 +120,20 @@ class Person(db.Model):
             raise NoResultFound
         except NoResultFound:
             return "No such ID exists"
+
+    def displayEmail(self, data):
+        try:
+            # print(data)
+            p = Person.query.filter_by(email=data["email"]).first()
+            print(self)
+            if p:
+                return True
+                # return self.displayOne(p.id)
+            return False
+            # return "No such Email exists"
+        except NoResultFound:
+            # return "No such Email exists"
+            return False
 
     # POST
     def create(self, data):
@@ -150,7 +152,7 @@ class Person(db.Model):
                 len(data["firstname"]) < 4
                 or len(data["lastname"]) < 4
                 or len(data["email"]) < 6
-                or len(data["password"]) < 8
+                # or len(data["password"]) < 8
             ):
                 # return msg.badLetter()
                 raise ValueError
@@ -168,13 +170,14 @@ class Person(db.Model):
             newP.contact = data["contact"]
             newP.address = data["address"]
             newP.education = data["education"]
-            newP.password = data["password"]
+            # newP.password = data["password"]
+            newP.created_at = func.now()
             # newP.aadhaar = data["aadhaar"]
 
             db.session.add(newP)
             db.session.commit()
-            users = keycloak_admin.create_user({"username": data["firstname"], "enabled": True})
-            print(keycloak_admin.get_users({"username": data["firstname"]}))
+            # users = keycloak_admin.create_user({"username": data["firstname"], "enabled": True})
+            # print(keycloak_admin.get_users({"username": data["firstname"]}))
             # person = Person.query.filter_by(
             #     email=data['email'], aadhaar=data['aadhaar']).first()
             # return Person.displayOne(data, data.id)
@@ -194,14 +197,10 @@ class Person(db.Model):
         except Exception as e:
             return e
 
-    # def existAll(self, data):
-    #     exist = 'firstname' not in data or 'lastname' not in data or 'email' not in data or 'contact' not in data or 'education' not in data
-    #     return exist
-
     def email_or_aadhaar(self, x, data):
         exist = db.session.query(db.exists().where(x == data)).scalar()
         return exist
-    
+
     def loginPerson(self, data):
         # if data["username"] in Person.email:
         #     return "Present"
@@ -234,9 +233,7 @@ class Person(db.Model):
             #     return self
             raise NoResultFound
         except NoResultFound:
-            return "data doesn't exist"
-        
-
+            return "Data doesn't exist"
 
     # def existAadhaar(self, data):
     #     exist = db.session.query(db.exists().where(Person.aadhaar == data)).scalar()

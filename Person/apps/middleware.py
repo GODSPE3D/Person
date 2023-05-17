@@ -21,7 +21,7 @@ def token_required(f):
             }, 401
         try:
             data=instance.decode(token, current_app.config["SECRET_KEY"])
-            current_user=Person().get_by_id(data["user_id"])
+            current_user=Person().get_by_id(data["_id"])
             if current_user is None:
                 return {
                 "message": "Invalid Authentication token!",
@@ -38,5 +38,5 @@ def token_required(f):
             }, 500
 
         return f(current_user, *args, **kwargs)
-
+    
     return decorated

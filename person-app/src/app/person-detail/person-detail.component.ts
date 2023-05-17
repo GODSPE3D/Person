@@ -1,16 +1,17 @@
-import { Component, Input, Output, EventEmitter, TemplateRef, ViewChild } from '@angular/core';
+import { Component, Input, Output, EventEmitter, TemplateRef, ViewChild, OnChanges, SimpleChanges } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 
 import { User } from '../user';
 import { FormControl, Validators } from '@angular/forms';
-import { Person } from '../person';
+import { P, Person } from '../person';
 import { PersonService } from '../person.service';
 import { LoginService } from '../login.service';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { KeycloakService } from 'keycloak-angular';
+import { KeycloakEventType, KeycloakService } from 'keycloak-angular';
 import { KeycloakProfile } from 'keycloak-js';
+import { from, filter } from 'rxjs';
 
 @Component({
   selector: 'app-person-detail, [app-person-detail]',
@@ -21,6 +22,8 @@ import { KeycloakProfile } from 'keycloak-js';
 export class PersonDetailComponent {
 
   @Input() x = {} as Person;
+  // myDataCopy = {...this.x};
+
   @ViewChild('addP') customDialog!: TemplateRef<any>;
   @ViewChild('editPerson') customDialog2!: TemplateRef<any>;
 
@@ -28,8 +31,10 @@ export class PersonDetailComponent {
   public userProfile: KeycloakProfile | null = null;
 
   user = {} as User;
+  public email: any;
 
   newP = {} as Person;
+  single = {} as Person;
   @Output() addP = new EventEmitter<Person>();
   emailFormControl = new FormControl('', [Validators.required, Validators.email]);
 
@@ -39,22 +44,66 @@ export class PersonDetailComponent {
 
   @Output() delEvent = new EventEmitter();
 
-  public async ngOnInit() {
+  ngOnInit() {
+    this.key();
+    // console.log(this.x.firstname);
+    
+    // console.log(this.myDataCopy.firstname);
+    // this.ngOnChanges;
       // this.loginForm = this.formBuilder.group({
       //   username: ['', Validators.required],
       //   password: ['', Validators.required]
       // })
-      this.getLog();
-      this.isLogged = await this.keycloak.isLoggedIn();
-      if (this.isLogged) {
-        this.userProfile = await this.keycloak.loadUserProfile();
-      }
-      console.log(this.userProfile);
-      this.user = this.userProfile as User;
+      // this.x = this.newP;
+      // console.log(this.newP.firstname);
+      // this.getLog();
+      // this.isLogged = await this.keycloak.isLoggedIn();
+      // if (this.isLogged) {
+      //   let userProfile = await this.keycloak.loadUserProfile();
+      //   // console.log(this.userProfile);
+      //   // this.email = userProfile.email;
+      //   // console.log(this.email);
+      // }
+      
+      // this.user = this.userProfile as User;
+      // this.p.forEach((a) => {
+      //   if (this.user.email == a.email) {
+      //     console.log('' + a.email);
+      //   }
+      //   console.log(a.email);
+      // })
+      // from(this.keycloak.keycloakEvents$)
+      // .pipe(filter(event => event.type === KeycloakEventType.OnTokenExpired))
+      // .subscribe(() => console.log('The token has expired', this.keycloak.logout()))
+      // console.dir(this.x);
+
+      // if (this.keycloak.isTokenExpired(this.keycloak.getToken()) === true) {
+      //   this.logoutSession();
+      // };
+      // this.getOne();
+  }
+
+  async key() {
+    let currentUser = await this.keycloak.loadUserProfile();
+    this.email = currentUser.email;
+    console.log(currentUser);
+    this.getOne(currentUser.email as string);
   }
 
   getLog(): void {
     this.loginService.get_login().subscribe();
+  }
+
+  getOne(email: string) {
+    this.personService.postMail(JSON.stringify({"email": email})).subscribe(newP => {
+      this.newP = newP;
+      // this.x = this.newP;
+      console.log(this.newP);
+      // this.personService.getPerson(this.newP._id).subscribe(single => {
+      //   this.single = single;
+      //   console.log(this.single);
+      // })
+    });
   }
 
   loginPerson(user: User): void {
@@ -62,11 +111,12 @@ export class PersonDetailComponent {
     this.loginService.login(user.username, user.password).subscribe();
   }
 
-  public loginSession() {
+  public async loginSession() {
     this.keycloak.login();
+    console.log(this.email);
   }
 
-  public logoutSession() {
+  logoutSession() {
     this.keycloak.logout();
   }
 
@@ -93,6 +143,12 @@ export class PersonDetailComponent {
     // 123245685464
     this.addP.emit(newP);
   }
+
+  // getOne(): void {
+  //   if (this.user.firstName === this.x.firstname) {
+  //     this.personService.getPerson(this.x._id).subscribe(p => this.p = p);
+  //   }
+  // }
 
   goBack(): void {
     this.location.back();
