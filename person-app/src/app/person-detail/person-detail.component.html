@@ -1,15 +1,22 @@
-<!-- <td class="data-border">{{user.username}}</td>  -->
-<!-- <button type="button" class="m-2 btn btn-primary" (click)="logoutSession()">Logout</button> -->
+<!-- <td class="data-border">{{user.username}}</td>
+<button type="button" class="m-2 btn btn-primary" (click)="logoutSession()">Logout</button> -->
 <!-- <br> -->
-<div *ngIf="newP">
+<!-- <div *ngIf="newP">
     <p>{{newP | json}}</p>
-    <p>{{newP._id}}</p>
+    <p>{{newP.email}}</p>
     {{newP.education}}
     {{newP.firstname}}
     {{newP.lastname}}
     {{newP.email}}
     <td class="data-border">{{newP.lastname}}</td>
-</div>
+</div> -->
+
+{{user.firstname | json}}
+{{user.lastname}}
+{{user.email}}
+<!-- <ng-container *ngIf="player">
+    <p> This is Player view. </p>
+</ng-container> -->
 
 <!-- <ng-container *ngIf="newP">
     {{newP.email}}
@@ -18,14 +25,17 @@
 <!-- <button type="button" class="m-2 btn btn-primary" (click)="openDialog2()"><i class="bi bi-pencil-square"></i></button>
 <button type="button" class="m-1 btn btn-danger" (click)="deletePerson(x)"><i class="bi bi-trash"></i></button> -->
 
-<!-- <button type="button" class="m-2 btn btn-primary" (click)="logoutSession()">Logout</button>
-<ng-container *ngTemplateOutlet="content"></ng-container> -->
+<!-- <button type="button" class="m-2 btn btn-primary" (click)="logoutSession()">Logout</button> -->
+<ng-container *ngTemplateOutlet="content"></ng-container>
 
 <ng-template #content>
-    <td class="data-border">{{x.education}}</td>
+    <!-- <td class="data-border">{{x.firstname}}</td>
     <td class="data-border">{{x.lastname}}</td>
-    <td class="data-border">{{x.email}}</td>
-    <td class="data-border">{{x.contact}}</td>
+    <td class="data-border">{{x.email}}</td> -->
+    {{user.firstname}}
+{{user.lastname}}
+{{user.email}}
+    <!-- <td class="data-border">{{x.contact}}</td> -->
     <td>
         <button type="button" class="m-2 btn btn-primary" (click)="openDialog2()"><i
                 class="bi bi-pencil-square"></i></button>

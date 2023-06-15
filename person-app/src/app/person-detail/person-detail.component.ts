@@ -4,7 +4,7 @@ import { Location } from '@angular/common';
 
 import { User } from '../user';
 import { FormControl, Validators } from '@angular/forms';
-import { P, Person } from '../person';
+import { Person } from '../person';
 import { PersonService } from '../person.service';
 import { LoginService } from '../login.service';
 import { MatDialog } from '@angular/material/dialog';
@@ -23,6 +23,7 @@ export class PersonDetailComponent {
 
   @Input() x = {} as Person;
   // myDataCopy = {...this.x};
+  player!: boolean;
 
   @ViewChild('addP') customDialog!: TemplateRef<any>;
   @ViewChild('editPerson') customDialog2!: TemplateRef<any>;
@@ -30,7 +31,7 @@ export class PersonDetailComponent {
   public isLogged = false;
   public userProfile: KeycloakProfile | null = null;
 
-  user = {} as User;
+  @Input() user = {} as User;
   public email: any;
 
   newP = {} as Person;
@@ -40,12 +41,14 @@ export class PersonDetailComponent {
 
   constructor(
     private route: ActivatedRoute, private loginService: LoginService, private readonly keycloak: KeycloakService, private personService: PersonService, private location: Location, private dialog: MatDialog, private _snackBar: MatSnackBar
-  ) { }
+  ) {
+    this.player = this.keycloak.isUserInRole("player");
+  }
 
   @Output() delEvent = new EventEmitter();
 
   ngOnInit() {
-    this.key();
+    // this.key();
     // console.log(this.x.firstname);
     
     // console.log(this.myDataCopy.firstname);
@@ -81,35 +84,42 @@ export class PersonDetailComponent {
       //   this.logoutSession();
       // };
       // this.getOne();
+      console.log(this.x);
+      console.log("User: ", this.user);
   }
 
-  async key() {
-    let currentUser = await this.keycloak.loadUserProfile();
-    this.email = currentUser.email;
-    console.log(currentUser);
-    this.getOne(currentUser.email as string);
-  }
+  // async key() {
+  //   let currentUser = await this.keycloak.loadUserProfile();
+  //   this.user.firstname = currentUser.firstName as string;
+  //   this.user.lastname = currentUser.lastName as string;
+  //   this.user.email = currentUser.email as string;
+  //   // console.log(currentUser);
+  //   console.log("User: ", this.user);
+  //   return this.user;
+  //   // this.getOne(currentUser.email as string);
+  // }
 
   getLog(): void {
     this.loginService.get_login().subscribe();
   }
 
   getOne(email: string) {
-    this.personService.postMail(JSON.stringify({"email": email})).subscribe(newP => {
-      this.newP = newP;
-      // this.x = this.newP;
-      console.log(this.newP);
-      // this.personService.getPerson(this.newP._id).subscribe(single => {
-      //   this.single = single;
-      //   console.log(this.single);
-      // })
-    });
+    // this.personService.postMail(JSON.stringify({"email": email})).subscribe(newPe => {
+    //   this.newP.email = email;
+    //   this.newP = newPe;
+    //   // this.x = this.newP;
+    //   console.log(this.newP);
+    //   // this.personService.getPerson(this.newP._id).subscribe(single => {
+    //   //   this.single = single;
+    //   //   console.log(this.single);
+    //   // })
+    // });
   }
 
-  loginPerson(user: User): void {
-    console.log(user. username, user.password);
-    this.loginService.login(user.username, user.password).subscribe();
-  }
+  // loginPerson(user: User): void {
+  //   console.log(user. username, user.password);
+  //   this.loginService.login(user.username, user.password).subscribe();
+  // }
 
   public async loginSession() {
     this.keycloak.login();

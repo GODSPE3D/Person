@@ -9,9 +9,10 @@ export function initializeKeycloak(keycloak: KeycloakService): () => Promise<boo
                 clientId: 'myClient'
             },
             initOptions: {
-                onLoad: 'login-required',
+                // onLoad: 'login-required',
                 flow: 'standard',
-            }
+            },
+            bearerExcludedUrls: ['/home']
         });
 }
 

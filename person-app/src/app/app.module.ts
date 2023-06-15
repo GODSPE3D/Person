@@ -13,9 +13,10 @@ import { PersonListComponent } from './person-list/person-list.component';
 import { PersonDetailComponent } from './person-detail/person-detail.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LoginComponent } from './login/login.component';
-import { KeycloakAngularModule, KeycloakService } from 'keycloak-angular';
+import { KeycloakAngularModule, KeycloakBearerInterceptor, KeycloakService } from 'keycloak-angular';
 import { initializeKeycloak } from './utility/app.init';
 import { ExampleInterceptorInterceptor } from './example-interceptor.interceptor';
+import { DashboardComponent } from './dashboard/dashboard.component';
 // import { MatDialogModule } from '@angular/material/dialog';
 // import { MatButtonModule } from '@angular/material/button';
 // import { MatIconModule } from '@angular/material/icon';
@@ -26,7 +27,8 @@ import { ExampleInterceptorInterceptor } from './example-interceptor.interceptor
     AppComponent,
     PersonListComponent,
     PersonDetailComponent,
-    LoginComponent
+    LoginComponent,
+    DashboardComponent
   ],
   imports: [
     BrowserModule,
@@ -45,7 +47,7 @@ import { ExampleInterceptorInterceptor } from './example-interceptor.interceptor
   providers: [PersonService, 
     {
       provide: HTTP_INTERCEPTORS,
-      useClass: ExampleInterceptorInterceptor,
+      useClass: KeycloakBearerInterceptor,
       multi: true
     }, 
     {
@@ -53,7 +55,8 @@ import { ExampleInterceptorInterceptor } from './example-interceptor.interceptor
       useFactory: initializeKeycloak,
       multi: true,
       deps: [KeycloakService]
-    }],
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -1,0 +1,38 @@
+<p>dashboard works! This is default view</p>
+
+<button type="button" class="m-2 btn btn-primary" (click)="loginSession()">Login</button>
+<button type="button" class="m-2 btn btn-primary" (click)="logoutSession()">Logout</button>
+
+<!-- <div *ngIf="newP">
+    {{newP.firstname}}
+    {{newP.lastname}}
+    {{newP.email}}
+</div> -->
+
+<!-- {{newP}}
+    {{newP1}} -->
+
+Name: {{newP}}
+<!-- html -->
+<!-- admin
+player -->
+<!-- <ng-container *ngIf="player">
+    <p> This is Player view. </p>
+    <button type="button" class="m-2 btn btn-primary" (click)="logoutSession()">Logout</button>
+    <app-person-list></app-person-list>
+</ng-container> -->
+<br>
+
+<ng-container *ngIf="player">
+    <div *ngIf="newP">
+    <!-- <app-person-detail [x]="newP"></app-person-detail> -->
+    <app-person-detail [user]="newP"></app-person-detail>
+    Name: {{newP.email | json}}
+    {{newP1}}
+    </div>
+    <!-- <p *ngFor="let n of newP">{{newP.email}}</p> -->
+</ng-container>
+
+<ng-container *ngIf="manager">
+    <p> This is Manager view. </p>
+</ng-container>

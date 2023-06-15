@@ -4,6 +4,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 import { Person } from './person';
+import { User } from './user';
 
 @Injectable({
   providedIn: 'root'
@@ -26,16 +27,20 @@ export class PersonService {
     return this.http.get<Person>(this.personUrl + `/${id}`);
   }
 
-  postMail(email: string): Observable<Person> {
-    return this.http.post<Person>(this.personUrl + '/login', email, this.httpOptions);
+  postMail(firstname: string, lastname: string, email: string): Observable<User> {
+    return this.http.post<User>(this.personUrl + '/login', {firstname, lastname, email}, this.httpOptions);
   }
+
+  // getMail(firstname: string, lastname: string, email: string): Observable<Person> {
+  //   return this.http.get<Person>(this.personUrl + '/login', {firstname, lastname, email});
+  // }
 
   addPerson(person: Person): Observable<Person> {
     return this.http.post<Person>(this.personUrl, person, this.httpOptions);
   }
 
   deletePerson(id: number) {
-    return this.http.delete(this.personUrl + `/` + id, {responseType: 'text'});
+    return this.http.delete(this.personUrl + `/` + id, { responseType: 'text' });
   }
 
   updatePerson(person: Person): Observable<Person> {

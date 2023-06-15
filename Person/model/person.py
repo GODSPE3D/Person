@@ -25,10 +25,12 @@ class Person(db.Model):
     contact = db.Column(db.Integer)
     address = db.Column(db.String(200))
     education = db.Column(db.String(500))
-    # password = db.Column(db.String(200), nullable=False)
+    password = db.Column(db.String(200), nullable=False)
     created_at = db.Column(db.DateTime(timezone=True),
                            onupdate=func.current_timestamp())
     status = db.Column(db.String(3), nullable=False)
+    
+    #act
     # default
     # time, user type
     # aadhaar = db.Column(db.BigInteger, nullable=False)  # unique
@@ -95,6 +97,7 @@ class Person(db.Model):
             return "Table is empty!"
 
     # GET with ID
+    #update
     def displayOne(self, id):
         try:
             # p = db.session.query.get(Person, id)
@@ -127,10 +130,24 @@ class Person(db.Model):
         try:
             # print(data)
             p = Person.query.filter_by(email=data["email"]).first()
+
+            # should whole data be read from keycloak
+            
             print(self)
             if p:
-                return True
-            return False
+                return self.displayOne(p.id)
+            else:
+                p = Person()
+                p.firstname = data["firstname"]
+                p.lastname = data["lastname"]
+                p.email = data["email"]
+
+                db.session.add(p)
+                db.session.commit()
+                
+                return Person.displayOne(p, p.id)
+                # return self.
+            # return False
         except NoResultFound:
             return False
 
@@ -276,7 +293,7 @@ class Person(db.Model):
             if self.sameID(id):
                 self = Person.query.filter_by(id=id).first()
                 if self.status == "tbd":
-                    db.session.delete(self)
+                    # db.session.delete(self)
                     db.session.commit()
                     return "Data deleted successfully!"
                 else:

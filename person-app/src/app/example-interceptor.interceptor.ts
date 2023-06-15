@@ -24,7 +24,7 @@ export class ExampleInterceptorInterceptor implements HttpInterceptor {
       }
     });
 
-    console.log('Authorization interceptor');
+    console.log('Authorization interceptor' + authToken);
     
     return next.handle(request);
   }

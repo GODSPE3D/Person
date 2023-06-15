@@ -40,10 +40,10 @@ export class LoginComponent implements OnInit {
     this.loginService.get_login().subscribe();
   }
 
-  loginPerson(user: User): void {
-    console.log(user. username, user.password);
-    this.loginService.login(user.username, user.password).subscribe();
-  }
+  // loginPerson(user: User): void {
+  //   console.log(user. username, user.password);
+  //   this.loginService.login(user.username, user.password).subscribe();
+  // }
 
   public loginSession() {
     this.keycloak.login();

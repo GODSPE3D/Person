@@ -35,13 +35,7 @@ def get_id(id):
 # @oidc.accept_token()
 def get_email():
     data = request.get_json()
-    if person.displayEmail(data):
-        print(data)
-        print(person.displayEmail(data))
-    # return jsonify(data)
     return person.displayEmail(data)
-    # return jsonify({"firstname": "Success"})
-    # return person.display()
 
 @home.route("/person", methods=["POST"])
 # @login_required
@@ -65,7 +59,7 @@ def create_user():
     return response
 
 @home.route("/person/<id>", methods=["PUT"])
-@login_required
+# @login_required
 def update_user(id):
     data = request.get_json()
     print(data)

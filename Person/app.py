@@ -5,8 +5,8 @@
 # from flask_login import current_user, LoginManager, login_user, logout_user, login_required
 # import flask_login
 
-
 # app = Flask(__name__)
+
 # app.config["SQLALCHEMY_DATABASE_URI"] = "mysql://root:root@localhost/flask"
 # app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
@@ -23,10 +23,10 @@
 #     db.create_all()
 
 
-# # DEFAULT
+# DEFAULT
 # @app.route("/")
 # def home():
-#     return {"message": "Welcome to API"}, 200
+#     return "<p>This is a Flask application</p>"
 
 
 # # GET
