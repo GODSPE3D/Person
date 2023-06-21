@@ -31,9 +31,9 @@ export class PersonService {
     return this.http.post<User>(this.personUrl + '/login', {firstname, lastname, email}, this.httpOptions);
   }
 
-  // getMail(firstname: string, lastname: string, email: string): Observable<Person> {
-  //   return this.http.get<Person>(this.personUrl + '/login', {firstname, lastname, email});
-  // }
+  getMail(): Observable<Person> {
+    return this.http.get<Person>(this.personUrl + '/login');
+  }
 
   addPerson(person: Person): Observable<Person> {
     return this.http.post<Person>(this.personUrl, person, this.httpOptions);

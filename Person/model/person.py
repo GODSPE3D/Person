@@ -134,9 +134,8 @@ class Person(db.Model):
             # should whole data be read from keycloak
             
             print(self)
-            if p:
-                return self.displayOne(p.id)
-            else:
+            if not p:
+                # return self.displayOne(p.id)
                 p = Person()
                 p.firstname = data["firstname"]
                 p.lastname = data["lastname"]
@@ -144,8 +143,18 @@ class Person(db.Model):
 
                 db.session.add(p)
                 db.session.commit()
+            # else:
+            #     p = Person()
+            #     p.firstname = data["firstname"]
+            #     p.lastname = data["lastname"]
+            #     p.email = data["email"]
+
+            #     db.session.add(p)
+            #     db.session.commit()
                 
-                return Person.displayOne(p, p.id)
+                # return Person.displayOne(p, p.id)
+                print(p.id)
+            return self.displayOne(p.id)
                 # return self.
             # return False
         except NoResultFound:
@@ -202,7 +211,7 @@ class Person(db.Model):
 
             # print(newP)
             # return
-            return Person.displayOne(newP, newP.id)
+            return newP.displayOne(newP.id)
             # return Person.display(self)
 
         except NoResultFound:

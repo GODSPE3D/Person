@@ -28,7 +28,7 @@ def get_all():
 def get_id(id):
     return person.displayOne(id)
 
-@home.route("/person/login", methods=["POST"])
+@home.route("/person/login", methods=["GET", "POST"])
 @cross_origin(allow_headers=['Content-Type','Authorization'])
 # @token_required
 # @login_required

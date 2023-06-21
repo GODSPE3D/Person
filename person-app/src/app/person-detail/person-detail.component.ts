@@ -31,7 +31,7 @@ export class PersonDetailComponent {
   public isLogged = false;
   public userProfile: KeycloakProfile | null = null;
 
-  @Input() user = {} as User;
+  @Input() user!: User;
   public email: any;
 
   newP = {} as Person;
@@ -47,46 +47,63 @@ export class PersonDetailComponent {
 
   @Output() delEvent = new EventEmitter();
 
-  ngOnInit() {
-    // this.key();
-    // console.log(this.x.firstname);
-    
-    // console.log(this.myDataCopy.firstname);
-    // this.ngOnChanges;
-      // this.loginForm = this.formBuilder.group({
-      //   username: ['', Validators.required],
-      //   password: ['', Validators.required]
-      // })
-      // this.x = this.newP;
-      // console.log(this.newP.firstname);
-      // this.getLog();
-      // this.isLogged = await this.keycloak.isLoggedIn();
-      // if (this.isLogged) {
-      //   let userProfile = await this.keycloak.loadUserProfile();
-      //   // console.log(this.userProfile);
-      //   // this.email = userProfile.email;
-      //   // console.log(this.email);
-      // }
-      
-      // this.user = this.userProfile as User;
-      // this.p.forEach((a) => {
-      //   if (this.user.email == a.email) {
-      //     console.log('' + a.email);
-      //   }
-      //   console.log(a.email);
-      // })
-      // from(this.keycloak.keycloakEvents$)
-      // .pipe(filter(event => event.type === KeycloakEventType.OnTokenExpired))
-      // .subscribe(() => console.log('The token has expired', this.keycloak.logout()))
-      // console.dir(this.x);
+  changeLog: string[] = [];
 
-      // if (this.keycloak.isTokenExpired(this.keycloak.getToken()) === true) {
-      //   this.logoutSession();
-      // };
-      // this.getOne();
-      console.log(this.x);
-      console.log("User: ", this.user);
+  ngOnChanges(changes: SimpleChanges) {
+    const log: string[] = [];
+    for (const propName in changes) {
+      const changedProp = changes[propName];
+      const to = JSON.stringify(changedProp.currentValue);
+      if (changedProp.isFirstChange()) {
+        log.push(`Initial value of ${propName} set to ${to}`);
+      } else {
+        const from = JSON.stringify(changedProp.previousValue);
+        log.push(`${propName} changed from ${from} to ${to}`);
+      }
+    }
+    this.changeLog.push(log.join(', '));
   }
+
+  // ngOnInit() {
+  //   // this.key();
+  //   // console.log(this.x.firstname);
+    
+  //   // console.log(this.myDataCopy.firstname);
+  //   // this.ngOnChanges;
+  //     // this.loginForm = this.formBuilder.group({
+  //     //   username: ['', Validators.required],
+  //     //   password: ['', Validators.required]
+  //     // })
+  //     // this.x = this.newP;
+  //     // console.log(this.newP.firstname);
+  //     // this.getLog();
+  //     // this.isLogged = await this.keycloak.isLoggedIn();
+  //     // if (this.isLogged) {
+  //     //   let userProfile = await this.keycloak.loadUserProfile();
+  //     //   // console.log(this.userProfile);
+  //     //   // this.email = userProfile.email;
+  //     //   // console.log(this.email);
+  //     // }
+      
+  //     // this.user = this.userProfile as User;
+  //     // this.p.forEach((a) => {
+  //     //   if (this.user.email == a.email) {
+  //     //     console.log('' + a.email);
+  //     //   }
+  //     //   console.log(a.email);
+  //     // })
+  //     // from(this.keycloak.keycloakEvents$)
+  //     // .pipe(filter(event => event.type === KeycloakEventType.OnTokenExpired))
+  //     // .subscribe(() => console.log('The token has expired', this.keycloak.logout()))
+  //     // console.dir(this.x);
+
+  //     // if (this.keycloak.isTokenExpired(this.keycloak.getToken()) === true) {
+  //     //   this.logoutSession();
+  //     // };
+  //     // this.getOne();
+  //     console.log(this.x);
+  //     console.log("User: ", this.user);
+  // }
 
   // async key() {
   //   let currentUser = await this.keycloak.loadUserProfile();

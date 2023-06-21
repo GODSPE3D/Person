@@ -11,9 +11,13 @@
     <td class="data-border">{{newP.lastname}}</td>
 </div> -->
 
-{{user.firstname | json}}
+{{user.firstname}}
 {{user.lastname}}
 {{user.email}}
+
+<ul>
+    <li *ngFor="let change of changeLog">{{change}}</li>
+</ul>
 <!-- <ng-container *ngIf="player">
     <p> This is Player view. </p>
 </ng-container> -->
@@ -32,9 +36,12 @@
     <!-- <td class="data-border">{{x.firstname}}</td>
     <td class="data-border">{{x.lastname}}</td>
     <td class="data-border">{{x.email}}</td> -->
-    {{user.firstname}}
+    <td class="data-border">{{user.firstname}}</td>
+    <td class="data-border">{{user.lastname}}</td>
+    <td class="data-border">{{user.email}}</td>
+    <!-- {{user.firstname}}
 {{user.lastname}}
-{{user.email}}
+{{user.email}} -->
     <!-- <td class="data-border">{{x.contact}}</td> -->
     <td>
         <button type="button" class="m-2 btn btn-primary" (click)="openDialog2()"><i
