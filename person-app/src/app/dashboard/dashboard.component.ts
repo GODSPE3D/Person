@@ -37,22 +37,23 @@ export class DashboardComponent {
   async key() {
     const currentUser = await this.keycloak.loadUserProfile();
     // return currentUser;
-    // this.firstname = currentUser.firstName;
-    // this.lastname = currentUser.lastName;
-    // this.email = currentUser.email;
-    // console.log(currentUser);
+    this.firstname = currentUser.firstName;
+    this.lastname = currentUser.lastName;
+    this.email = currentUser.email;
+    console.log(currentUser);
     this.user.firstname = currentUser.firstName as string;
     this.user.lastname = currentUser.lastName as string;
     this.user.email = currentUser.email as string;
     console.log('user', this.user);
     // this.getOne(currentUser.firstName as string, currentUser.lastName as string, currentUser.email as string);
-    this.personService.postMail(this.user.firstname, this.user.lastname, this.user.email).subscribe(newP => {
+    this.personService.postMail(this.firstname, this.lastname, this.email).subscribe(newP => {
       console.log(newP)
       // this.user = newP;
       // return this.newP;
       // console.log(this.newP)
-      this.personService.getMail().subscribe(newP => {
-        this.user = newP;
+      this.personService.getMail().subscribe(X => {
+        console.log(X)
+        this.user = X
       })
     });
     return this.user;
