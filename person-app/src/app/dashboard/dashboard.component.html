@@ -3,34 +3,18 @@
 <button type="button" class="m-2 btn btn-primary" (click)="loginSession()">Login</button>
 <button type="button" class="m-2 btn btn-primary" (click)="logoutSession()">Logout</button>
 
-<!-- <div *ngIf="user">
-    {{user.firstname | json}}
-    {{user.lastname}}
-    {{user.email}}
-</div>
-
-{{newP}}
-    {{newP1}}
-
-Name: {{user}} -->
-<!-- html -->
-<!-- admin
-player -->
-<!-- <ng-container *ngIf="player">
-    <p> This is Player view. </p>
-    <button type="button" class="m-2 btn btn-primary" (click)="logoutSession()">Logout</button>
-    <app-person-list></app-person-list>
-</ng-container> -->
 <br>
 
+<ng-container *ngIf="admin">
+    <p> This is Admin view. </p>
+    <app-person-list></app-person-list>
+</ng-container>
+
 <ng-container *ngIf="player">
-    <div *ngIf="user">
-    <!-- <app-person-detail [x]="newP"></app-person-detail> -->
-    <app-person-detail [user]="user"></app-person-detail>
-    <!-- Name: {{user.email | json}} -->
-    <!-- {{user}} -->
+    <div *ngIf="x">
+     <app-person-detail [x]="x"></app-person-detail> 
+        <!-- <app-person-detail [user]="user"></app-person-detail> -->
     </div>
-    <!-- <p *ngFor="let n of newP">{{newP.email}}</p> -->
 </ng-container>
 
 <ng-container *ngIf="manager">

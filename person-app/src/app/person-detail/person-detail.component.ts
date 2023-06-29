@@ -22,6 +22,7 @@ import { from, filter } from 'rxjs';
 export class PersonDetailComponent {
 
   @Input() x = {} as Person;
+  @Input() x1!: Person;
   // myDataCopy = {...this.x};
   player!: boolean;
 

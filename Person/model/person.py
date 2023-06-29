@@ -132,10 +132,8 @@ class Person(db.Model):
             p = Person.query.filter_by(email=data["email"]).first()
 
             # should whole data be read from keycloak
-            
             print(self)
             if not p:
-                # return self.displayOne(p.id)
                 p = Person()
                 p.firstname = data["firstname"]
                 p.lastname = data["lastname"]
@@ -143,20 +141,21 @@ class Person(db.Model):
 
                 db.session.add(p)
                 db.session.commit()
-            # else:
-            #     p = Person()
-            #     p.firstname = data["firstname"]
-            #     p.lastname = data["lastname"]
-            #     p.email = data["email"]
-
-            #     db.session.add(p)
-            #     db.session.commit()
-                
-                # return Person.displayOne(p, p.id)
                 print(p.id)
-            return self.displayOne(p.id)
-                # return self.
-            # return False
+            return jsonify(
+                [
+                    {
+                        "_id": p.id,
+                        "firstname": p.firstname,
+                        "lastname": p.lastname,
+                        "email": p.email,
+                        "contact": p.contact,
+                        "address": p.address,
+                        "education": p.education,
+                        'created_at': p.created_at,
+                    }
+                ]
+            )
         except NoResultFound:
             return False
 

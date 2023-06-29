@@ -24,15 +24,11 @@ export class PersonService {
   }
 
   getPerson(id: number): Observable<Person> {
-    return this.http.get<Person>(this.personUrl + `/${id}`);
+    return this.http.get<Person>(`${this.personUrl}/${id}`);
   }
 
-  postMail(firstname: string, lastname: string, email: string): Observable<User> {
-    return this.http.post<User>(this.personUrl + '/login', {firstname, lastname, email}, this.httpOptions);
-  }
-
-  getMail(): Observable<Person> {
-    return this.http.get<Person>(this.personUrl + '/login');
+  postMail(firstname: string, lastname: string, email: string): Observable<Person> {
+    return this.http.post<Person>(`${this.personUrl}/login`, {firstname, lastname, email}, this.httpOptions);
   }
 
   addPerson(person: Person): Observable<Person> {
@@ -40,7 +36,7 @@ export class PersonService {
   }
 
   deletePerson(id: number) {
-    return this.http.delete(this.personUrl + `/` + id, { responseType: 'text' });
+    return this.http.delete(`${this.personUrl}/${id}`, { responseType: 'text' });
   }
 
   updatePerson(person: Person): Observable<Person> {

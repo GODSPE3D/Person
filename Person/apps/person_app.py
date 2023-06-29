@@ -35,7 +35,12 @@ def get_id(id):
 # @oidc.accept_token()
 def get_email():
     data = request.get_json()
+    # if data:
+    # response = Response(json.dumps(person),201,mimetype='application/json')
+    # response.headers['Content-Type'] = "/person/login" + str(data['email'])
+    print(data)
     return person.displayEmail(data)
+
 
 @home.route("/person", methods=["POST"])
 # @login_required

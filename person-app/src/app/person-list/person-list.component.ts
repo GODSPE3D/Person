@@ -30,7 +30,7 @@ export class PersonListComponent implements OnInit {
         console.log(person);
         this.person = person
       });
-    // console.log(this.person);
+      // console.log(this.person);
   }
 
   addPerson(addP: Person) {
