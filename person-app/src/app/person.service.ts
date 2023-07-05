@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 import { Person } from './person';
 import { User } from './user';
@@ -10,6 +10,16 @@ import { User } from './user';
   providedIn: 'root'
 })
 export class PersonService {
+
+  isLoggedIn = new BehaviorSubject(false);
+
+  logoutUser() {
+    this.isLoggedIn.next(false);
+  }
+  
+  loginUser() {
+    this.isLoggedIn.next(true);
+  }
 
   private personUrl = 'http://127.0.0.1:5000/person';
 

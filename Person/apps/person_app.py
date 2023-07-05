@@ -2,12 +2,14 @@ import json
 from flask_cors import cross_origin
 from flask_login import login_required
 from model.person import Person
+from model.info import Info
 from flask import Blueprint, request, Response, jsonify
 from .middleware import token_required
 # from flask_oidc import OpenIDConnect
 
 home = Blueprint("home", __name__)
 person = Person()
+info = Info()
 # oidc = OpenIDConnect()
 
 @home.route("/")
@@ -19,6 +21,10 @@ def index():
 # @login_required
 def get_all():
     return person.display()
+
+@home.route("/person/info")
+def get_info():
+    return info.display()
 
 @home.route("/person/<id>")
 # @cross_origin(allow_headers=['Content-Type','Authorization'])

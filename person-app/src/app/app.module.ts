@@ -17,6 +17,7 @@ import { KeycloakAngularModule, KeycloakBearerInterceptor, KeycloakService } fro
 import { initializeKeycloak } from './utility/app.init';
 import { ExampleInterceptorInterceptor } from './example-interceptor.interceptor';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { DashboardModule } from './dashboard/dashboard.module';
 // import { MatDialogModule } from '@angular/material/dialog';
 // import { MatButtonModule } from '@angular/material/button';
 // import { MatIconModule } from '@angular/material/icon';
@@ -39,7 +40,8 @@ import { DashboardComponent } from './dashboard/dashboard.component';
     PersonListModule,
     PersonDetailModule,
     BrowserAnimationsModule,
-    KeycloakAngularModule
+    KeycloakAngularModule,
+    DashboardModule
     // MatButtonModule,
     // MatIconModule,
     // MatFormFieldModule

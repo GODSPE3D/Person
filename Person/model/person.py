@@ -1,13 +1,15 @@
 from flask import jsonify
-from flask_sqlalchemy import SQLAlchemy
+# from flask_sqlalchemy import SQLAlchemy
+from model.db import db
 from sqlalchemy.exc import NoResultFound, IntegrityError
 from sqlalchemy.sql import func
-from keycloak.keycloak_admin import KeycloakAdmin
+# from apps.settings import app
+# from keycloak.keycloak_admin import KeycloakAdmin
 
 # keycloak_admin = KeycloakAdmin(server_url='http://localhost:8080/', username='myuser', password='myuser', realm_name='person', verify=True)
 
 
-db = SQLAlchemy()
+# db = SQLAlchemy()
 
 
 class SameValue(Exception):
@@ -17,8 +19,7 @@ class SameValue(Exception):
 class Person(db.Model):
     __tablename__ = "person"
 
-    id = db.Column(db.Integer, primary_key=True,
-                   nullable=False, autoincrement=True)
+    id = db.Column(db.Integer, primary_key=True, nullable=False, autoincrement=True)
     firstname = db.Column(db.String(100), nullable=False)
     lastname = db.Column(db.String(100), nullable=False)
     email = db.Column(db.String(80), unique=True, nullable=False)
@@ -26,9 +27,9 @@ class Person(db.Model):
     address = db.Column(db.String(200))
     education = db.Column(db.String(500))
     password = db.Column(db.String(200), nullable=False)
-    created_at = db.Column(db.DateTime(timezone=True),
-                           onupdate=func.current_timestamp())
+    created_at = db.Column(db.DateTime(timezone=True), onupdate=func.current_timestamp())
     status = db.Column(db.String(3), nullable=False)
+    # person = db.relationship("Info", backref=db.backref("person", uselist=False))
     
     #act
     # default
@@ -78,7 +79,7 @@ class Person(db.Model):
                 return jsonify(
                     [
                         {
-                            "_id": person.id,
+                            "id": person.id,
                             "firstname": person.firstname,
                             "lastname": person.lastname,
                             "email": person.email,
@@ -109,7 +110,7 @@ class Person(db.Model):
                 return jsonify(
                     [
                         {
-                            "_id": self.id,
+                            "id": self.id,
                             "firstname": self.firstname,
                             "lastname": self.lastname,
                             "email": self.email,
@@ -145,7 +146,7 @@ class Person(db.Model):
             return jsonify(
                 [
                     {
-                        "_id": p.id,
+                        "id": p.id,
                         "firstname": p.firstname,
                         "lastname": p.lastname,
                         "email": p.email,
@@ -242,7 +243,7 @@ class Person(db.Model):
                 return jsonify(
                     [
                         {
-                            "_id": x.id,
+                            "id": x.id,
                             "firstname": x.firstname,
                             "lastname": x.lastname,
                             "email": x.email,
@@ -311,3 +312,41 @@ class Person(db.Model):
             raise NoResultFound
         except NoResultFound:
             return "No such ID exists"
+
+# class Info(db.Model):
+#     __tablename__ = "info"
+
+#     id = db.Column(db.Integer, primary_key=True, nullable=False, autoincrement=True)
+#     person_id = db.Column(db.Integer, db.ForeignKey('person.id'))
+#     person = db.relationship("Person", backref=db.backref("person", uselist=False))
+
+#     # contact = db.Column(db.Integer) class
+#     # address = db.Column(db.String(200)) class
+#     pin = db.Column(db.Integer())
+#     # bod, aadhaar
+#     city = db.Column(db.String(100))
+#     state = db.Column(db.String(100))
+#     country = db.Column(db.String(100))
+#     education = db.Column(db.String(500))
+
+#     def display(self):
+#         try:
+#             if Info.query.all() != []:
+#                 return jsonify(
+#                     [
+#                         {
+#                             "id": person.id,
+#                             "contact": person.contact,
+#                             "address": person.address,
+#                             "pin": person.pin,
+#                             "city": person.city,
+#                             'state': person.state,
+#                             "country": person.country,
+#                             "education": person.education
+#                         }
+#                         for person in Info.query.all()
+#                     ]
+#                 )
+#             raise NoResultFound
+#         except NoResultFound:
+#             return "Table is empty!"

@@ -195,35 +195,38 @@
 #     app.run()
 
 
-from flask import Flask
-from flask_cors import CORS
-from flask_login import LoginManager
+# from flask import Flask
+# from flask_cors import CORS
+# from flask_login import LoginManager
 # from flask_oidc import OpenIDConnect
-from model.person import db, Person
-from apps.login_app import auth
+# from model.person import db, Person
+# from apps.login_app import auth
+from apps.settings import app
 from apps.person_app import home
-# from 
 
-def create_app():
-    app = Flask(__name__)
-    app.config.from_object('config.DevelopmentConfig')
+# def create_app():
+#     # app = Flask(__name__)
+#     # app.config.from_object('config.DevelopmentConfig')
 
-    db.init_app(app)
-    CORS(app)
-    login_manager = LoginManager(app)
-    # oidc = OpenIDConnect(app)
+#     db.init_app(app)
+#     # CORS(app)
+#     login_manager = LoginManager(app)
+#     # oidc = OpenIDConnect(app)
 
-    # login_manager.init_app(app)
-    with app.app_context():
-        db.create_all()
+#     # login_manager.init_app(app)
+#     with app.app_context():
+#         db.create_all()
 
-    app.register_blueprint(auth)
-    app.register_blueprint(home)
+#     app.register_blueprint(auth)
+#     app.register_blueprint(home)
 
-    return app
+#     return app
+
+app.register_blueprint(home)
 
 if __name__ == "__main__":
-    create_app().run(debug=True)
+    app.run()
+    # create_app().run(debug=True)
 
 # from keycloak import KeycloakAdmin
 # from keycloak import KeycloakOpenIDConnection

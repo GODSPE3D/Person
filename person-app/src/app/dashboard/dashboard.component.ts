@@ -17,6 +17,7 @@ export class DashboardComponent {
   player!: boolean;
   admin!: boolean;
   manager!: boolean;
+  loginStatus!: boolean;
   
   public email: any;
   public firstname: any;
@@ -35,10 +36,25 @@ export class DashboardComponent {
 
   ngOnInit() {
     this.key();
+    this.personService.isLoggedIn.subscribe((status) => {
+      this.loginStatus = status;
+    });
   }
 
   loginSession() {
     this.keycloak.login();
+  }
+
+  // login() {
+  //   this.personService.loginUser();
+  // }
+  
+  logoutSession() {
+    this.keycloak.logout();
+  }
+  
+  logout() {
+    this.personService.logoutUser();
   }
 
   async key() {
@@ -56,7 +72,9 @@ export class DashboardComponent {
 
     this.personService.postMail(this.firstname, this.lastname, this.email).subscribe(newP => {
       console.log("newP", newP)
-      this.newPerson = newP
+      this.newPerson = newP;
+      
+      this.personService.loginUser();
 
       console.log(`this.newPerson as Person`, this.newPerson)
       console.log(`this.newPerson as Person ${this.newPerson._id}`)
@@ -84,8 +102,4 @@ export class DashboardComponent {
   //     console.log(this.newP);
   //   });
   // }
-
-  logoutSession() {
-    this.keycloak.logout();
-  }
 }
