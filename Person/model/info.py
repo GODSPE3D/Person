@@ -1,14 +1,8 @@
 from flask import jsonify
 from model.db import db
-# from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.exc import NoResultFound, IntegrityError
 from sqlalchemy.sql import func
 from model.person import Person
-# from apps.settings import app
-
-
-# person = Person()
-# db = SQLAlchemy(app)
 
 
 class SameValue(Exception):
@@ -20,7 +14,7 @@ class Info(db.Model):
 
     id = db.Column(db.Integer, primary_key=True, nullable=False, autoincrement=True)
     person_id = db.Column(db.Integer, db.ForeignKey('person.id'))
-    person = db.relationship("Person", backref=db.backref("person", uselist=False))
+    person = db.relationship(Person, backref=db.backref("person", uselist=False))
 
     # contact = db.Column(db.Integer)
     # address = db.Column(db.String(200))

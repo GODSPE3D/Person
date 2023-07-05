@@ -1,15 +1,7 @@
 from flask import jsonify
-# from flask_sqlalchemy import SQLAlchemy
 from model.db import db
 from sqlalchemy.exc import NoResultFound, IntegrityError
 from sqlalchemy.sql import func
-# from apps.settings import app
-# from keycloak.keycloak_admin import KeycloakAdmin
-
-# keycloak_admin = KeycloakAdmin(server_url='http://localhost:8080/', username='myuser', password='myuser', realm_name='person', verify=True)
-
-
-# db = SQLAlchemy()
 
 
 class SameValue(Exception):
@@ -202,17 +194,8 @@ class Person(db.Model):
 
             db.session.add(newP)
             db.session.commit()
-            # users = keycloak_admin.create_user({"username": data["firstname"], "enabled": True})
-            # print(keycloak_admin.get_users({"username": data["firstname"]}))
-            # person = Person.query.filter_by(
-            #     email=data['email'], aadhaar=data['aadhaar']).first()
-            # return Person.displayOne(data, data.id)
-            # return person.serialize
 
-            # print(newP)
-            # return
             return newP.displayOne(newP.id)
-            # return Person.display(self)
 
         except NoResultFound:
             return "data doesn't exist"
