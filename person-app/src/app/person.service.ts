@@ -24,7 +24,7 @@ export class PersonService {
   private personUrl = 'http://127.0.0.1:5000/person';
 
   httpOptions = {
-    headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+    headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
   };
 
   constructor(private http: HttpClient) { }
@@ -37,8 +37,13 @@ export class PersonService {
     return this.http.get<Person>(`${this.personUrl}/${id}`);
   }
 
-  postMail(firstname: string, lastname: string, email: string): Observable<Person> {
-    return this.http.post<Person>(`${this.personUrl}/login`, {firstname, lastname, email}, this.httpOptions);
+  // postMail(firstname: string, lastname: string, email: string): Observable<Person> {
+  //   // return this.http.get<Person>(`${this.personUrl}/login`);
+  //   return this.http.post<Person>(`${this.personUrl}/login`, {firstname, lastname, email}, this.httpOptions);
+  // }
+
+  postMail(): Observable<Person> {
+    return this.http.post<Person>(`${this.personUrl}/login`, {firstname: "Aeon", lastname: "Flux", email: "aeonflux@gmail.com"}, this.httpOptions);
   }
 
   addPerson(person: Person): Observable<Person> {
@@ -50,6 +55,6 @@ export class PersonService {
   }
 
   updatePerson(person: Person): Observable<Person> {
-    return this.http.put<Person>(this.personUrl + `/${person._id}`, person, this.httpOptions);
+    return this.http.put<Person>(this.personUrl + `/${person.id}`, person, this.httpOptions);
   }
 }

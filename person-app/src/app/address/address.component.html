@@ -1,0 +1,33 @@
+<!-- <p>address works!</p> -->
+
+<!-- <td class="data-border">{{c.country_code}}</td>
+<td class="data-border">{{c.region_code}}</td>
+<td class="data-border">{{c.phone}}</td> -->
+
+<!-- <tr>{{a.address_type}}</tr>
+<tr>{{a.flat_no}}</tr>
+<tr>{{a.locality}}</tr>
+<tr>{{a.city}}</tr>
+<tr>{{a.state}}</tr>
+<tr>{{a.country}}</tr>
+<tr>{{a.pin}}</tr> -->
+
+<!-- For -->
+{{a.flat_no}}
+{{a.area}}
+{{a.locality}}
+{{a.city}}
+{{a.state}}
+{{a.country}}
+{{a.pin}}
+
+
+<div *ngFor="let add of addressList">
+    <td>{{add.flat_no}}</td>
+    <td>{{add.area}}</td>
+    <td>{{add.locality}}</td>
+    <td>{{add.city}}</td>
+    <td>{{add.state}}</td>
+    <td>{{add.country}}</td>
+    <td>{{add.pin}}</td>
+</div>

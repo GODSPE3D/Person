@@ -1,73 +1,91 @@
-<!-- <nav class="navbar navbar-expand-sm bg-light">
-    <ul class="navbar-nav">
-      <li class="nav-item">
-        <a class="nav-link" href="#">Home</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#" >Aboutus</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#" >ContactUS</a>
-      </li>
-      <li class="nav-item">
-        <button type="button" class="btn btn-primary" *ngIf="!loginStatus" (click)="loginSession()">
-          Login
-        </button>
-      </li>
-      <li class="nav-item">
-        <button type="button" class="btn btn-danger" *ngIf="loginStatus" (click)="logout(); logoutSession()">
-          Logout
-        </button>
-      </li>
-    </ul>
-  </nav> -->
-
-
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="#">Navbar</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-            <div class="navbar-nav">
-                <a class="nav-link active" aria-current="page" href="#">Home</a>
-                <a class="nav-link" href="#">Competitions</a>
-                <a class="nav-link" href="#" *ngIf="loginStatus">Profile</a>
-                <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
-            </div>
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">Navbar</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
+      aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+      <div class="navbar-nav">
+        <a class="nav-link active" aria-current="page" href="#">Home</a>
+        <a class="nav-link" href="#">Competitions</a>
+        <a class="nav-link" href="#" *ngIf="loginStatus">Profile</a>
+        <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+        <!-- <a class="nav-link" id="defaultDropdown" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi bi-person-circle h5"></i></a> -->
+        <div class="dropdown">
+          <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="defaultDropdown"
+            data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="bi bi-person-circle"></i>
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="defaultDropdown">
+            <li><button class="dropdown-item" type="button">Action</button></li>
+            <li><button class="dropdown-item btn-outline-danger" type="button"
+                (click)="logout(); logoutSession()">Logout</button></li>
+            <!-- <li><button class="dropdown-item" type="button">Something else here</button></li> -->
+          </ul>
         </div>
-        <button class="me-2 btn btn-outline-primary float-end btn-rounded btn-sm" type="button" *ngIf="!loginStatus"
-            (click)="loginSession()"><i class="bi bi-box-arrow-in-right me-2"></i>Sign In</button>
-        <button class="me-2 btn btn-outline-danger float-end btn-rounded btn-sm" type="button" *ngIf="loginStatus"
-            (click)="logout(); logoutSession()"><i class="bi bi-person-circle me-2"></i>Logout</button>
+      </div>
     </div>
-    <!-- <ul class="navbar-nav">
-            <li class="nav-item">
-                <button type="button" class="btn btn-primary" *ngIf="!loginStatus" (click)="loginSession(); login()">
-                    Login
-                </button>
-            </li>
-            <li class="nav-item">
-                <button type="button" class="btn btn-danger" *ngIf="loginStatus" (click)="logoutSession(); logout()">
-                    Logout
-                </button>
-            </li>
-        </ul> -->
+    <button class="me-2 btn btn-outline-primary float-end btn-rounded btn-sm" type="button" *ngIf="!loginStatus"
+      (click)="loginSession()"><i class="bi bi-box-arrow-in-right me-2"></i>Log In</button>
+    <button class="me-2 btn btn-outline-danger float-end btn-rounded btn-sm" type="button" *ngIf="loginStatus"
+      (click)="logout(); logoutSession()"><i class="bi bi-person-circle me-2"></i>Logout</button>
+  </div>
 </nav>
 
-<ng-container *ngIf="admin">
-    <p> This is Admin view. </p>
-    <app-person-list></app-person-list>
-</ng-container>
+<!-- "node_modules/@popperjs/core/dist/umd/popper.min.js", -->
+
+<!-- <nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <div class="container-fluid">
+    <ul class="navbar-nav">
+      Avatar
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="navbarDropdownMenuLink" role="button"
+          data-bs-toggle="dropdown" aria-expanded="false">
+          <img src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/img (31).webp" class="rounded-circle" height="22"
+            alt="Avatar" loading="lazy" />
+        </a>
+        <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+          <li><a class="dropdown-item" href="#">My profile</a></li>
+          <li><a class="dropdown-item" href="#">Settings</a></li>
+          <li><a class="dropdown-item" href="#">Logout</a></li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+<div class="dropdown">
+  <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown"
+    aria-expanded="false">
+    Dropdown button
+  </button>
+  <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+    <li><a class="dropdown-item" href="#">Action</a></li>
+    <li><a class="dropdown-item" href="#">Another action</a></li>
+    <li><a class="dropdown-item" href="#">Something else here</a></li>
+  </ul>
+</div> -->
+
+
+<!-- <ng-container *ngIf="admin">
+  <p> This is Admin view. </p>
+  <app-person-list></app-person-list>
+</ng-container> -->
 
 <ng-container *ngIf="player">
-    <div *ngIf="user">
-        <!-- <app-person-detail [x]="x"></app-person-detail>  -->
-        <app-person-detail [user]="user"></app-person-detail>
-    </div>
+  {{x.firstname}}
+  <!-- <app-address [addressList]="x.address"></app-address> -->
+<td *ngIf="x"><app-person-detail [x]="x"></app-person-detail></td>
 </ng-container>
 
-<ng-container *ngIf="manager">
-    <p> This is Manager view. </p>
-</ng-container>
+<!-- <div *ngIf="x">
+	{{x.firstname}}
+  <app-person-detail [x]="x"></app-person-detail>
+</div>
+<ng-template #noData>
+</ng-template> -->
+
+<!-- <ng-container *ngIf="manager">
+  <p> This is Manager view. </p>
+</ng-container> -->

@@ -30,22 +30,33 @@
 <button type="button" class="m-1 btn btn-danger" (click)="deletePerson(x)"><i class="bi bi-trash"></i></button> -->
 
 <!-- <button type="button" class="m-2 btn btn-primary" (click)="logoutSession()">Logout</button> -->
+<!-- <td class="data-border">{{x.id}}</td>
+<td class="data-border">{{x.firstname}}</td>
+<td class="data-border">{{x.lastname}}</td>
+<td class="data-border">{{x.email}}</td> -->
 <ng-container *ngTemplateOutlet="content"></ng-container>
 
 <ng-template #content>
-    <td class="data-border">{{x._id}}</td>
+    <td class="data-border">{{x.id}}</td>
     <td class="data-border">{{x.firstname}}</td>
     <td class="data-border">{{x.lastname}}</td>
     <td class="data-border">{{x.email}}</td>
-    <td class="data-border">{{x.contact}}</td>
-    <!-- <td class="data-border">{{user.firstname}}</td>
-    <td class="data-border">{{user.lastname}}</td>
-    <td class="data-border">{{user.email}}</td> -->
+    <td class="data-border"><app-contact [contactList]="x.contact"></app-contact></td>
+    <td class="data-border"><app-address [addressList]="x.address"></app-address></td>
     <td>
         <button type="button" class="m-2 btn btn-primary" (click)="openDialog2()"><i class="bi bi-pencil-square"></i></button>
         <button type="button" class="m-1 btn btn-danger" (click)="deletePerson(x)"><i class="bi bi-trash"></i></button>
-        <mat-divider></mat-divider>
     </td>
+    <!-- <td class="data-border" *ngFor="let cont of x.contact">
+        <app-contact [c]="cont"></app-contact>
+    </td> -->
+    <!-- <td class="data-border" *ngFor="let add of x.address">
+        <app-address [a]="add"></app-address>
+    </td> -->
+    <!-- <td class="data-border">{{x.contact}}</td> -->
+    <!-- <td class="data-border">{{user.firstname}}</td>
+    <td class="data-border">{{user.lastname}}</td>
+    <td class="data-border">{{user.email}}</td> -->
 </ng-template>
 
 <!-- Dialog template to Add Person -->

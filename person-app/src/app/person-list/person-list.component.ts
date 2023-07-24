@@ -44,7 +44,7 @@ export class PersonListComponent implements OnInit {
 
   delete(p: Person): void {
     this.person = this.person.filter(h => h !== p);
-    this.personService.deletePerson(p._id).subscribe(son => {
+    this.personService.deletePerson(p.id).subscribe(son => {
       this.getPersonAll();
     });
   }

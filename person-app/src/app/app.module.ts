@@ -18,6 +18,8 @@ import { initializeKeycloak } from './utility/app.init';
 import { ExampleInterceptorInterceptor } from './example-interceptor.interceptor';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { DashboardModule } from './dashboard/dashboard.module';
+import { AddressComponent } from './address/address.component';
+import { ContactComponent } from './contact/contact.component';
 // import { MatDialogModule } from '@angular/material/dialog';
 // import { MatButtonModule } from '@angular/material/button';
 // import { MatIconModule } from '@angular/material/icon';
@@ -29,7 +31,9 @@ import { DashboardModule } from './dashboard/dashboard.module';
     PersonListComponent,
     PersonDetailComponent,
     LoginComponent,
-    DashboardComponent
+    DashboardComponent,
+    AddressComponent,
+    ContactComponent
   ],
   imports: [
     BrowserModule,

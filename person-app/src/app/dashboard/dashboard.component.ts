@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { KeycloakService } from 'keycloak-angular';
 
 import { PersonService } from '../person.service';
@@ -7,6 +7,7 @@ import { User } from '../user';
 import { ActivatedRoute, Route, Router } from '@angular/router';
 import { JsonPipe } from '@angular/common';
 import { map } from 'rxjs';
+import { PersonDetailComponent } from '../person-detail/person-detail.component';
 
 @Component({
   selector: 'app-dashboard',
@@ -14,6 +15,8 @@ import { map } from 'rxjs';
   styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent {
+  // @ViewChild(PersonDetailComponent) child: PersonDetailComponent;
+
   player!: boolean;
   admin!: boolean;
   manager!: boolean;
@@ -24,8 +27,10 @@ export class DashboardComponent {
   public lastname: any;
 
   user = {} as User;
-  newPerson = {} as Person;
+  // newPerson = {} as Person;
+  // x = <Person>{};
   x = {} as Person;
+  person: Person[] = [];
   newP1!: string;
   newP2!: any;
 
@@ -59,40 +64,35 @@ export class DashboardComponent {
 
   async key() {
     const currentUser = await this.keycloak.loadUserProfile();
-    // return currentUser;
-    this.firstname = currentUser.firstName;
-    this.lastname = currentUser.lastName;
-    this.email = currentUser.email;
-    console.log(currentUser);
+    
+    // this.firstname = currentUser.firstName;
+    // this.lastname = currentUser.lastName;
+    // this.email = currentUser.email;
+    
+    this.personService.loginUser();
+    this.personService.postMail().subscribe(newP => {
+      this.x = newP
+      console.log(this.x)
+    });
+    // console.log(this.child.x);
 
-    this.user.firstname = currentUser.firstName as string;
-    this.user.lastname = currentUser.lastName as string;
-    this.user.email = currentUser.email as string;
-    console.log('user', this.user);
-
-    this.personService.postMail(this.firstname, this.lastname, this.email).subscribe(newP => {
-      console.log("newP", newP)
-      this.newPerson = newP;
-      
-      this.personService.loginUser();
-
-      console.log(`this.newPerson as Person`, this.newPerson)
-      console.log(`this.newPerson as Person ${this.newPerson._id}`)
-      console.log("this.newPerson as Object values", Object.values(this.newPerson)["0"]["_id"])
-      console.log("this.newPerson as JSON", JSON.parse(JSON.stringify(this.newPerson)))
-
-      // this.personService.getPerson(newP._id).pipe(map())
-      // });
-
-      this.personService.getPerson(Object.values(this.newPerson)["0"]["_id"]).subscribe(x => {
-        this.x = x
-        console.log("x", this.x)
-      });
-      // this.personService.getPerson(Object.values(this.newPerson)["0"]["_id"]).subscribe(x => {
+    // this.personService.postMail(this.firstname, this.lastname, this.email).subscribe(newP => {
+      // return {
+      // }
+      // newP}
+      // this.x = newP
+      // console.log("x", this.x)
+      // console.log("newP", newP)
+      // console.log(this.x);
+      // console.log(`this.newPerson as Person`, this.newPerson)
+      // console.log(`this.newPerson as Person ${this.newPerson.id}`)
+      // console.log("this.newPerson as Object values", Object.values(this.newPerson)["0"]["id"])
+      // console.log("this.newPerson as JSON", JSON.parse(JSON.stringify(this.newPerson)))
+      // this.personService.getPerson(Object.values(this.x)["0"]["id"]).subscribe(x => {
       //   this.x = x
       //   console.log("x", this.x)
       // });
-    });
+    // });
   }
 
   // getOne(firstName: string, lastName: string, email: string) {
