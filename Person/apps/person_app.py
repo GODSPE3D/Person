@@ -2,14 +2,19 @@ import json
 from flask_cors import cross_origin
 from flask_login import login_required
 from model.person import Person
-from model.info import Info
+# from model.info import Info
+from model.address import Address
+from model.contact import Contact
 from flask import Blueprint, request, Response, jsonify
 from .middleware import token_required
 # from flask_oidc import OpenIDConnect
 
 home = Blueprint("home", __name__)
+
 person = Person()
-info = Info()
+# info = Info()
+address = Address()
+contact = Contact()
 # oidc = OpenIDConnect()
 
 
@@ -25,32 +30,121 @@ def get_all():
     return person.display()
 
 
-@home.route("/person/info")
-def get_info():
-    return info.display()
+# @home.route("/person/info")
+# def get_info():
+#     return info.display()
+
+# API
+@home.route("/person/address")
+def get_add():
+    return address.display()
+
+@home.route("/person/address/<id>")
+def get_ad(id):
+    return address.displayOneAdd(id)
+
+@home.route("/person/address", methods=["POST"])
+# @login_required
+@cross_origin(allow_headers=['Content-Type', 'Authorization'])
+def create_add():
+    try:
+        data = request.get_json()
+        print(data)
+        return address.create(data)
+#    return jsonify(person.create(data))
+        response = person.create(data)
+        # p.create(data)
+        # response = Response(json.dumps(person),201,mimetype='application/json')
+        # response.headers['Person'] = "/person/" + str(data['firstname'])
+    except Exception as e:
+        print(e)
+        ErrorMessage = {
+            "error": str(e),
+            "helpString": " Refer the Client Model for Details "
+        }
+        response = Response(json.dumps(ErrorMessage),
+                            status=400, mimetype='application/json')
+    return response
+
+# API
+@home.route("/person/contact")
+def get_con():
+    return contact.display()
+
+
+@home.route("/person/contact/<id>")
+def get_cn(id):
+    return contact.displayOneCon(id)
+
+
+@home.route("/person/contact", methods=["POST"])
+# @login_required
+@cross_origin(allow_headers=['Content-Type', 'Authorization'])
+def create_cont():
+    try:
+        data = request.get_json()
+        print(data)
+        return contact.create(data)
+#    return jsonify(person.create(data))
+        response = person.create(data)
+        # p.create(data)
+        # response = Response(json.dumps(person),201,mimetype='application/json')
+        # response.headers['Person'] = "/person/" + str(data['firstname'])
+    except Exception as e:
+        print(e)
+        ErrorMessage = {
+            "error": str(e),
+            "helpString": " Refer the Client Model for Details "
+        }
+        response = Response(json.dumps(ErrorMessage),
+                            status=400, mimetype='application/json')
+    return response
 
 
 @home.route("/person/<id>")
-# @cross_origin(allow_headers=['Content-Type','Authorization'])
+@cross_origin(allow_headers=['Content-Type','Authorization'])
 # @token_required
 # @login_required
 # @oidc.accept_token()
 def get_id(id):
     return person.displayOne(id)
 
+# @home.route("/person/email/<email>")
+# @cross_origin(allow_headers=['Content-Type','Authorization'])
+# # @token_required
+# # @login_required
+# # @oidc.accept_token()
+# def get_mail(email):
+#     return person.displayEmail(email)
 
-@home.route("/person/login", methods=["GET", "POST"])
+# def get_cont(id):
+#     return contact.displayOneCon(5)
+
+@home.route("/person/login", methods=["GET"])
 @cross_origin(allow_headers=['Content-Type', 'Authorization'])
 # @token_required
 # @login_required
 # @oidc.accept_token()
 def get_email():
-    data = request.get_json()
+    # data = request.get_json()
     # if data:
     # response = Response(json.dumps(person),201,mimetype='application/json')
     # response.headers['Content-Type'] = "/person/login" + str(data['email'])
-    print(data)
-    return person.displayEmail(data)
+    # print(data)
+    return person.displayEmail()
+
+# @home.route("/person/login", methods=["GET", "POST"])
+# @cross_origin(allow_headers=['Content-Type', 'Authorization'])
+# # @token_required
+# # @login_required
+# # @oidc.accept_token()
+# def get_email():
+#     data = request.get_json()
+#     # if data:
+#     # response = Response(json.dumps(person),201,mimetype='application/json')
+#     # response.headers['Content-Type'] = "/person/login" + str(data['email'])
+#     print(data)
+#     return person.displayEmail(data)
 
 
 @home.route("/person", methods=["POST"])

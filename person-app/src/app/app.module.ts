@@ -20,6 +20,8 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { DashboardModule } from './dashboard/dashboard.module';
 import { AddressComponent } from './address/address.component';
 import { ContactComponent } from './contact/contact.component';
+import { ContactListComponent } from './contact-list/contact-list.component';
+import { AddressListComponent } from './address-list/address-list.component';
 // import { MatDialogModule } from '@angular/material/dialog';
 // import { MatButtonModule } from '@angular/material/button';
 // import { MatIconModule } from '@angular/material/icon';
@@ -33,7 +35,9 @@ import { ContactComponent } from './contact/contact.component';
     LoginComponent,
     DashboardComponent,
     AddressComponent,
-    ContactComponent
+    ContactComponent,
+    ContactListComponent,
+    AddressListComponent
   ],
   imports: [
     BrowserModule,

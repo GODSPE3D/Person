@@ -5,11 +5,37 @@
 <td class="data-border">{{c.phone}}</td> -->
 
 <!-- For -->
-<div *ngFor="let cont of contactList">
-    <td>{{cont.country_code}}</td>
-    <td>{{cont.region_code}}</td>
-    <td>{{cont.phone}}</td>
-</div>
+<!-- <div *ngFor="let cont of contactList"> -->
+
+<ng-container *ngTemplateOutlet="display"></ng-container>
+
+<ng-template #display>
+    <td>{{contact.country_code}}</td>
+    <td>{{contact.region_code}}</td>
+    <td>{{contact.phone}}</td>
+</ng-template>
+
+
+<ng-template #addC>
+    <div>
+        this is contact.html
+        <mat-form-field appearance="outline">
+            <mat-label>Country Code</mat-label>
+            <input matInput [(ngModel)]="addContact.country_code" placeholder="91" name="country_code" required>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+            <mat-label>Region Code</mat-label>
+            <input matInput [(ngModel)]="addContact.region_code" placeholder="020" name="region_code" required>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+            <mat-label>Phone</mat-label>
+            <input matInput [(ngModel)]="addContact.phone" placeholder="123456789" name="phone" required>
+        </mat-form-field>
+    </div>
+    <!-- this is else -->
+</ng-template>
+
+<!-- </div> -->
 
 <!-- {{contactList.country_code}}
 {{contactList.region_code}}

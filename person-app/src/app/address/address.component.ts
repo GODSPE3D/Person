@@ -7,10 +7,10 @@ import { Address } from '../person';
   styleUrls: ['./address.component.css']
 })
 export class AddressComponent {
-  @Input() addressList: Address[] = [];
-  @Input() a = {} as Address
+  // @Input() addressList: Address[] = [];
+  @Input() address = {} as Address
 
   ngOninit() {
-    console.log("contact ", this.a);
+    console.log("contact ", this.address);
   }
 }

@@ -1,10 +1,10 @@
-import { Component, Input, Output, EventEmitter, TemplateRef, ViewChild, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, Input, Output, EventEmitter, TemplateRef, ViewChild, OnChanges, SimpleChanges, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 
 import { User } from '../user';
 import { FormControl, Validators } from '@angular/forms';
-import { Person } from '../person';
+import { Contact, Person } from '../person';
 import { PersonService } from '../person.service';
 import { LoginService } from '../login.service';
 import { MatDialog } from '@angular/material/dialog';
@@ -21,10 +21,10 @@ import { from, filter } from 'rxjs';
 })
 export class PersonDetailComponent {
 
-  @Input() x!: Person;
+  @Input() x = {} as Person;
   // @Input() x1!: Person;
   // myDataCopy = {...this.x};
-  player!: boolean;
+  dataVar!: boolean;
 
   @ViewChild('addP') customDialog!: TemplateRef<any>;
   @ViewChild('editPerson') customDialog2!: TemplateRef<any>;
@@ -35,13 +35,26 @@ export class PersonDetailComponent {
   @Input() user!: User;
   public email: any;
 
+  // p: Person[] = [];
+  public p: Person = {
+    id: 0,
+    firstname: '',
+    lastname: '',
+    email: '',
+    contact: [],
+    address: [],
+    education: '',
+    password: ''
+    // aadhaar: 1
+  }
   newP = {} as Person;
   single = {} as Person;
   @Output() addP = new EventEmitter<Person>();
   emailFormControl = new FormControl('', [Validators.required, Validators.email]);
+  changeLog: any;
 
   constructor(
-    private route: ActivatedRoute, private loginService: LoginService, private readonly keycloak: KeycloakService, private personService: PersonService, private location: Location, private dialog: MatDialog, private _snackBar: MatSnackBar
+    private cdr: ChangeDetectorRef, private route: ActivatedRoute, private loginService: LoginService, private readonly keycloak: KeycloakService, private personService: PersonService, private location: Location, private dialog: MatDialog, private _snackBar: MatSnackBar
   ) {
     // this.player = this.keycloak.isUserInRole("player");
   }
@@ -49,6 +62,8 @@ export class PersonDetailComponent {
   @Output() delEvent = new EventEmitter();
 
   ngOnInit() {
+    this.getOne();
+    // console.log(this.route.snapshot.paramMap.get('5'));
     // this.key();
     // console.log(this.x.firstname);
 
@@ -89,21 +104,22 @@ export class PersonDetailComponent {
     // console.log("detail ", this.x);
     // console.log("User: ", this.user);
   }
+  
   // changeLog: string[] = [];
 
   // ngOnChanges(changes: SimpleChanges) {
-    // const log: string[] = [];
-    // for (const propName in changes) {
-    //   const changedProp = changes[propName];
-    //   const to = JSON.stringify(changedProp.currentValue);
-    //   if (changedProp.isFirstChange()) {
-    //     log.push(`Initial value of ${propName} set to ${to}`);
-    //   } else {
-    //     const from = JSON.stringify(changedProp.previousValue);
-    //     log.push(`${propName} changed from ${from} to ${to}`);
-    //   }
-    // }
-    // this.changeLog.push(log.join(', '));
+  //   const log: string[] = [];
+  //   for (const propName in changes) {
+  //     const changedProp = changes[propName];
+  //     const to = JSON.stringify(changedProp.currentValue);
+  //     if (changedProp.isFirstChange()) {
+  //       log.push(`Initial value of ${propName} set to ${to}`);
+  //     } else {
+  //       const from = JSON.stringify(changedProp.previousValue);
+  //       log.push(`${propName} changed from ${from} to ${to}`);
+  //     }
+  //   }
+  //   // this.changeLog.push(log.join(', '));
   // }
 
   // ngOnChanges(changes: SimpleChanges) {
@@ -131,17 +147,26 @@ export class PersonDetailComponent {
     this.loginService.get_login().subscribe();
   }
 
-  getOne(email: string) {
-    // this.personService.postMail(JSON.stringify({"email": email})).subscribe(newPe => {
-    //   this.newP.email = email;
-    //   this.newP = newPe;
-    //   // this.x = this.newP;
-    //   console.log(this.newP);
-    //   // this.personService.getPerson(this.newP._id).subscribe(single => {
-    //   //   this.single = single;
-    //   //   console.log(this.single);
-    //   // })
-    // });
+  getOne() {
+    this.personService.getPerson(5).subscribe(newValue => {
+      // let p: Person = {
+      //   id: 0,
+      //   firstname: '',
+      //   lastname: '',
+      //   email: '',
+      //   contact: [],
+      //   address: [],
+      //   education: '',
+      //   password: ''
+      //   // aadhaar: 1
+      // }
+
+      this.newP = newValue;
+      console.log('p -> ', this.newP);
+      // this.newP = newValue;
+      // console.log(this.newP);
+      // this.cdr.detectChanges();
+    });
   }
 
   // loginPerson(user: User): void {
@@ -182,9 +207,13 @@ export class PersonDetailComponent {
     this.addP.emit(newP);
   }
 
+  // addContact(newC: Contact) {
+  //   this.
+  // }
+
   // getOne(): void {
   //   if (this.user.firstName === this.x.firstname) {
-  //     this.personService.getPerson(this.x._id).subscribe(p => this.p = p);
+  //     this.personService.getPerson(this.x.id).subscribe(p => this.p = p);
   //   }
   // }
 
@@ -198,11 +227,11 @@ export class PersonDetailComponent {
     }
   }
 
-  deletePerson(delP: Person): void {
-    this.personService.deletePerson(delP.id).subscribe(person => {
-      console.log(person);
-      // this.x = person
-      this.delEvent.emit(this.x);
-    });
-  }
+  // deletePerson(delP: Person): void {
+  //   this.personService.deletePerson(delP.id).subscribe(person => {
+  //     console.log(person);
+  //     // this.x = person
+  //     this.delEvent.emit(this.x);
+  //   });
+  // }
 }

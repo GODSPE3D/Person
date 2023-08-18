@@ -1,0 +1,167 @@
+from model.db import db
+from flask import jsonify
+# from model.person import Person
+# from sqlalchemy.schema import PrimaryKeyConstraint, ForeignKey
+from sqlalchemy.exc import NoResultFound
+
+class Contact(db.Model):
+    __tablename__ = "contact"
+
+    id = db.Column(db.Integer, primary_key=True, nullable=False, autoincrement=True)
+    person_id = db.Column(db.ForeignKey("person.id"), primary_key=True, nullable=False)
+    person = db.relationship("Person", back_populates="contact")
+    
+    country_code = db.Column(db.Integer)
+    region_code = db.Column(db.Integer)
+    phone = db.Column(db.Integer)
+
+    def sameID(self, id):
+        s = db.session.query(
+            db.session.query(Contact).filter_by(person_id=id).exists()
+        ).scalar()
+        if s is True:
+            return True
+        return False
+
+    def display(self):
+        try:
+            if Contact.query.all() != []:
+                return jsonify(
+                    [
+                        {
+                            "id": person.id,
+                            "country_code": person.country_code,
+                            "region_code": person.region_code,
+                            "phone": person.phone,
+                            "person_id": person.person_id
+                        }
+                        for person in Contact.query.all()
+                    ]
+                )
+            raise NoResultFound
+        except NoResultFound:
+            return "Table is empty!"
+
+    def displayOneCon(self, id):
+        try:
+            if self.sameID(id):
+                self = db.session.query(Contact).filter_by(person_id=id).first()
+                return jsonify(
+                    [
+                        {
+                            "id": self.id,
+                            "country_code": self.country_code,
+                            "region_code": self.region_code,
+                            "phone": self.phone,
+                            "person_id": self.person_id
+                        }
+                    ]
+                )
+            raise NoResultFound
+        except NoResultFound:
+            return "No such ID exists"
+    
+    def displayOneCon2(self, id):
+        self = db.session.query(Contact).filter_by(id=id).first_or_404()
+        return jsonify(
+            [
+                {
+                    "id": self.id,
+                    "country_code": self.country_code,
+                    "region_code": self.region_code,
+                    "phone": self.phone,
+                    # "person_id": self.person_id
+                }
+            ]
+        )
+    
+    def create(self, data):
+        print(data)
+        try:
+            if (
+                not "person_id" in data
+                or not "country_code" in data
+                or not "region_code" in data
+                or not "phone" in data
+            ):
+                raise NoResultFound
+            if (
+                # len(data["person_id"]) < 1
+                # len(data["country_code"]) < 1
+                # or len(data["region_code"]) < 1
+                # or len(data["phone"]) < 1
+            ):
+                # return msg.badLetter()
+                raise ValueError
+            # if Contact.email_or_aadhaar(self, Contact.email, data["email"]):
+                # return msg.duplicate("email")
+                # raise SameValue
+            # if Person.email_or_aadhaar(self, Person.aadhaar, data["aadhaar"]):
+            #     # return msg.duplicate("aadhaar")
+            #     raise SameValue
+
+            newP = Contact()
+            newP.person_id = data["person_id"]
+            newP.country_code = data["country_code"]
+            newP.region_code = data["region_code"]
+            newP.phone = data["phone"]
+
+            print(newP.person_id)
+            # return jsonify([
+            #     {
+            #         "person_id": newP.person_id,
+            #         "country_code": newP.country_code,
+            #         "region_code": newP.region_code,
+            #         "phone": newP.phone,
+            #     }
+            # ])
+            db.session.add(newP)
+            db.session.commit()
+
+            return newP.displayOneCon(newP.person_id)
+
+        except NoResultFound:
+            return "Field is missing!"
+        except ValueError:
+            return "Invalid character length!"
+        # except SameValue:
+        #     return "email or aadhaar is same"
+        except Exception as e:
+            return e
+    
+    def update(self, id, data):
+        # print("Update: ", self, id, data)
+        try:
+            if self.sameID(id):
+                self = Contact.query.filter_by(id=id).first()
+
+                if "country_code" in data:
+                    self.country_code = data["country_code"]
+                if "phone" in data:
+                    self.phone = data["phone"]
+                
+                self.status = "old"
+
+                db.session.commit()
+                # print(self)
+                return self.displayOne(id)
+            raise NoResultFound
+        except NoResultFound:
+            return "No such ID/data exists"
+    
+    def contactDelete(self, id):
+        print(id)
+        try:
+            if self.sameID(id):
+                self = Contact.query.filter_by(id=id).first()
+                if self.status == "tbd":
+                    # db.session.delete(self)
+                    db.session.commit()
+                    return "Data deleted successfully!"
+                # else:
+                #     self.status = "tbd"
+                #     db.session.commit()
+                #     return "Data set for deletion"
+            raise NoResultFound
+        except NoResultFound:
+            return "No such ID exists"

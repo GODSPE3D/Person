@@ -4,6 +4,7 @@ import { Person } from '../person';
 import { PersonService } from '../person.service';
 import { PersonDetailComponent } from '../person-detail/person-detail.component';
 import { MatDialog } from '@angular/material/dialog';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-person-list',
@@ -16,12 +17,16 @@ export class PersonListComponent implements OnInit {
   searchText!: string;
   person: Person[] = [];
 
+  newP = {} as Person;
+
   @ViewChild(PersonDetailComponent) child!: PersonDetailComponent;
 
-  constructor(private personService: PersonService, public dialog: MatDialog) { }
+  constructor(private route: ActivatedRoute, private personService: PersonService, public dialog: MatDialog) {}
 
   ngOnInit() {
-    this.getPersonAll();
+    // this.getPersonAll();
+    // this.getOne();
+    this.postM();
   }
 
   getPersonAll() {
@@ -31,6 +36,21 @@ export class PersonListComponent implements OnInit {
         this.person = person
       });
       // console.log(this.person);
+  }
+
+  getOne() {
+    this.personService.getPerson(5).subscribe(newValue => {
+      this.newP.firstname = newValue.firstname;
+    });
+  }
+
+  postM() {
+    this.personService.postMail().subscribe(newV => {
+      this.newP = newV;
+      console.log("newP -> ", this.newP);
+      console.log(Object.keys(this.newP));
+      console.log(Object.values("0"));
+    })
   }
 
   addPerson(addP: Person) {

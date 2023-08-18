@@ -1,7 +1,10 @@
-from flask import jsonify
+from flask import jsonify, json, request, make_response
 from model.db import db
 from sqlalchemy.exc import NoResultFound, IntegrityError
 from sqlalchemy.sql import func
+from sqlalchemy.orm import joinedload
+# from model.contact import Contact
+# from model.address import Address
 
 
 class SameValue(Exception):
@@ -15,12 +18,15 @@ class Person(db.Model):
     firstname = db.Column(db.String(100), nullable=False)
     lastname = db.Column(db.String(100), nullable=False)
     email = db.Column(db.String(80), unique=True, nullable=False)
-    contact = db.Column(db.Integer)
-    address = db.Column(db.String(200))
+    # contact = db.Column(db.Integer)
+    contact = db.relationship("Contact", back_populates="person")
+    address = db.relationship("Address", back_populates="person")
+    # address = db.Column(db.String(200))
     education = db.Column(db.String(500))
     password = db.Column(db.String(200), nullable=False)
     created_at = db.Column(db.DateTime(timezone=True), onupdate=func.current_timestamp())
-    status = db.Column(db.String(3), nullable=False)
+    status = db.Column(db.String(3), nullable=False) #profiletype
+    profile_type = db.Column(db.String(80), unique=True, nullable=False)
     # person = db.relationship("Info", backref=db.backref("person", uselist=False))
     
     #act
@@ -46,7 +52,7 @@ class Person(db.Model):
             'firstname': self.firstname,
             'lastname': self.lastname,
             'email': self.email,
-            'contact': self.contact,
+            # 'contact': self.contact,
             'address': self.address,
             'education': self.education,
             # 'password': self.password,
@@ -63,7 +69,15 @@ class Person(db.Model):
         if s is True:
             return True
         return False
-
+    
+    def sameMail(self, email):
+        s = db.session.query(
+            db.session.query(Person).filter_by(email=email).exists()
+        ).scalar()
+        if s is True:
+            return True
+        return False
+    
     # GET
     def display(self):
         try:
@@ -75,16 +89,38 @@ class Person(db.Model):
                             "firstname": person.firstname,
                             "lastname": person.lastname,
                             "email": person.email,
-                            "contact": person.contact,
-                            "address": person.address,
+                            "contact": [
+                                {
+                                    "phone": p.phone,
+                                    "country_code": p.country_code,
+                                    "region_code": p.region_code
+                                }
+                                for p in person.contact
+                            ],
+                            "address": [
+                                {
+                                    "address_type": p.address_type,
+                                    "flat_no": p.flat_no,
+                                    "area": p.area,
+                                    "locality": p.locality,
+                                    "city": p.city,
+                                    "state": p.state,
+                                    "country": p.country,
+                                    "pin": p.pin,
+                                }
+                                for p in person.address
+                            ],
                             "education": person.education,
-                            # "password": person.password,
+                            "password": person.password,
                             'created_at': person.created_at,
                             # "aadhaar": person.aadhaar,
                         }
                         for person in Person.query.all()
                     ]
                 )
+                # person = Person.query.all()
+                # # for person in Person.query.all():
+                # self.common(person)
             raise NoResultFound
         except NoResultFound:
             return "Table is empty!"
@@ -92,25 +128,46 @@ class Person(db.Model):
     # GET with ID
     #update
     def displayOne(self, id):
+        # self = db.session.query(Person).filter_by(id=id).first()
         try:
             # p = db.session.query.get(Person, id)
             # p = Person.query.filter_by(id=id).first_or_404()
             # print(id)
             # print(p)
             if self.sameID(id):
-                self = db.session.query(Person).filter_by(id=id).first()
+                p = Person.query.filter_by(id=id).first() #email
+                print(p.id)
                 return jsonify(
                     [
                         {
-                            "id": self.id,
-                            "firstname": self.firstname,
-                            "lastname": self.lastname,
-                            "email": self.email,
-                            "contact": self.contact,
-                            "address": self.address,
-                            "education": self.education,
-                            'created_at': self.created_at,
-                            'status': self.status,
+                            "id": p.id,
+                            "firstname": p.firstname,
+                            "lastname": p.lastname,
+                            "email": p.email,
+                            "contact": [
+                                {
+                                    "phone": per.phone,
+                                    "country_code": per.country_code,
+                                    "region_code": per.region_code
+                                }
+                                for per in p.contact
+                            ],
+                            "address": [
+                                {
+                                    "address_type": per.address_type,
+                                    "flat_no": per.flat_no,
+                                    "area": per.area,
+                                    "locality": per.locality,
+                                    "city": per.city,
+                                    "state": per.state,
+                                    "country": per.country,
+                                    "pin": per.pin,
+                                }
+                                for per in p.address
+                            ],
+                            "education": p.education,
+                            'created_at': p.created_at,
+                            'status': p.status,
                             # "aadhaar": self.aadhaar,
                         }
                     ]
@@ -119,22 +176,25 @@ class Person(db.Model):
         except NoResultFound:
             return "No such ID exists"
 
-    def displayEmail(self, data):
+    def displayEmail(self):
         try:
             # print(data)
-            p = Person.query.filter_by(email=data["email"]).first()
-
             # should whole data be read from keycloak
-            print(self)
-            if not p:
-                p = Person()
-                p.firstname = data["firstname"]
-                p.lastname = data["lastname"]
-                p.email = data["email"]
 
-                db.session.add(p)
-                db.session.commit()
-                print(p.id)
+            # if not self.sameMail(data["email"]):
+            #     p = Person()
+            #     p.firstname = data["firstname"]
+            #     p.lastname = data["lastname"]
+            #     p.email = data["email"]
+
+            #     db.session.add(p)
+            #     db.session.commit()
+            #     print(p.id)
+            # Authorization process
+            p = Person.query.filter_by(email="aeonflux@gmail.com").first()
+            print(p)
+            print(p.id)
+
             return jsonify(
                 [
                     {
@@ -142,15 +202,36 @@ class Person(db.Model):
                         "firstname": p.firstname,
                         "lastname": p.lastname,
                         "email": p.email,
-                        "contact": p.contact,
-                        "address": p.address,
+                        "contact": [
+                            {
+                                "phone": per.phone,
+                                "country_code": per.country_code,
+                                "region_code": per.region_code
+                            }
+                            for per in p.contact
+                        ],
+                        "address": [
+                            {
+                                "address_type": per.address_type,
+                                "flat_no": per.flat_no,
+                                "area": per.area,
+                                "locality": per.locality,
+                                "city": per.city,
+                                "state": per.state,
+                                "country": per.country,
+                                "pin": per.pin,
+                            }
+                            for per in p.address
+                        ],
                         "education": p.education,
                         'created_at': p.created_at,
+                        'status': p.status,
                     }
                 ]
             )
+            # raise NoResultFound
         except NoResultFound:
-            return False
+            return "No data exists"
 
     # POST
     def create(self, data):
@@ -184,7 +265,7 @@ class Person(db.Model):
             newP.firstname = data["firstname"]
             newP.lastname = data["lastname"]
             newP.email = data["email"]
-            newP.contact = data["contact"]
+            # newP.contact = data["contact"]
             newP.address = data["address"]
             newP.education = data["education"]
             # newP.password = data["password"]
@@ -230,8 +311,8 @@ class Person(db.Model):
                             "firstname": x.firstname,
                             "lastname": x.lastname,
                             "email": x.email,
-                            "contact": x.contact,
-                            "address": x.address,
+                            # "contact": x.contact,
+                            # "address": x.address,
                             "education": x.education,
                             # "aadhaar": self.aadhaar,
                         }
@@ -248,36 +329,7 @@ class Person(db.Model):
     #     exist = db.session.query(db.exists().where(Person.aadhaar == data)).scalar()
     #     return exist
 
-    def update(self, id, data):
-        # print("Update: ", self, id, data)
-        try:
-            # if (
-            #     "email" in data
-            # ):
-            #     print(data)
-            #     raise NoResultFound
-            if self.sameID(id):
-                self = Person.query.filter_by(id=id).first()
-
-                # self.firstname = data["firstname"]
-                # self.lastname = data["lastname"]
-                # self.contact = data["contact"]
-
-                if "firstname" in data:
-                    self.firstname = data["firstname"]
-                if "lastname" in data:
-                    self.lastname = data["lastname"]
-                if "contact" in data:
-                    self.contact = data["contact"]
-                
-                self.status = "old"
-
-                db.session.commit()
-                # print(self)
-                return self.displayOne(id)
-            raise NoResultFound
-        except NoResultFound:
-            return "No such ID/data exists"
+    
 
     def personDelete(self, id):
         print(id)

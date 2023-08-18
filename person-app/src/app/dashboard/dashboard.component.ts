@@ -41,9 +41,10 @@ export class DashboardComponent {
 
   ngOnInit() {
     this.key();
-    this.personService.isLoggedIn.subscribe((status) => {
-      this.loginStatus = status;
-    });
+    this.getOne();
+    //  this.personService.isLoggedIn.subscribe((status) => {
+    //   this.loginStatus = status;
+    // });
   }
 
   loginSession() {
@@ -62,6 +63,14 @@ export class DashboardComponent {
     this.personService.logoutUser();
   }
 
+  getOne() {
+    this.personService.email.replace('', 'aeonflux@gmail.com');
+    // this.personService.postMail().subscribe(newValue => {
+    //   console.log("dashboard", newValue);
+    //   this.x = newValue;
+    // });
+  }
+
   async key() {
     const currentUser = await this.keycloak.loadUserProfile();
     
@@ -71,7 +80,10 @@ export class DashboardComponent {
     
     this.personService.loginUser();
     this.personService.postMail().subscribe(newP => {
-      this.x = newP
+      // this.x = newP;
+      console.log("newP", newP);
+      // this.x = this.personService.email;
+      // this.personService.
       console.log(this.x)
     });
     // console.log(this.child.x);

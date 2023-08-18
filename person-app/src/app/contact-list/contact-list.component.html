@@ -1,0 +1,17 @@
+<!-- <p>contact-list works!</p> -->
+
+<ng-container *ngTemplateOutlet="display"></ng-container>
+
+<ng-template #display>
+    <tr *ngFor="let c of contactList">
+        <app-contact [contact]="c"></app-contact>
+    </tr>
+</ng-template>
+
+
+<ng-template #addContactList>
+    <div *ngFor="let addC of addContact">
+        thi sis else
+        <app-contact [addContact]="addC"></app-contact>
+    </div>
+</ng-template>

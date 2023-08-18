@@ -24,7 +24,7 @@ export interface Person {
     address: Address[];
     education: string;
     password: string;
-    aadhaar: number;
+    // aadhaar: number;
 }
 
-// const person = {} as Person;
+// export const p1 = {} as Person;
