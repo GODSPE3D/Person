@@ -21,7 +21,7 @@ import { from, filter } from 'rxjs';
 })
 export class PersonDetailComponent {
 
-  @Input() x = {} as Person;
+  @Input() x!: Person;
   // @Input() x1!: Person;
   // myDataCopy = {...this.x};
   dataVar!: boolean;
@@ -44,10 +44,25 @@ export class PersonDetailComponent {
     contact: [],
     address: [],
     education: '',
-    password: ''
+    password: '',
     // aadhaar: 1
+    created_at: new Date(''),
+    status: '',
+    profile_type: ''
   }
-  newP = {} as Person;
+  // newP = {} as Person;
+  // public newP: Person = {
+  //   id: 0,
+  //   firstname: '',
+  //   lastname: '',
+  //   email: '',
+  //   contact: [],
+  //   address: [],
+  //   education: '',
+  //   password: '',
+  //   created_at: ''
+  // }
+  newP!: Person;
   single = {} as Person;
   @Output() addP = new EventEmitter<Person>();
   emailFormControl = new FormControl('', [Validators.required, Validators.email]);
@@ -62,7 +77,7 @@ export class PersonDetailComponent {
   @Output() delEvent = new EventEmitter();
 
   ngOnInit() {
-    this.getOne();
+    // this.getOne();
     // console.log(this.route.snapshot.paramMap.get('5'));
     // this.key();
     // console.log(this.x.firstname);
@@ -101,7 +116,7 @@ export class PersonDetailComponent {
     // };
     // this.getOne();
     // this.newP = this.x;
-    // console.log("detail ", this.x);
+    // console.log("detail ", this.x.firstname);
     // console.log("User: ", this.user);
   }
   
@@ -227,11 +242,11 @@ export class PersonDetailComponent {
     }
   }
 
-  // deletePerson(delP: Person): void {
-  //   this.personService.deletePerson(delP.id).subscribe(person => {
-  //     console.log(person);
-  //     // this.x = person
-  //     this.delEvent.emit(this.x);
-  //   });
-  // }
+  deletePerson(delP: Person): void {
+    this.personService.deletePerson(delP.id).subscribe(person => {
+      console.log(person);
+      // this.x = person
+      this.delEvent.emit(this.x);
+    });
+  }
 }

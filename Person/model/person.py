@@ -1,10 +1,7 @@
-from flask import jsonify, json, request, make_response
+from flask import jsonify
 from model.db import db
 from sqlalchemy.exc import NoResultFound, IntegrityError
 from sqlalchemy.sql import func
-from sqlalchemy.orm import joinedload
-# from model.contact import Contact
-# from model.address import Address
 
 
 class SameValue(Exception):
@@ -14,35 +11,24 @@ class SameValue(Exception):
 class Person(db.Model):
     __tablename__ = "person"
 
-    id = db.Column(db.Integer, primary_key=True, nullable=False, autoincrement=True)
+    id = db.Column(db.Integer, primary_key=True,
+                   nullable=False, autoincrement=True)
     firstname = db.Column(db.String(100), nullable=False)
     lastname = db.Column(db.String(100), nullable=False)
     email = db.Column(db.String(80), unique=True, nullable=False)
-    # contact = db.Column(db.Integer)
     contact = db.relationship("Contact", back_populates="person")
     address = db.relationship("Address", back_populates="person")
-    # address = db.Column(db.String(200))
     education = db.Column(db.String(500))
     password = db.Column(db.String(200), nullable=False)
-    created_at = db.Column(db.DateTime(timezone=True), onupdate=func.current_timestamp())
-    status = db.Column(db.String(3), nullable=False) #profiletype
+    created_at = db.Column(db.DateTime(timezone=True),
+                           onupdate=func.current_timestamp())
+    status = db.Column(db.String(3), nullable=False)
     profile_type = db.Column(db.String(80), unique=True, nullable=False)
-    # person = db.relationship("Info", backref=db.backref("person", uselist=False))
-    
-    #act
+
+    # act
     # default
     # time, user type
     # aadhaar = db.Column(db.BigInteger, nullable=False)  # unique
-
-    # def create(self, data):
-    #     self.firstname = (data["firstname"],)
-    #     self.lastname = (data["lastname"],)
-    #     self.email = (data["email"],)
-    #     self.contact = (data["contact"],)
-    #     self.address = (data["address"],)
-    #     self.education = (data["education"],)
-    #     self.password = (data["password"],)
-    #     self.aadhaar = data["aadhaar"]
 
     @property
     def serialize(self):
@@ -69,7 +55,7 @@ class Person(db.Model):
         if s is True:
             return True
         return False
-    
+
     def sameMail(self, email):
         s = db.session.query(
             db.session.query(Person).filter_by(email=email).exists()
@@ -77,7 +63,7 @@ class Person(db.Model):
         if s is True:
             return True
         return False
-    
+
     # GET
     def display(self):
         try:
@@ -113,20 +99,16 @@ class Person(db.Model):
                             "education": person.education,
                             "password": person.password,
                             'created_at': person.created_at,
-                            # "aadhaar": person.aadhaar,
                         }
                         for person in Person.query.all()
                     ]
                 )
-                # person = Person.query.all()
-                # # for person in Person.query.all():
-                # self.common(person)
             raise NoResultFound
         except NoResultFound:
             return "Table is empty!"
 
     # GET with ID
-    #update
+    # update
     def displayOne(self, id):
         # self = db.session.query(Person).filter_by(id=id).first()
         try:
@@ -135,42 +117,40 @@ class Person(db.Model):
             # print(id)
             # print(p)
             if self.sameID(id):
-                p = Person.query.filter_by(id=id).first() #email
+                p = Person.query.filter_by(id=id).first()  # email
                 print(p.id)
                 return jsonify(
-                    [
-                        {
-                            "id": p.id,
-                            "firstname": p.firstname,
-                            "lastname": p.lastname,
-                            "email": p.email,
-                            "contact": [
-                                {
-                                    "phone": per.phone,
-                                    "country_code": per.country_code,
-                                    "region_code": per.region_code
-                                }
-                                for per in p.contact
-                            ],
-                            "address": [
-                                {
-                                    "address_type": per.address_type,
-                                    "flat_no": per.flat_no,
-                                    "area": per.area,
-                                    "locality": per.locality,
-                                    "city": per.city,
-                                    "state": per.state,
-                                    "country": per.country,
-                                    "pin": per.pin,
-                                }
-                                for per in p.address
-                            ],
-                            "education": p.education,
-                            'created_at': p.created_at,
-                            'status': p.status,
-                            # "aadhaar": self.aadhaar,
-                        }
-                    ]
+                    {
+                        "id": p.id,
+                        "firstname": p.firstname,
+                        "lastname": p.lastname,
+                        "email": p.email,
+                        "contact": [
+                            {
+                                "phone": pr.phone,
+                                "country_code": pr.country_code,
+                                "region_code": pr.region_code
+                            }
+                            for pr in p.contact
+                        ],
+                        "address": [
+                            {
+                                "address_type": pr.address_type,
+                                "flat_no": pr.flat_no,
+                                "area": pr.area,
+                                "locality": pr.locality,
+                                "city": pr.city,
+                                "state": pr.state,
+                                "country": pr.country,
+                                "pin": pr.pin,
+                            }
+                            for pr in p.address
+                        ],
+                        "education": p.education,
+                        "password": p.password,
+                        'created_at': p.created_at,
+                        # "aadhaar": person.aadhaar,
+                    }
                 )
             raise NoResultFound
         except NoResultFound:
@@ -196,38 +176,36 @@ class Person(db.Model):
             print(p.id)
 
             return jsonify(
-                [
-                    {
-                        "id": p.id,
-                        "firstname": p.firstname,
-                        "lastname": p.lastname,
-                        "email": p.email,
-                        "contact": [
-                            {
-                                "phone": per.phone,
-                                "country_code": per.country_code,
-                                "region_code": per.region_code
-                            }
-                            for per in p.contact
-                        ],
-                        "address": [
-                            {
-                                "address_type": per.address_type,
-                                "flat_no": per.flat_no,
-                                "area": per.area,
-                                "locality": per.locality,
-                                "city": per.city,
-                                "state": per.state,
-                                "country": per.country,
-                                "pin": per.pin,
-                            }
-                            for per in p.address
-                        ],
-                        "education": p.education,
-                        'created_at': p.created_at,
-                        'status': p.status,
-                    }
-                ]
+                {
+                    "id": p.id,
+                    "firstname": p.firstname,
+                    "lastname": p.lastname,
+                    "email": p.email,
+                    "contact": [
+                        {
+                            "phone": per.phone,
+                            "country_code": per.country_code,
+                            "region_code": per.region_code
+                        }
+                        for per in p.contact
+                    ],
+                    "address": [
+                        {
+                            "address_type": per.address_type,
+                            "flat_no": per.flat_no,
+                            "area": per.area,
+                            "locality": per.locality,
+                            "city": per.city,
+                            "state": per.state,
+                            "country": per.country,
+                            "pin": per.pin,
+                        }
+                        for per in p.address
+                    ],
+                    "education": p.education,
+                    'created_at': p.created_at,
+                    'status': p.status,
+                }
             )
             # raise NoResultFound
         except NoResultFound:
@@ -305,18 +283,16 @@ class Person(db.Model):
                 # Person.id
                 x = Person.query.filter_by(email=data["username"]).first()
                 return jsonify(
-                    [
-                        {
-                            "id": x.id,
-                            "firstname": x.firstname,
-                            "lastname": x.lastname,
-                            "email": x.email,
-                            # "contact": x.contact,
-                            # "address": x.address,
-                            "education": x.education,
-                            # "aadhaar": self.aadhaar,
-                        }
-                    ]
+                    {
+                        "id": x.id,
+                        "firstname": x.firstname,
+                        "lastname": x.lastname,
+                        "email": x.email,
+                        # "contact": x.contact,
+                        # "address": x.address,
+                        "education": x.education,
+                        # "aadhaar": self.aadhaar,
+                    }
                 )
                 return print(Person.id, "present")
             # if self.email_or_aadhaar(Person.email, data["username"]):
@@ -328,8 +304,6 @@ class Person(db.Model):
     # def existAadhaar(self, data):
     #     exist = db.session.query(db.exists().where(Person.aadhaar == data)).scalar()
     #     return exist
-
-    
 
     def personDelete(self, id):
         print(id)

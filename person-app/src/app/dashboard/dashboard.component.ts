@@ -41,10 +41,10 @@ export class DashboardComponent {
 
   ngOnInit() {
     this.key();
-    this.getOne();
-    //  this.personService.isLoggedIn.subscribe((status) => {
-    //   this.loginStatus = status;
-    // });
+    // this.getOne();
+     this.personService.isLoggedIn.subscribe((status) => {
+      this.loginStatus = status;
+    });
   }
 
   loginSession() {
@@ -63,13 +63,13 @@ export class DashboardComponent {
     this.personService.logoutUser();
   }
 
-  getOne() {
-    this.personService.email.replace('', 'aeonflux@gmail.com');
-    // this.personService.postMail().subscribe(newValue => {
-    //   console.log("dashboard", newValue);
-    //   this.x = newValue;
-    // });
-  }
+  // getOne() {
+  //   this.personService.email.replace('', 'aeonflux@gmail.com');
+  //   // this.personService.postMail().subscribe(newValue => {
+  //   //   console.log("dashboard", newValue);
+  //   //   this.x = newValue;
+  //   // });
+  // }
 
   async key() {
     const currentUser = await this.keycloak.loadUserProfile();
@@ -80,31 +80,9 @@ export class DashboardComponent {
     
     this.personService.loginUser();
     this.personService.postMail().subscribe(newP => {
-      // this.x = newP;
-      console.log("newP", newP);
-      // this.x = this.personService.email;
-      // this.personService.
+      this.x = newP;
       console.log(this.x)
     });
-    // console.log(this.child.x);
-
-    // this.personService.postMail(this.firstname, this.lastname, this.email).subscribe(newP => {
-      // return {
-      // }
-      // newP}
-      // this.x = newP
-      // console.log("x", this.x)
-      // console.log("newP", newP)
-      // console.log(this.x);
-      // console.log(`this.newPerson as Person`, this.newPerson)
-      // console.log(`this.newPerson as Person ${this.newPerson.id}`)
-      // console.log("this.newPerson as Object values", Object.values(this.newPerson)["0"]["id"])
-      // console.log("this.newPerson as JSON", JSON.parse(JSON.stringify(this.newPerson)))
-      // this.personService.getPerson(Object.values(this.x)["0"]["id"]).subscribe(x => {
-      //   this.x = x
-      //   console.log("x", this.x)
-      // });
-    // });
   }
 
   // getOne(firstName: string, lastName: string, email: string) {

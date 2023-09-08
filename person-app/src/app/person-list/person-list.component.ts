@@ -5,6 +5,7 @@ import { PersonService } from '../person.service';
 import { PersonDetailComponent } from '../person-detail/person-detail.component';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
+import { User } from '../user';
 
 @Component({
   selector: 'app-person-list',
@@ -16,12 +17,13 @@ export class PersonListComponent implements OnInit {
 
   searchText!: string;
   person: Person[] = [];
+  p!: Person;
 
-  newP = {} as Person;
+  public newP = <Person>{};
 
   @ViewChild(PersonDetailComponent) child!: PersonDetailComponent;
 
-  constructor(private route: ActivatedRoute, private personService: PersonService, public dialog: MatDialog) {}
+  constructor(private personService: PersonService, public dialog: MatDialog) {}
 
   ngOnInit() {
     // this.getPersonAll();
@@ -39,17 +41,24 @@ export class PersonListComponent implements OnInit {
   }
 
   getOne() {
-    this.personService.getPerson(5).subscribe(newValue => {
-      this.newP.firstname = newValue.firstname;
-    });
+    // this.personService.getPerson(5).subscribe((newValue: Person) => {
+    //   // const x: User = {firstname: newValue.firstname, lastname: newValue.lastname, email: newValue.email};
+    //   this.newP = newValue;
+    //   console.log(this.newP);
+    // }, error => {
+    //   console.log(error);
+    // }
+    // );
+    this.personService.getPerson(5).subscribe(newP => {
+      this.newP = newP;
+      console.log(this.newP);
+    })
   }
 
   postM() {
     this.personService.postMail().subscribe(newV => {
       this.newP = newV;
       console.log("newP -> ", this.newP);
-      console.log(Object.keys(this.newP));
-      console.log(Object.values("0"));
     })
   }
 

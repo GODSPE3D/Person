@@ -23,11 +23,11 @@
 </ng-container> -->
 
 <!-- <div *ngIf="newP"> -->
-<!-- <div *ngFor="let n of newP.contact">
-        {{n.phone}}
-    </div>
-    {{newP.firstname}} -->
-<!-- newP: {{newP}}
+<!-- <div *ngFor="let n of newP.contact"> -->
+        <!-- {{n.phone}} -->
+    <!-- </div> -->
+    <!-- {{newP.firstname}}
+newP: {{newP}}
     {{newP.email}}
     json: {{newP | json}}
     {{p.firstname}}
@@ -41,29 +41,31 @@
 <td class="data-border">{{x.firstname}}</td>
 <td class="data-border">{{x.lastname}}</td>
 <td class="data-border">{{x.email}}</td> -->
-<td class="data-border">{{newP.id}}</td>
-<td class="data-border">{{newP.firstname}}</td>
-<td class="data-border">{{newP.lastname}}</td>
-<td class="data-border">{{newP.email}}</td>
-<td class="data-border">
+<!-- <p>{{newP | json}}</p>
+<td class="data-border">{{newP}}</td> -->
+<!-- <td class="data-border">{{newP.firstname}}</td> -->
+<!-- <td class="data-border">{{newP.lastname}}</td> -->
+<!-- <td class="data-border">{{newP.email}}</td> -->
+<!-- <app-contact-list [contactList]="newP.contact"></app-contact-list> -->
+<!-- <td class="data-border"> -->
 
-<!-- <ng-container *ngTemplateOutlet="content"></ng-container>
+<ng-container *ngTemplateOutlet="content"></ng-container>
 
 <ng-template #content>
-    <td class="data-border">{{newP.id}}</td>
-    <td class="data-border">{{newP.firstname}}</td>
-    <td class="data-border">{{newP.lastname}}</td>
-    <td class="data-border">{{newP.email}}</td>
+    <td class="data-border">{{x.id}}</td>
+    <td class="data-border">{{x.firstname}}</td>
+    <td class="data-border">{{x.lastname}}</td>
+    <td class="data-border">{{x.email}}</td>
     <td class="data-border">
-        <app-contact-list [contactList]="newP.contact"></app-contact-list>
+        <app-contact-list [contactList]="x.contact"></app-contact-list>
     </td>
     <td class="data-border">
-        <app-address-list [addressList]="newP.address"></app-address-list>
+        <app-address-list [addressList]="x.address"></app-address-list>
     </td>
     <td>
         <button type="button" class="m-2 btn btn-primary" (click)="openDialog2()"><i
-                class="bi bi-pencil-square"></i></button> -->
-        <!-- <button type="button" class="m-1 btn btn-danger" (click)="deletePerson(x)"><i class="bi bi-trash"></i></button> -->
+                class="bi bi-pencil-square"></i></button>
+        <button type="button" class="m-1 btn btn-danger" (click)="deletePerson(x)"><i class="bi bi-trash"></i></button>
     <!-- </td> -->
     <!-- <td class="data-border" *ngFor="let cont of x.contact">
         <app-contact [c]="cont"></app-contact>
@@ -75,7 +77,7 @@
     <!-- <td class="data-border">{{user.firstname}}</td>
     <td class="data-border">{{user.lastname}}</td>
     <td class="data-border">{{user.email}}</td> -->
-<!-- </ng-template> -->
+</ng-template>
 
 <!-- Dialog template to Add Person -->
 <ng-template #addP>

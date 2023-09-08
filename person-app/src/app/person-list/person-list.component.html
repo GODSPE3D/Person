@@ -12,7 +12,7 @@
   </div>
 </div>
 
-<!-- <div class="p-2 table-responsive">
+<div class="p-2 table-responsive">
   <table id="example" class="table table-bordered" data-auto-refresh="true">
     <thead class="thead-dark">
       <tr class="text-center">
@@ -27,19 +27,35 @@
     </thead>
     <tbody>
       <tr *ngFor="let p of person | filter:searchText" class="text-center">
-        <app-person-detail [x]="p" class="td" (delEvent)="getPersonAll()" (addP)="addPerson($event)"></app-person-detail> -->
-        <!-- <app-person-detail [x]="p" class="td" (delEvent)="getOne()"></app-person-detail> -->
+        <app-person-detail [x]="p" class="td" (delEvent)="getPersonAll()"
+          (addP)="addPerson($event)"></app-person-detail>
+        <app-person-detail [x]="newP" class="td"></app-person-detail>
         <!-- <td><button type="button" class="m-1 btn btn-danger" (click)="delete(p)"><i class="bi bi-trash"></i></button>
         </td> -->
-      <!-- </tr>
+      </tr>
     </tbody>
   </table>
-</div> -->
+</div>
 
 <!-- <button (click)="getOne()"></button> -->
-<!-- <div *ngIf="newP"> -->
-  {{newP}}
-  {{newP.firstname}}
-  <!-- <app-person-detail [x]="newP" class="td" (delEvent)="getOne()" (addP)="addPerson($event)"></app-person-detail> -->
-  <p>{{newP.id}}</p>
+<!-- <div *ngIf="p">
+  <h1>{{p['id']}}</h1> -->
+<!-- {{newP}} -->
+<!-- {{newP.firstname}} -->
+<!-- {{p.firstname}} -->
+<!-- {{newP | json}} -->
+<!-- <p>{{newP.id}}</p> -->
 <!-- </div> -->
+
+<!-- <section id="profile"> -->
+  <div class="container" *ngIf="newP">
+    <div class="row">
+      <div class="col">
+      <app-person-detail [x]="newP"></app-person-detail>
+      <!-- <h2>{{newP.firstname}}</h2>
+      <h2>{{newP.id}}</h2> -->
+      <!-- {{newP | json}} -->
+      <!-- <h2>{{newP[0].profile.dsplayName}}</h2> -->
+    </div>
+  </div>
+</div>

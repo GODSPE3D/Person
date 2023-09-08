@@ -3,12 +3,13 @@ from flask import jsonify
 from model.person import Person
 from sqlalchemy.exc import NoResultFound
 
+
 class Address(db.Model):
     __tablename__ = "address"
 
-    id = db.Column(db.Integer, primary_key=True, nullable=False, autoincrement=True)
+    id = db.Column(db.Integer, primary_key=True,
+                   nullable=False, autoincrement=True)
     person_id = db.Column(db.ForeignKey("person.id"),  primary_key=True)
-    # person_addr = db.relationship(Person, backref=db.backref("persons", uselist=False))
     person = db.relationship("Person", back_populates="address")
 
     address_type = db.Column(db.String(100))
@@ -50,11 +51,12 @@ class Address(db.Model):
             raise NoResultFound
         except NoResultFound:
             return "Table is empty!"
-        
+
     def displayOneAdd(self, id):
         try:
             if self.sameID(id):
-                self = db.session.query(Address).filter_by(person_id=id).first()
+                self = db.session.query(Address).filter_by(
+                    person_id=id).first()
                 return jsonify(
                     [
                         {
@@ -109,14 +111,7 @@ class Address(db.Model):
             newP.pin = data["pin"]
 
             print(newP.person_id)
-            # return jsonify([
-            #     {
-            #         "person_id": newP.person_id,
-            #         "country_code": newP.country_code,
-            #         "region_code": newP.region_code,
-            #         "phone": newP.phone,
-            #     }
-            # ])
+            
             db.session.add(newP)
             db.session.commit()
 
@@ -130,8 +125,7 @@ class Address(db.Model):
         #     return "email or aadhaar is same"
         except Exception as e:
             return e
-        
-    
+
     def update(self, id, data):
         # print("Update: ", self, id, data)
         try:
@@ -142,7 +136,7 @@ class Address(db.Model):
                     self.firstname = data["country_code"]
                 if "phone" in data:
                     self.lastname = data["phone"]
-                
+
                 self.status = "old"
 
                 db.session.commit()
@@ -151,7 +145,7 @@ class Address(db.Model):
             raise NoResultFound
         except NoResultFound:
             return "No such ID/data exists"
-    
+
     def addressDelete(self, id):
         print(id)
         try:

@@ -1,10 +1,12 @@
 export interface Contact {
+    person_id: number;
     country_code: number;
     region_code: number;
     phone: number;
 }
 
 export interface Address {
+    person_id: number;
     address_type: string;
     flat_no: string;
     area: string;
@@ -24,6 +26,9 @@ export interface Person {
     address: Address[];
     education: string;
     password: string;
+    created_at: Date;
+    status: string;
+    profile_type: string;
     // aadhaar: number;
 }
 

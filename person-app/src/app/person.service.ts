@@ -22,6 +22,7 @@ export class PersonService {
   }
 
   private personUrl = 'http://127.0.0.1:5000/person';
+  private contactUrl = 'http://127.0.0.1:5000/person/contact';
   email = '';
 
   httpOptions = {
@@ -46,9 +47,9 @@ export class PersonService {
   postMail(): Observable<Person> {
     // this.email = email;
     // return this.http.post<Person>(`${this.personUrl}/login`, {email: "aeonflux@gmail.com"}, this.httpOptions)
-    return this.http.get<Person>(`${this.personUrl}/login`).pipe();
+    // return this.http.get<Person>(`${this.personUrl}/login`);
     // this.http.get('...').map(res => <Product[]>res.json());
-    // return this.http.post<Person>(`${this.personUrl}/login`, {firstname: "Aeon", lastname: "Flux", email: "aeonflux@gmail.com"}, this.httpOptions)
+    return this.http.post<Person>(`${this.personUrl}/login`, {firstname: "Aeon", lastname: "Flux", email: "aeonflux@gmail.com"}, this.httpOptions);
     // return this.http.post<Person>(`${this.personUrl}/login`, {firstname: "Aeon", lastname: "Flux", email: "aeonflux@gmail.com"}, this.httpOptions)
   }
 
@@ -70,5 +71,13 @@ export class PersonService {
 
   updatePerson(person: Person): Observable<Person> {
     return this.http.put<Person>(this.personUrl + `/${person.id}`, person, this.httpOptions);
+  }
+
+  getAllContact(): Observable<Contact[]> {
+    return this.http.get<Contact[]>(this.contactUrl);
+  }
+
+  addContact(contactDetails: Contact): Observable<Contact[]> {
+    return this.http.post<Contact[]>(this.contactUrl, contactDetails, this.httpOptions);
   }
 }

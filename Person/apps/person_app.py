@@ -29,19 +29,18 @@ def index():
 def get_all():
     return person.display()
 
-
-# @home.route("/person/info")
-# def get_info():
-#     return info.display()
-
 # API
+
+
 @home.route("/person/address")
 def get_add():
     return address.display()
 
+
 @home.route("/person/address/<id>")
 def get_ad(id):
     return address.displayOneAdd(id)
+
 
 @home.route("/person/address", methods=["POST"])
 # @login_required
@@ -67,6 +66,8 @@ def create_add():
     return response
 
 # API
+
+
 @home.route("/person/contact")
 def get_con():
     return contact.display()
@@ -102,23 +103,13 @@ def create_cont():
 
 
 @home.route("/person/<id>")
-@cross_origin(allow_headers=['Content-Type','Authorization'])
+@cross_origin(allow_headers=['Content-Type', 'Authorization'])
 # @token_required
 # @login_required
 # @oidc.accept_token()
 def get_id(id):
     return person.displayOne(id)
 
-# @home.route("/person/email/<email>")
-# @cross_origin(allow_headers=['Content-Type','Authorization'])
-# # @token_required
-# # @login_required
-# # @oidc.accept_token()
-# def get_mail(email):
-#     return person.displayEmail(email)
-
-# def get_cont(id):
-#     return contact.displayOneCon(5)
 
 @home.route("/person/login", methods=["GET"])
 @cross_origin(allow_headers=['Content-Type', 'Authorization'])
@@ -133,18 +124,18 @@ def get_email():
     # print(data)
     return person.displayEmail()
 
-# @home.route("/person/login", methods=["GET", "POST"])
-# @cross_origin(allow_headers=['Content-Type', 'Authorization'])
-# # @token_required
-# # @login_required
-# # @oidc.accept_token()
-# def get_email():
-#     data = request.get_json()
-#     # if data:
-#     # response = Response(json.dumps(person),201,mimetype='application/json')
-#     # response.headers['Content-Type'] = "/person/login" + str(data['email'])
-#     print(data)
-#     return person.displayEmail(data)
+@home.route("/person/login", methods=["POST"])
+@cross_origin(allow_headers=['Content-Type', 'Authorization'])
+# @token_required
+# @login_required
+# @oidc.accept_token()
+def post_email():
+    data = request.get_json()
+    # if data:
+    # response = Response(json.dumps(person),201,mimetype='application/json')
+    # response.headers['Content-Type'] = "/person/login" + str(data['email'])
+    print(data)
+    return person.displayEmail()
 
 
 @home.route("/person", methods=["POST"])

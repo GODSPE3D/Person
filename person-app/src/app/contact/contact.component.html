@@ -10,6 +10,9 @@
 <ng-container *ngTemplateOutlet="display"></ng-container>
 
 <ng-template #display>
+    <th>Country code</th>
+    <th>Region code</th>
+    <th>Phone</th>
     <td>{{contact.country_code}}</td>
     <td>{{contact.region_code}}</td>
     <td>{{contact.phone}}</td>
@@ -34,6 +37,27 @@
     </div>
     <!-- this is else -->
 </ng-template>
+
+<!-- <form class="example-form">
+    <div mat-dialog-content *ngIf="contact">
+        <table class="example-full-width" cellspacing="0">
+            <tr>
+                <td>
+                    <mat-form-field appearance="outline">
+                        <mat-label>First name</mat-label>
+                        <input matInput [(ngModel)]="contact.country_code" placeholder="John" name="firstname">
+                    </mat-form-field>
+                </td>
+                <td>
+                    <mat-form-field appearance="outline">
+                        <mat-label>Last name</mat-label>
+                        <input matInput [(ngModel)]="contact.region_code" placeholder="Doe" name="lastname">
+                    </mat-form-field>
+                </td>
+            </tr>
+        </table>
+    </div>
+</form> -->
 
 <!-- </div> -->
 

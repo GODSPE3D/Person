@@ -67,10 +67,10 @@
   </ul>
 </div> -->
 
-<ng-container *ngIf="x">
+<!-- <ng-container *ngIf="x">
   {{x.firstname}}
   <app-person-detail [x]="x"></app-person-detail>
-</ng-container>
+</ng-container> -->
 
 <ng-container *ngIf="admin">
   <p> This is Admin view. </p>
@@ -78,9 +78,9 @@
 </ng-container>
 
 <ng-container *ngIf="player">
-  Firstname: {{x.firstname}}
+  <!-- Firstname: {{x.firstname}} -->
   <!-- <app-address [addressList]="x.address"></app-address> -->
-  <!-- <td *ngIf="x"><app-person-detail [x]="x"></app-person-detail></td> -->
+  <app-person-detail [x]="x"></app-person-detail>
 </ng-container>
 <!-- <app-person-detail [x]="x"></app-person-detail> -->
 

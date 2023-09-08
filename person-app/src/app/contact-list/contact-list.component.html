@@ -1,5 +1,14 @@
 <!-- <p>contact-list works!</p> -->
 
+<div *ngIf="contactL">
+    <tr *ngFor="let c of contactL">
+        <app-contact [contact]="c"></app-contact>
+    </tr>
+</div>
+
+<!-- <button type="button" class="ms-2 btn btn-primary btn-rounded">
+    <i class="me-2 bi bi-person-plus-fill"></i>Add Person</button> -->
+
 <ng-container *ngTemplateOutlet="display"></ng-container>
 
 <ng-template #display>

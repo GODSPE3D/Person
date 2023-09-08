@@ -19,7 +19,7 @@ const routes: Routes = [
   // { path: 'person', component: PersonListComponent, loadChildren: () => import('./person-list/person-list.module').then(m => m.PersonListModule), canActivate: [AuthGuard] },
   // { path: 'person/:id', component: PersonDetailComponent, loadChildren: () => import('./person-detail/person-detail.module').then(m => m.PersonDetailModule), canActivate: [AuthGuard]},
   { path: 'home', component: DashboardComponent },
-  { path: 'person/detail', component: PersonDetailComponent },
+  { path: 'person/detail/:id', component: PersonDetailComponent },
   { path: 'person/contact', component: ContactListComponent },
   { path: 'person/address', component: AddressListComponent }
   // { path: 'person', component: PersonDetailComponent, canActivate: [AuthGuard]},
