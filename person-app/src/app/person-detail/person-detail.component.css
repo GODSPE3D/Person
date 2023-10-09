@@ -1,10 +1,14 @@
-td.data-border {
-    border-right: 1px solid black;
-}
+/* td.data-border {
+    border-bottom: 1px solid black;
+} */
 
-:host {
+/* :host td {
     display: contents;
-}
+} */
+
+/* div.card :host {
+    display:none;
+} */
 
 mat-form-field {
     margin-top: 5px;

@@ -29,7 +29,5 @@ export interface Person {
     created_at: Date;
     status: string;
     profile_type: string;
-    // aadhaar: number;
+    isExpand: boolean;
 }
-
-// export const p1 = {} as Person;

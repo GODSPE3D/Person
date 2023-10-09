@@ -1,4 +1,4 @@
-<!-- <p>contact works!</p> -->
+<p>contact works!</p>
 
 <!-- <td class="data-border">{{c.country_code}}</td>
 <td class="data-border">{{c.region_code}}</td>
@@ -7,12 +7,35 @@
 <!-- For -->
 <!-- <div *ngFor="let cont of contactList"> -->
 
+<!-- <div> -->
+<!-- <mat-form-field appearance="outline">
+    <mat-label>Person ID</mat-label>
+    <input matInput [(ngModel)]="addContact.person_id" placeholder="123456789" name="phone" required>
+</mat-form-field>
+<mat-form-field appearance="outline">
+    <mat-label>Country Code</mat-label>
+    <input matInput [(ngModel)]="addContact.country_code" placeholder="91" name="country_code" required>
+</mat-form-field>
+<mat-form-field appearance="outline">
+    <mat-label>Region Code</mat-label>
+    <input matInput [(ngModel)]="addContact.region_code" placeholder="020" name="region_code" required>
+</mat-form-field>
+<mat-form-field appearance="outline">
+    <mat-label>Phone</mat-label>
+    <input matInput [(ngModel)]="addContact.phone" placeholder="123456789" name="phone" required>
+</mat-form-field> -->
+<!-- <button type="button" class="btn btn-primary" (click)="addCont(addContact)">Send</button> -->
+<!-- {{contact.country_code}}
+{{contact.region_code}} -->
+<!-- <td>{{contact.phone}}</td> -->
+<!-- </div> -->
+
 <ng-container *ngTemplateOutlet="display"></ng-container>
 
 <ng-template #display>
-    <th>Country code</th>
+    <!-- <th>Country code</th>
     <th>Region code</th>
-    <th>Phone</th>
+    <th>Phone</th> -->
     <td>{{contact.country_code}}</td>
     <td>{{contact.region_code}}</td>
     <td>{{contact.phone}}</td>

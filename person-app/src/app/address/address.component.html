@@ -21,13 +21,43 @@
 {{a.country}}
 {{a.pin}} -->
 
+<div class="input-group mb-3">
+    <span class="input-group-text" id="inputGroup-sizing-default">Flat No.</span>
+    <input type="text" class="form-control" aria-label="Sizing example input"
+        aria-describedby="inputGroup-sizing-default" [(ngModel)]="address.flat_no">
+    <span class="input-group-text" id="inputGroup-sizing-default">Area</span>
+    <input type="text" class="form-control" aria-label="Sizing example input"
+        aria-describedby="inputGroup-sizing-default" [(ngModel)]="address.area">
+</div>
+<div class="input-group mb-3">
+    <span class="input-group-text" id="inputGroup-sizing-default">Locality</span>
+    <input type="text" class="form-control" aria-label="Sizing example input"
+        aria-describedby="inputGroup-sizing-default" [(ngModel)]="address.locality">
+    <span class="input-group-text" id="inputGroup-sizing-default">City</span>
+    <input type="text" class="form-control" aria-label="Sizing example input"
+        aria-describedby="inputGroup-sizing-default" [(ngModel)]="address.city">
+</div>
+<div class="input-group mb-3">
+    <span class="input-group-text" id="inputGroup-sizing-default">State</span>
+    <input type="text" class="form-control" aria-label="Sizing example input"
+        aria-describedby="inputGroup-sizing-default" [(ngModel)]="address.state">
+    <span class="input-group-text" id="inputGroup-sizing-default">Country</span>
+    <input type="text" class="form-control" aria-label="Sizing example input"
+        aria-describedby="inputGroup-sizing-default" [(ngModel)]="address.country">
+</div>
+<div class="input-group mb-3">
+    <span class="input-group-text" id="inputGroup-sizing-default">PIN</span>
+    <input type="text" class="form-control" aria-label="Sizing example input"
+        aria-describedby="inputGroup-sizing-default" [(ngModel)]="address.pin">
+</div>
+
 
 <!-- <div *ngFor="let add of address"> -->
-    <td>{{address.flat_no}}</td>
-    <td>{{address.area}}</td>
-    <td>{{address.locality}}</td>
-    <td>{{address.city}}</td>
-    <td>{{address.state}}</td>
-    <td>{{address.country}}</td>
-    <td>{{address.pin}}</td>
+<!-- <td>{{address.flat_no}}</td>
+<td>{{address.area}}</td>
+<td>{{address.locality}}</td>
+<td>{{address.city}}</td>
+<td>{{address.state}}</td>
+<td>{{address.country}}</td>
+<td>{{address.pin}}</td> -->
 <!-- </div> -->

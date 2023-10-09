@@ -1,83 +1,78 @@
-<!-- <td class="data-border">{{user.username}}</td>
-<button type="button" class="m-2 btn btn-primary" (click)="logoutSession()">Logout</button> -->
-<!-- <br> -->
-<!-- <div *ngIf="newP">
-    <p>{{newP | json}}</p>
-    <p>{{newP.email}}</p>
-    {{newP.education}}
-    {{newP.firstname}}
-    {{newP.lastname}}
-    {{newP.email}}
-    <td class="data-border">{{newP.lastname}}</td>
-</div> -->
+<ng-container *ngTemplateOutlet="admin"></ng-container>
 
-<!-- Firstname {{user.firstname}}
-{{user.lastname}}
-{{user.email}} -->
-
-<!-- <ul>
-    <li *ngFor="let change of changeLog">{{change}}</li>
-</ul> -->
-<!-- <ng-container *ngIf="player">
-    <p> This is Player view. </p>
-</ng-container> -->
-
-<!-- <div *ngIf="newP"> -->
-<!-- <div *ngFor="let n of newP.contact"> -->
-        <!-- {{n.phone}} -->
-    <!-- </div> -->
-    <!-- {{newP.firstname}}
-newP: {{newP}}
-    {{newP.email}}
-    json: {{newP | json}}
-    {{p.firstname}}
-</div> -->
-
-<!-- <button type="button" class="m-2 btn btn-primary" (click)="openDialog2()"><i class="bi bi-pencil-square"></i></button>
-<button type="button" class="m-1 btn btn-danger" (click)="deletePerson(x)"><i class="bi bi-trash"></i></button> -->
-
-<!-- <button type="button" class="m-2 btn btn-primary" (click)="logoutSession()">Logout</button> -->
-<!-- <td class="data-border">{{x.id}}</td>
-<td class="data-border">{{x.firstname}}</td>
-<td class="data-border">{{x.lastname}}</td>
-<td class="data-border">{{x.email}}</td> -->
-<!-- <p>{{newP | json}}</p>
-<td class="data-border">{{newP}}</td> -->
-<!-- <td class="data-border">{{newP.firstname}}</td> -->
-<!-- <td class="data-border">{{newP.lastname}}</td> -->
-<!-- <td class="data-border">{{newP.email}}</td> -->
-<!-- <app-contact-list [contactList]="newP.contact"></app-contact-list> -->
-<!-- <td class="data-border"> -->
-
-<ng-container *ngTemplateOutlet="content"></ng-container>
-
-<ng-template #content>
-    <td class="data-border">{{x.id}}</td>
-    <td class="data-border">{{x.firstname}}</td>
-    <td class="data-border">{{x.lastname}}</td>
-    <td class="data-border">{{x.email}}</td>
-    <td class="data-border">
-        <app-contact-list [contactList]="x.contact"></app-contact-list>
-    </td>
-    <td class="data-border">
-        <app-address-list [addressList]="x.address"></app-address-list>
-    </td>
+<ng-template #admin>
+    <!-- <a class="btn btn-warning" data-bs-toggle="collapse" href="#collapse+${{people.id}}" role="button"
+        aria-expanded="false" aria-controls="collapse"><i class="bi bi-eye-slash-fill"></i>
+    </a> -->
+    <!-- <tr> -->
+    <!-- <td class="text-center"><input class="form-check-input justify-content-end" type="checkbox" ng-model="isAgreed"
+            id="flexCheckDefault"></td> -->
+    <td class="detailTD" (click)="openModal()">{{people.firstname}}</td>
+    <td class="detailTD" (click)="openModal()">{{people.lastname}}</td>
+    <td class="detailTD" (click)="openModal()">{{people.email}}</td>
     <td>
-        <button type="button" class="m-2 btn btn-primary" (click)="openDialog2()"><i
-                class="bi bi-pencil-square"></i></button>
-        <button type="button" class="m-1 btn btn-danger" (click)="deletePerson(x)"><i class="bi bi-trash"></i></button>
-    <!-- </td> -->
-    <!-- <td class="data-border" *ngFor="let cont of x.contact">
-        <app-contact [c]="cont"></app-contact>
+        <select class="form-select form-select-sm" [(ngModel)]="people.profile_type" role="button">
+            <!-- <option selected>{{people.profile_type}}</option> -->
+            <option [ngValue]="admin">Admin</option>
+            <option [ngValue]="player">Player</option>
+            <!-- <option [ngValue]="15">15</option> -->
+            <!-- <option [ngValue]="person.length">All</option> -->
+        </select>
+    </td>
+    <!-- <app-contact-list [contactList]="people.contact"></app-contact-list>
+
+    <td class="data-border">
+        <app-address-list [addressList]="people.address"></app-address-list>
     </td> -->
-    <!-- <td class="data-border" *ngFor="let add of x.address">
-        <app-address [a]="add"></app-address>
-    </td> -->
-    <!-- <td class="data-border">{{x.contact}}</td> -->
-    <!-- <td class="data-border">{{user.firstname}}</td>
-    <td class="data-border">{{user.lastname}}</td>
-    <td class="data-border">{{user.email}}</td> -->
+    <!-- <td> -->
+    <!-- <button type="button" class="m-2 btn btn-primary" (click)="openDialog2()"><i
+                        class="bi bi-pencil-square"></i></button>
+                        <button type="button" class="m-1 btn btn-danger" (click)="deletePerson(people)"><i
+                            class="bi bi-trash"></i></button> -->
+    <!-- <td> -->
+    <!-- <div class="my-1 btn-group" role="group"> -->
+    <!-- <button type="button" class="btn btn-primary" (click)="openDialog2()"><i class="bi bi-pencil-square"></i></button> -->
+
+    <!-- <button type="button" class="btn btn-warning"><i class="bi bi-eye-slash-fill"></i></button> -->
+
 </ng-template>
+
+<ng-template #content let-modal>
+    <div class="modal-header modal-header-centered">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">{{people.firstname}} Details</h1>
+        <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+    </div>
+    <div class="modal-body modal-body-centered">
+        <div class="input-group mb-3">
+            <span class="input-group-text" id="inputGroup-sizing-default">Firstname</span>
+            <input type="text" class="form-control" aria-label="Sizing example input"
+                aria-describedby="inputGroup-sizing-default" [(ngModel)]="people.firstname">
+        </div>
+        <div class="input-group mb-3">
+            <span class="input-group-text" id="inputGroup-sizing-default">Lastname</span>
+            <input type="text" class="form-control" aria-label="Sizing example input"
+                aria-describedby="inputGroup-sizing-default" [(ngModel)]="people.lastname">
+        </div>
+        <div class="input-group mb-3">
+            <span class="input-group-text" id="inputGroup-sizing-default">Email</span>
+            <input type="text" class="form-control" aria-label="Sizing example input"
+                aria-describedby="inputGroup-sizing-default" [(ngModel)]="people.email" disabled>
+        </div>
+        <hr class="dropdown-divider">
+        <!-- <div class="input-group mb-3">
+            <span class="input-group-text" id="inputGroup-sizing-default">Address</span>
+            <input type="text" class="form-control" aria-label="Sizing example input"
+                aria-describedby="inputGroup-sizing-default" [(ngModel)]="people.address" disabled> -->
+        <app-address-list [addressList]="people.address"></app-address-list>
+        <!-- </div> -->
+    </div>
+    <div class="modal-footer modal-footer-centered">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+            (click)="modal.dismiss('Cross click')">Close</button>
+        <button type="button" class="btn btn-primary" (click)="modal.close('Save click')">Save changes</button>
+    </div>
+</ng-template>
+
 
 <!-- Dialog template to Add Person -->
 <ng-template #addP>
@@ -87,21 +82,21 @@ newP: {{newP}}
             <table class="example-full-width" cellspacing="0">
                 <tr>
                     <td>
-                        <mat-form-field appearance="outline">
-                            <mat-label>First name</mat-label>
-                            <input matInput [(ngModel)]="newP.firstname" placeholder="John" name="firstname">
-                        </mat-form-field>
                     </td>
                     <td>
-                        <mat-form-field appearance="outline">
-                            <mat-label>Last name</mat-label>
-                            <input matInput [(ngModel)]="newP.lastname" placeholder="Doe" name="lastname">
-                        </mat-form-field>
                     </td>
                 </tr>
             </table>
 
             <p>
+                <mat-form-field appearance="outline">
+                    <mat-label>First name</mat-label>
+                    <input matInput [(ngModel)]="newP.firstname" placeholder="John" name="firstname">
+                </mat-form-field>
+                <mat-form-field appearance="outline">
+                    <mat-label>Last name</mat-label>
+                    <input matInput [(ngModel)]="newP.lastname" placeholder="Doe" name="lastname">
+                </mat-form-field>
                 <!-- <mat-form-field appearance="outline">
                     <mat-label>Email</mat-label>
                     <input type="email" matInput [formControl]="emailFormControl" placeholder="Ex. pat@example.com" name="email">
@@ -125,17 +120,17 @@ newP: {{newP}}
                     <textarea matInput [(ngModel)]="newP.address" placeholder="Ex. 100 Main St"
                         name="address"></textarea>
                 </mat-form-field> -->
-                <mat-form-field appearance="outline">
+                <!-- <mat-form-field appearance="outline">
                     <mat-label>Education</mat-label>
                     <textarea matInput [(ngModel)]="newP.education" name="education"></textarea>
-                </mat-form-field>
+                </mat-form-field> -->
                 <mat-form-field appearance="outline">
                     <mat-label>Password</mat-label>
                     <input matInput placeholder="Ex. San Francisco" [(ngModel)]="newP.password" name="password">
                 </mat-form-field>
                 <!-- <mat-form-field appearance="outline">
                 </mat-form-field> -->
-                <app-contact-list [addContact]="newP.contact"></app-contact-list>
+                <!-- <app-contact-list [addContact]="newP.contact"></app-contact-list> -->
                 <!-- <div class="input-group">
                     <div class="input-group-prepend">
                         <span class="input-group-text">Country Code</span>
@@ -154,25 +149,47 @@ newP: {{newP}}
                         <mat-label>Contact</mat-label>
                         <input matInput placeholder="Ex. San Francisco" [(ngModel)]="newP.contact" name="password">
                     </mat-form-field> -->
-                <mat-form-field appearance="outline">
+                <!-- <mat-form-field appearance="outline">
                     <mat-label>Address</mat-label>
                     <input matInput placeholder="Ex. San Francisco" [(ngModel)]="newP.address" name="address">
-                </mat-form-field>
-            <!-- </p> -->
+                </mat-form-field> -->
+                <!-- </p> -->
 
-            <mat-dialog-actions align="end" class="btn-edit">
-                <button mat-raised-button mat-dialog-close (click)="addPerson(newP); " color="primary">Create</button>
-                <button mat-raised-button mat-dialog-close>Cancel</button>
-            </mat-dialog-actions>
-            <!-- </mat-dialog-content> -->
+                <mat-dialog-actions align="end" class="btn-edit">
+                    <button mat-raised-button mat-dialog-close (click)="addPerson(newP); "
+                        color="primary">Create</button>
+                    <button mat-raised-button mat-dialog-close>Cancel</button>
+                </mat-dialog-actions>
+                <!-- </mat-dialog-content> -->
         </div>
     </form>
 </ng-template>
 
+<ng-template #detail>
+    <div class="modal" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    ...
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-template>
+
+
 
 <!-- Dialog template to Edit Person -->
 <ng-template #editPerson>
-    <h2 mat-dialog-title>{{x.firstname}} Details</h2>
+    <h2 mat-dialog-title>{{people.firstname}} Details</h2>
     <!-- <form class="example-form">
         <mat-dialog-content>
             <table class="example-full-width" cellspacing="0">
@@ -239,17 +256,19 @@ newP: {{newP}}
             </mat-dialog-actions>
         </mat-dialog-content>
     </form> -->
-    <div mat-dialog-content *ngIf="x">
+    <div mat-dialog-content *ngIf="people">
         <mat-form-field appearance="fill">
             <mat-label>Firstname</mat-label>
-            <input matInput [(ngModel)]="x.firstname" name="firstname">
+            <input matInput [(ngModel)]="people.firstname" name="firstname">
         </mat-form-field>
         <mat-form-field>
             <mat-label>Lastname</mat-label>
-            <input matInput [(ngModel)]="x.lastname" name="lastname">
+            <input matInput [(ngModel)]="people.lastname" name="lastname">
         </mat-form-field>
         <div mat-dialog-actions align="end">
-            <button mat-raised-button mat-dialog-close (click)="save()" color="primary">Save</button>
+            <button type="button" class="mx-1 btn btn-success" (click)="save()"><i class="bi bi-check"></i></button>
+            <!-- <button type="button" class="mx-1 btn btn-success" (click)="save()"><i class="bi bi-check"></i></button> -->
+            <!-- <button mat-raised-button mat-dialog-close (click)="save()" color="primary">Save</button> -->
             <button mat-raised-button mat-dialog-close>Close</button>
         </div>
     </div>

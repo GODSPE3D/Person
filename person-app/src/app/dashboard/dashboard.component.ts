@@ -1,13 +1,10 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component } from '@angular/core';
 import { KeycloakService } from 'keycloak-angular';
 
-import { PersonService } from '../person.service';
+import { ActivatedRoute } from '@angular/router';
 import { Person } from '../person';
+import { PersonService } from '../person.service';
 import { User } from '../user';
-import { ActivatedRoute, Route, Router } from '@angular/router';
-import { JsonPipe } from '@angular/common';
-import { map } from 'rxjs';
-import { PersonDetailComponent } from '../person-detail/person-detail.component';
 
 @Component({
   selector: 'app-dashboard',
@@ -27,12 +24,7 @@ export class DashboardComponent {
   public lastname: any;
 
   user = {} as User;
-  // newPerson = {} as Person;
-  // x = <Person>{};
-  x = {} as Person;
-  person: Person[] = [];
-  newP1!: string;
-  newP2!: any;
+  newPerson = {} as Person;
 
   constructor(private readonly keycloak: KeycloakService, private personService: PersonService, private route: ActivatedRoute) {
     this.player = this.keycloak.isUserInRole("player");
@@ -74,14 +66,14 @@ export class DashboardComponent {
   async key() {
     const currentUser = await this.keycloak.loadUserProfile();
     
-    // this.firstname = currentUser.firstName;
+    this.firstname = currentUser.firstName;
     // this.lastname = currentUser.lastName;
     // this.email = currentUser.email;
     
     this.personService.loginUser();
-    this.personService.postMail().subscribe(newP => {
-      this.x = newP;
-      console.log(this.x)
+    this.personService.postMail(currentUser.email as string).subscribe(newP => {
+      this.newPerson = newP;
+      console.log(this.newPerson);
     });
   }
 

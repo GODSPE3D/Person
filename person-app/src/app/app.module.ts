@@ -22,6 +22,8 @@ import { AddressComponent } from './address/address.component';
 import { ContactComponent } from './contact/contact.component';
 import { ContactListComponent } from './contact-list/contact-list.component';
 import { AddressListComponent } from './address-list/address-list.component';
+import { SearchPipe } from './search.pipe';
+import { ProfileComponent } from './profile/profile.component';
 // import { MatDialogModule } from '@angular/material/dialog';
 // import { MatButtonModule } from '@angular/material/button';
 // import { MatIconModule } from '@angular/material/icon';
@@ -37,7 +39,9 @@ import { AddressListComponent } from './address-list/address-list.component';
     AddressComponent,
     ContactComponent,
     ContactListComponent,
-    AddressListComponent
+    AddressListComponent,
+    SearchPipe,
+    ProfileComponent
   ],
   imports: [
     BrowserModule,

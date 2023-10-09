@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { CommonModule } from '@angular/common';
+import { NgbModule, NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';
+import { AsyncPipe, CommonModule, DecimalPipe, NgFor } from '@angular/common';
 
 import { PersonDetailModule } from '../person-detail/person-detail.module';
 import { MatDialogModule } from '@angular/material/dialog';
@@ -16,6 +16,7 @@ import { Ng2SearchPipeModule } from 'ng2-search-filter';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { ToastModule } from 'primeng/toast';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [],
@@ -35,7 +36,8 @@ import { MatPaginatorModule } from '@angular/material/paginator';
     Ng2SearchPipeModule,
     MatSnackBarModule,
     ToastModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    DecimalPipe, NgFor, AsyncPipe, ReactiveFormsModule, NgbTypeaheadModule
   ],
   exports: [
     NgbModule,

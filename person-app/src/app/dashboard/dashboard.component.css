@@ -1,3 +1,8 @@
 /* mat-icon {
     height: 20px;
 } */
+
+button.dropdown-item.red:hover {
+    color: white;
+    background-color: red;
+}

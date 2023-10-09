@@ -1,17 +1,17 @@
-import { Component, Input, Output, EventEmitter, TemplateRef, ViewChild, OnChanges, SimpleChanges, ChangeDetectorRef } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
+import { ChangeDetectorRef, Component, EventEmitter, Input, Output, TemplateRef, ViewChild } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 
-import { User } from '../user';
 import { FormControl, Validators } from '@angular/forms';
-import { Contact, Person } from '../person';
-import { PersonService } from '../person.service';
-import { LoginService } from '../login.service';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { KeycloakEventType, KeycloakService } from 'keycloak-angular';
+import { KeycloakService } from 'keycloak-angular';
 import { KeycloakProfile } from 'keycloak-js';
-import { from, filter } from 'rxjs';
+import { LoginService } from '../login.service';
+import { Person, Contact, Address } from '../person';
+import { PersonService } from '../person.service';
+import { User } from '../user';
+import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-person-detail, [app-person-detail]',
@@ -21,54 +21,32 @@ import { from, filter } from 'rxjs';
 })
 export class PersonDetailComponent {
 
-  @Input() x!: Person;
-  // @Input() x1!: Person;
-  // myDataCopy = {...this.x};
+  @Input() people!: Person;
+  @Input() person!: Person;
+  @Input() player!: boolean;
+
   dataVar!: boolean;
 
   @ViewChild('addP') customDialog!: TemplateRef<any>;
   @ViewChild('editPerson') customDialog2!: TemplateRef<any>;
+  @ViewChild('content') modalNGB!: TemplateRef<any>;
 
   public isLogged = false;
   public userProfile: KeycloakProfile | null = null;
+  agree!: boolean;
 
   @Input() user!: User;
   public email: any;
+  closeResult = '';
 
-  // p: Person[] = [];
-  public p: Person = {
-    id: 0,
-    firstname: '',
-    lastname: '',
-    email: '',
-    contact: [],
-    address: [],
-    education: '',
-    password: '',
-    // aadhaar: 1
-    created_at: new Date(''),
-    status: '',
-    profile_type: ''
-  }
-  // newP = {} as Person;
-  // public newP: Person = {
-  //   id: 0,
-  //   firstname: '',
-  //   lastname: '',
-  //   email: '',
-  //   contact: [],
-  //   address: [],
-  //   education: '',
-  //   password: '',
-  //   created_at: ''
-  // }
-  newP!: Person;
+  newP = {} as Person;
   single = {} as Person;
   @Output() addP = new EventEmitter<Person>();
+  @Output() detailP = new EventEmitter<Person>();
   emailFormControl = new FormControl('', [Validators.required, Validators.email]);
   changeLog: any;
 
-  constructor(
+  constructor(private modalService: NgbModal,
     private cdr: ChangeDetectorRef, private route: ActivatedRoute, private loginService: LoginService, private readonly keycloak: KeycloakService, private personService: PersonService, private location: Location, private dialog: MatDialog, private _snackBar: MatSnackBar
   ) {
     // this.player = this.keycloak.isUserInRole("player");
@@ -77,121 +55,35 @@ export class PersonDetailComponent {
   @Output() delEvent = new EventEmitter();
 
   ngOnInit() {
-    // this.getOne();
-    // console.log(this.route.snapshot.paramMap.get('5'));
-    // this.key();
-    // console.log(this.x.firstname);
-
-    // console.log(this.myDataCopy.firstname);
-    // this.ngOnChanges;
-    // this.loginForm = this.formBuilder.group({
-    //   username: ['', Validators.required],
-    //   password: ['', Validators.required]
-    // })
-    // this.x = this.newP;
-    // console.log(this.newP.firstname);
-    // this.getLog();
-    // this.isLogged = await this.keycloak.isLoggedIn();
-    // if (this.isLogged) {
-    //   let userProfile = await this.keycloak.loadUserProfile();
-    //   // console.log(this.userProfile);
-    //   // this.email = userProfile.email;
-    //   // console.log(this.email);
-    // }
-
-    // this.user = this.userProfile as User;
-    // this.p.forEach((a) => {
-    //   if (this.user.email == a.email) {
-    //     console.log('' + a.email);
-    //   }
-    //   console.log(a.email);
-    // })
-    // from(this.keycloak.keycloakEvents$)
-    // .pipe(filter(event => event.type === KeycloakEventType.OnTokenExpired))
-    // .subscribe(() => console.log('The token has expired', this.keycloak.logout()))
-    // console.dir(this.x);
-
-    // if (this.keycloak.isTokenExpired(this.keycloak.getToken()) === true) {
-    //   this.logoutSession();
-    // };
-    // this.getOne();
-    // this.newP = this.x;
-    // console.log("detail ", this.x.firstname);
-    // console.log("User: ", this.user);
-  }
-  
-  // changeLog: string[] = [];
-
-  // ngOnChanges(changes: SimpleChanges) {
-  //   const log: string[] = [];
-  //   for (const propName in changes) {
-  //     const changedProp = changes[propName];
-  //     const to = JSON.stringify(changedProp.currentValue);
-  //     if (changedProp.isFirstChange()) {
-  //       log.push(`Initial value of ${propName} set to ${to}`);
-  //     } else {
-  //       const from = JSON.stringify(changedProp.previousValue);
-  //       log.push(`${propName} changed from ${from} to ${to}`);
-  //     }
-  //   }
-  //   // this.changeLog.push(log.join(', '));
-  // }
-
-  // ngOnChanges(changes: SimpleChanges) {
-  //   for (const propName in changes) {
-  //     const chng = changes[propName];
-  //     const cur  = JSON.stringify(chng.currentValue);
-  //     const prev = JSON.stringify(chng.previousValue);
-  //     this.changeLog.push(`${propName}: currentValue = ${cur}, previousValue = ${prev}`);
-  //   }
-  // }
-
-
-  // async key() {
-  //   let currentUser = await this.keycloak.loadUserProfile();
-  //   this.user.firstname = currentUser.firstName as string;
-  //   this.user.lastname = currentUser.lastName as string;
-  //   this.user.email = currentUser.email as string;
-  //   // console.log(currentUser);
-  //   console.log("User: ", this.user);
-  //   return this.user;
-  //   // this.getOne(currentUser.email as string);
-  // }
-
-  getLog(): void {
-    this.loginService.get_login().subscribe();
   }
 
   getOne() {
     this.personService.getPerson(5).subscribe(newValue => {
-      // let p: Person = {
-      //   id: 0,
-      //   firstname: '',
-      //   lastname: '',
-      //   email: '',
-      //   contact: [],
-      //   address: [],
-      //   education: '',
-      //   password: ''
-      //   // aadhaar: 1
-      // }
 
-      this.newP = newValue;
-      console.log('p -> ', this.newP);
-      // this.newP = newValue;
-      // console.log(this.newP);
-      // this.cdr.detectChanges();
+      this.person = newValue;
+      console.log('p -> ', this.person);
     });
   }
 
-  // loginPerson(user: User): void {
-  //   console.log(user. username, user.password);
-  //   this.loginService.login(user.username, user.password).subscribe();
-  // }
+  openModal() {
+    this.modalService.open(this.modalNGB, { ariaLabelledBy: 'modal-basic-title' }).result.then(
+      (result) => {
+        this.closeResult = `Closed with: ${result}`;
+      },
+      (reason) => {
+        this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+      },
+    );
+  }
 
-  public async loginSession() {
-    this.keycloak.login();
-    console.log(this.email);
+  private getDismissReason(reason: any): string {
+    if (reason === ModalDismissReasons.ESC) {
+      return 'by pressing ESC';
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      return 'by clicking on a backdrop';
+    } else {
+      return `with: ${reason}`;
+    }
   }
 
   logoutSession() {
@@ -237,8 +129,8 @@ export class PersonDetailComponent {
   }
 
   save(): void {
-    if (this.x) {
-      this.personService.updatePerson(this.x).subscribe();
+    if (this.people) {
+      this.personService.updatePerson(this.people).subscribe();
     }
   }
 
@@ -246,7 +138,7 @@ export class PersonDetailComponent {
     this.personService.deletePerson(delP.id).subscribe(person => {
       console.log(person);
       // this.x = person
-      this.delEvent.emit(this.x);
+      this.delEvent.emit(this.people);
     });
   }
 }
