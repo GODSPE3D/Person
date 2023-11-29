@@ -4,13 +4,16 @@ from flask import jsonify
 # from sqlalchemy.schema import PrimaryKeyConstraint, ForeignKey
 from sqlalchemy.exc import NoResultFound
 
+
 class Contact(db.Model):
     __tablename__ = "contact"
 
-    id = db.Column(db.Integer, primary_key=True, nullable=False, autoincrement=True)
-    person_id = db.Column(db.ForeignKey("person.id"), primary_key=True, nullable=False)
+    id = db.Column(db.Integer, primary_key=True,
+                   nullable=False, autoincrement=True)
+    person_id = db.Column(db.ForeignKey("person.id"),
+                          primary_key=True, nullable=False)
     person = db.relationship("Person", back_populates="contact")
-    
+
     country_code = db.Column(db.Integer)
     region_code = db.Column(db.Integer)
     phone = db.Column(db.Integer)
@@ -45,22 +48,21 @@ class Contact(db.Model):
     def displayOneCon(self, id):
         try:
             if self.sameID(id):
-                self = db.session.query(Contact).filter_by(person_id=id).first()
+                self = db.session.query(Contact).filter_by(
+                    person_id=id).first()
                 return jsonify(
-                    [
-                        {
-                            "id": self.id,
-                            "country_code": self.country_code,
-                            "region_code": self.region_code,
-                            "phone": self.phone,
-                            "person_id": self.person_id
-                        }
-                    ]
+                    {
+                        "id": self.id,
+                        "country_code": self.country_code,
+                        "region_code": self.region_code,
+                        "phone": self.phone,
+                        "person_id": self.person_id
+                    }
                 )
             raise NoResultFound
         except NoResultFound:
             return "No such ID exists"
-    
+
     def displayOneCon2(self, id):
         self = db.session.query(Contact).filter_by(id=id).first_or_404()
         return jsonify(
@@ -74,7 +76,7 @@ class Contact(db.Model):
                 }
             ]
         )
-    
+
     def create(self, data):
         print(data)
         try:
@@ -118,7 +120,14 @@ class Contact(db.Model):
             db.session.add(newP)
             db.session.commit()
 
-            return newP.displayOneCon(newP.person_id)
+            return jsonify(
+                {
+                    "person_id": newP.person_id,
+                    "country_code": newP.country_code,
+                    "region_code": newP.region_code,
+                    "phone": newP.phone,
+                }
+            )
 
         except NoResultFound:
             return "Field is missing!"
@@ -128,7 +137,7 @@ class Contact(db.Model):
         #     return "email or aadhaar is same"
         except Exception as e:
             return e
-    
+
     def update(self, id, data):
         # print("Update: ", self, id, data)
         try:
@@ -139,7 +148,7 @@ class Contact(db.Model):
                     self.country_code = data["country_code"]
                 if "phone" in data:
                     self.phone = data["phone"]
-                
+
                 self.status = "old"
 
                 db.session.commit()
@@ -148,7 +157,7 @@ class Contact(db.Model):
             raise NoResultFound
         except NoResultFound:
             return "No such ID/data exists"
-    
+
     def contactDelete(self, id):
         print(id)
         try:

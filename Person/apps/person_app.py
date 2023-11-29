@@ -5,6 +5,9 @@ from model.person import Person
 # from model.info import Info
 from model.address import Address
 from model.contact import Contact
+from model.athlete import Athlete
+from model.document import Document
+from model.competitions import Competition
 from flask import Blueprint, request, Response, jsonify
 from .middleware import token_required
 # from flask_oidc import OpenIDConnect
@@ -15,6 +18,9 @@ person = Person()
 # info = Info()
 address = Address()
 contact = Contact()
+athlete = Athlete()
+doc = Document()
+compi = Competition()
 # oidc = OpenIDConnect()
 
 
@@ -22,6 +28,47 @@ contact = Contact()
 def index():
     return {"message": "Welcome to API"}, 200
 
+@home.route("/athlete")
+def get_a():
+    # print(athlete.display())
+    return athlete.display()
+
+@home.route("/comp/add")
+def get_comp():
+    for attribute, value in compi.__dict__.items():
+        print(attribute, value)
+    return compi.display()
+
+# @home.route("/comp/add/1")
+# def get_comp():
+#     return compi.display()
+
+@home.route("/comp/add", methods=["POST"]) # person_id/role_id/route_name
+# @login_required
+@cross_origin(allow_headers=['Content-Type', 'Authorization'])
+def create_compi():
+    try:
+        data = request.get_json()
+        print(data)
+        # return compi.create(data)
+#    return jsonify(person.create(data))
+        response = compi.create(data)
+        # p.create(data)
+        # response = Response(json.dumps(person),201,mimetype='application/json')
+        # response.headers['Person'] = "/person/" + str(data['firstname'])
+    except Exception as e:
+        print(e)
+        ErrorMessage = {
+            "error": str(e),
+            "helpString": " Refer the Client Model for Details "
+        }
+        response = Response(json.dumps(ErrorMessage),
+                            status=400, mimetype='application/json')
+    return response
+
+@home.route("/doc")
+def get_d():
+    return doc.display()
 
 @home.route("/person")
 @cross_origin(allow_headers=['Content-Type', 'Authorization'])
@@ -111,18 +158,18 @@ def get_id(id):
     return person.displayOne(id)
 
 
-@home.route("/person/login", methods=["GET"])
-@cross_origin(allow_headers=['Content-Type', 'Authorization'])
-# @token_required
-# @login_required
-# @oidc.accept_token()
-def get_email():
-    # data = request.get_json()
-    # if data:
-    # response = Response(json.dumps(person),201,mimetype='application/json')
-    # response.headers['Content-Type'] = "/person/login" + str(data['email'])
-    # print(data)
-    return person.displayEmail()
+# @home.route("/person/login", methods=["GET"])
+# @cross_origin(allow_headers=['Content-Type', 'Authorization'])
+# # @token_required
+# # @login_required
+# # @oidc.accept_token()
+# def get_email():
+#     # data = request.get_json()
+#     # if data:
+#     # response = Response(json.dumps(person),201,mimetype='application/json')
+#     # response.headers['Content-Type'] = "/person/login" + str(data['email'])
+#     # print(data)
+#     return person.displayEmail()
 
 @home.route("/person/login", methods=["POST"])
 @cross_origin(allow_headers=['Content-Type', 'Authorization'])
@@ -135,7 +182,7 @@ def post_email():
     # response = Response(json.dumps(person),201,mimetype='application/json')
     # response.headers['Content-Type'] = "/person/login" + str(data['email'])
     print(data)
-    return person.displayEmail()
+    return person.displayEmail(data)
 
 
 @home.route("/person", methods=["POST"])

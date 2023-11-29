@@ -1,11 +1,26 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
+<!-- <div class="row">
+  <div class="col">
+    <div ngbDropdown class="d-inline-block">
+      <button type="button" class="btn btn-outline-primary" id="dropdownBasic1" ngbDropdownToggle>
+        Toggle dropdown
+      </button>
+      <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+        <button ngbDropdownItem>Action - 1</button>
+        <button ngbDropdownItem>Another Action</button>
+        <button ngbDropdownItem>Something else is here</button>
+      </div>
+    </div>
+  </div>
+</div> -->
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light" *ngIf="!loginStatus">
   <div class="container-fluid">
     <!-- <a class="navbar-brand" href="#">Navbar</a> -->
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
       aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
-    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup" *ngIf="!loginStatus">
       <div class="navbar-nav">
         <a class="nav-link active" aria-current="page" href="#">Home</a>
         <a class="nav-link" href="#">Competitions</a>
@@ -17,23 +32,23 @@
     <button class="me-2 btn btn-outline-primary btn-rounded btn-sm float-end" type="button" *ngIf="!loginStatus"
       (click)="loginSession()"><i class="bi bi-box-arrow-in-right me-2"></i>Log In</button>
     <!-- *ngIf="loginStatus" -->
-    <div class="dropdown" *ngIf="loginStatus">
-      <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="defaultDropdown"
-        data-bs-toggle="dropdown" aria-expanded="false">
-        <!-- <i class="bi bi-person-circle"></i> -->
-        <img src="https://s3.eu-central-1.amazonaws.com/bootstrapbaymisc/blog/24_days_bootstrap/fox.jpg" width="40"
-          height="40" class="rounded-circle">
-      </a>
-      <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="defaultDropdown">
-        <li><button class="dropdown-item" type="button">My Profile</button></li>
-        <li><button class="dropdown-item" type="button">Settings</button></li>
-        <li>
-          <hr class="dropdown-divider">
-        </li>
-        <li><button class="dropdown-item red" type="button" (click)="logout(); logoutSession()">Logout</button></li>
-        <!-- <li><button class="dropdown-item" type="button">Something else here</button></li> -->
-      </ul>
-    </div>
+    <!-- <div class="dropdown" *ngIf="loginStatus">
+  <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="defaultDropdown" data-bs-toggle="dropdown"
+    aria-expanded="false"> -->
+    <!-- <i class="bi bi-person-circle"></i> -->
+    <!-- <img src="https://s3.eu-central-1.amazonaws.com/bootstrapbaymisc/blog/24_days_bootstrap/fox.jpg" width="40"
+      height="40" class="rounded-circle">
+  </a>
+  <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="defaultDropdown">
+    <li><button class="dropdown-item" type="button">My Profile</button></li>
+    <li><button class="dropdown-item" type="button">Settings</button></li>
+    <li>
+      <hr class="dropdown-divider">
+    </li>
+    <li><button class="dropdown-item red" type="button" (click)="logout(); logoutSession()">Logout</button></li> -->
+    <!-- <li><button class="dropdown-item" type="button">Something else here</button></li> -->
+    <!-- </ul>
+</div> -->
     <!-- <button class="me-2 btn btn-outline-danger float-end btn-rounded btn-sm" type="button" *ngIf="loginStatus"
     (click)="logout(); logoutSession()"><i class="bi bi-person-circle me-2"></i>Logout</button> -->
     <!-- <button class="navbar-toggler float-end" type="button" data-toggle="collapse" data-target="#navbar-list-4"
@@ -58,98 +73,51 @@
   </div>
 </nav>
 
-<!-- <div class="container-fluid">
-  <div class="offcanvas-body">
-    <ul class="list-group">
-      <li>
-        Active
-      </li>
-      <li>
-        Link
-      </li>
-      <li>
-        Disabled
-      </li>
-    </ul>
+<ng-container *ngIf="loginStatus">
+  <div class="row m-2 p-2 justify-content-between">
+    <div class="col-xs-4 col-sm-auto">
+      <input #box type="text" class="form-control form-control-sm" placeholder="Search" aria-label="Search"
+        (keyup)="child.filterResults(box.value)">
+    </div>
+    <div class="col-xs-3 col-sm-auto">
+      <button type="button" class="btn btn-primary btn-sm" (click)="child2.openDialog()">
+        <i class="me-2 bi bi-plus-circle-fill"></i>Add Person</button>
+        <button class="ms-1 btn btn-danger btn-sm" type="button" (click)="logout(); logoutSession()">Logout</button>
+    </div>
+    <!-- <div class="col-xs-3 col-sm-auto">
+      
+    </div> -->
   </div>
-</div> -->
 
-<div class="card m-2" style="width: 18rem; height: auto">
-  <!-- <div class="card-header">
-    <ul class="nav nav-pills nav-fill  card-header-pills">
-      <li class="nav-item">
-        <a class="nav-link active" href="#">Active</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#">Link</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link disabled" aria-disabled="true">Disabled</a>
-      </li>
-    </ul>
-  </div> -->
-  <!-- <div class="card-body">
-    <ul class="nav nav-pills list-group card-header-pills">
-      <li>
-        <a class="nav-link active" href="#">Active</a>
-      </li>
-      <li>
-        <a class="nav-link" href="#">Link</a>
-      </li>
-      <li>
-        <a class="nav-link disabled" aria-disabled="true">Disabled</a>
-      </li>
-    </ul> -->
-    <!-- <h5 class="card-title">Card title</h5>
-    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.
-    </p>
-    <a href="#" class="btn btn-primary">Go somewhere</a> -->
-  <!-- </div> -->
-  <!-- <div class="card-body">
-    <h5 class="card-title">Card title</h5>
-    <h6 class="card-subtitle mb-2 text-body-secondary">Card subtitle</h6>
-    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.
-    </p>
-    <a href="#" class="card-link">Card link</a>
-    <a href="#" class="card-link">Another link</a>
-  </div> -->
-  <div class="row">
-    <div class="col-sm-6 mb-3 mb-sm-0">
-      <div class="card">
+  <div class="row m-2 p-2" style="height: 100%;">
+    <div class="col-sm-3">
+      <!-- <div class="card-group m-3"> -->
+
+      <div class="card h-100">
         <div class="card-body">
-          <ul class="nav nav-pills list-group card-header-pills">
-            <li>
-              <a class="nav-link active" href="#">Active</a>
-            </li>
-            <li>
-              <a class="nav-link" href="#">Link</a>
-            </li>
-            <li>
-              <a class="nav-link disabled" aria-disabled="true">Disabled</a>
-            </li>
-          </ul>
+          <nav class="nav flex-column nav-pills">
+            <a class="nav-link" (click)="onSelect('home')" role="button">Home</a>
+            <a class="nav-link" (click)="onSelect('detail')" role="button">Detail</a>
+            <a class="nav-link" (click)="onSelect('admin')" role="button" *ngIf="admin">Admin</a>
+          </nav>
         </div>
       </div>
     </div>
-    <div class="col-sm-6">
-      <div class="card">
+    <div class="col-sm-9">
+      <div class="card h-100">
         <div class="card-body">
-          <h5 class="card-title">Special title treatment</h5>
-          <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-          <a href="#" class="btn btn-primary">Go somewhere</a>
+          <app-person-detail *ngIf="button === 'detail'" [person]="newPerson"></app-person-detail>
+          <app-person-detail *ngIf="button == 'home' || button === 'detail'" [person]="newPerson"></app-person-detail>z
+          <app-person-list *ngIf="button === 'admin'"></app-person-list>
         </div>
       </div>
     </div>
   </div>
-</div>
-
-<!-- Welcome {{firstname}} -->
-<ng-container *ngIf="admin">
-  <!-- <app-profile [userData]="newPerson"></app-profile> -->
-  <app-person-list></app-person-list>
 </ng-container>
 
+<!-- Welcome {{firstname}} -->
+
 <ng-container *ngIf="player">
-  <app-profile [userData]="newPerson"></app-profile>
-  <app-person-detail [person]="newPerson" [player]="player"></app-person-detail>
+  <!-- <app-profile [userData]="newPerson"></app-profile> -->
+  <!-- <app-person-detail [person]="newPerson" [player]="player"></app-person-detail> -->
 </ng-container>

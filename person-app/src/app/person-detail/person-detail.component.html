@@ -1,4 +1,28 @@
-<ng-container *ngTemplateOutlet="admin"></ng-container>
+<!-- <ng-container *ngTemplateOutlet="home"></ng-container> -->
+
+<!-- <ng-container *ngIf="home"></ng-container> -->
+<div [ngSwitch]="ngdirectSwitch">
+    <div *ngSwitchCase="'detail'" [ngTemplateOutlet]="detail"></div>
+    <div *ngSwitchCase="'admin'" [ngTemplateOutlet]="admin"></div>
+    <div *ngSwitchDefault [ngTemplateOutlet]="home">This is home template
+        Welcome {{person.firstname}}</div>
+</div>
+
+
+<ng-template #home>
+    This is home template
+    Welcome {{person.firstname}}
+</ng-template>
+
+
+<ng-template #detail>
+    This is detail template
+    <!-- <td class="detailTD" (click)="openModal()">{{people.firstname}}</td>
+    <td class="detailTD" (click)="openModal()">{{people.lastname}}</td>
+    <td class="detailTD" (click)="openModal()">{{people.email}}</td> -->
+</ng-template>
+
+<!-- <ng-container *ngTemplateOutlet="admin"></ng-container> -->
 
 <ng-template #admin>
     <!-- <a class="btn btn-warning" data-bs-toggle="collapse" href="#collapse+${{people.id}}" role="button"
@@ -63,6 +87,27 @@
             <span class="input-group-text" id="inputGroup-sizing-default">Address</span>
             <input type="text" class="form-control" aria-label="Sizing example input"
                 aria-describedby="inputGroup-sizing-default" [(ngModel)]="people.address" disabled> -->
+        <!-- <div id="carouselExample" class="carousel slide">
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <app-address-list [addressList]="people.address"></app-address-list>
+                </div>
+                <div class="carousel-item">
+                    <img src="..." class="d-block w-100" alt="...">
+                </div>
+                <div class="carousel-item">
+                    <img src="..." class="d-block w-100" alt="...">
+                </div>
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+        </div> -->
         <app-address-list [addressList]="people.address"></app-address-list>
         <!-- </div> -->
     </div>

@@ -3,42 +3,22 @@
 
 <!-- <form> -->
 <div class="d-flex justify-content-end p-2">
-  <div class="mx-2 my-2 p-1 row justify-content-end">
+  <div class="mx-1 row justify-content-end">
     <div class="col-xs-3 col-sm-auto">
-      <input #box type="text" class="form-control" placeholder="Search" aria-label="Search"
-        (keyup)="filterResults(box.value)">
+      <ngb-pagination [(page)]="page" [pageSize]="pageSize" [collectionSize]="person.length"></ngb-pagination>
     </div>
     <div class="col-xs-3 col-sm-auto">
-      <button type="button" class="btn btn-primary" (click)="child.openDialog()">
-        <i class="me-2 bi bi-plus-circle-fill"></i>Add Person</button>
-    </div>
-    <div class="mt-3 row justify-content-end">
-      <!-- <input type="checkbox" name="isAgreed" ng-model="isAgreed" />
-      <div class="col-xs-3 col-sm-auto">
-        <button type="button" class="btn btn-warning btn-sm" ng-disabled="!isAgreed"><i
-            class="bi bi-eye-slash-fill"></i></button>
-      </div> -->
-      <div class="col-xs-3 col-sm-auto">
-        <ngb-pagination [(page)]="page" [pageSize]="pageSize" [collectionSize]="person.length"></ngb-pagination>
-      </div>
-      <!-- <div class="col-6 col-sm-2"> -->
-      <!-- <div class="form-floating"> -->
-      <div class="col-xs-3 col-sm-auto">
-        <select class="form-select" [(ngModel)]="pageSize" (ngModelChange)="refreshCountries()" role="button">
-          <option [ngValue]="5">5</option>
-          <option [ngValue]="10">10</option>
-          <option [ngValue]="15">15</option>
-          <option [ngValue]="person.length">All</option>
-        </select>
-      </div>
-      <!-- <label for="floatingSelectGrid">Number</label> -->
-      <!-- </div> -->
-      <!-- </div> -->
+      <select class="form-select" [(ngModel)]="pageSize" (ngModelChange)="refreshCountries()" role="button">
+        <option [ngValue]="5">5</option>
+        <option [ngValue]="10">10</option>
+        <option [ngValue]="15">15</option>
+        <option [ngValue]="person.length">All</option>
+      </select>
     </div>
   </div>
 </div>
 
-<div class="mx-4 mt-1 p-1 table-responsive">
+<div class="mx-4 table-responsive">
   <table class="table align-middle table-bordered table-hover rounded">
     <thead class="thead-dark text-center">
       <tr>
@@ -53,31 +33,9 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let p of filterPerson | slice: (page-1) * pageSize : page * pageSize" app-person-detail [people]="p"
+      <!-- <tr *ngFor="let p of filterPerson"></tr> -->
+      <tr *ngFor="let p of filterPerson | slice: (page-1) * pageSize : page * pageSize" app-person-detail [people]="p" ngdirectSwitch="admin"
         (addP)="addPerson($event)" (detailP)="getOne()" role="button">
-        <!-- <button class="btn btn-lg btn-outline-primary" (click)="child.open()">Launch demo modal</button> -->
-        <!-- <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-          Launch demo modal
-      </button> -->
-
-        <!-- Modal -->
-        <!-- <div class="modal" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-          <div class="modal-dialog">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-              </div>
-              <div class="modal-body">
-                ...
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
-              </div>
-            </div>
-          </div>
-        </div> -->
       </tr>
     </tbody>
   </table>

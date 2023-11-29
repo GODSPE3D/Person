@@ -98,7 +98,7 @@ class Person(db.Model):
                             ],
                             "education": person.education,
                             "password": person.password,
-                            'created_at': person.created_at,
+                            "created_at": person.created_at
                         }
                         for person in Person.query.all()
                     ]
@@ -152,11 +152,12 @@ class Person(db.Model):
                         # "aadhaar": person.aadhaar,
                     }
                 )
+                # return p.serialize
             raise NoResultFound
         except NoResultFound:
             return "No such ID exists"
 
-    def displayEmail(self):
+    def displayEmail(self, data):
         try:
             # print(data)
             # should whole data be read from keycloak
@@ -171,7 +172,7 @@ class Person(db.Model):
             #     db.session.commit()
             #     print(p.id)
             # Authorization process
-            p = Person.query.filter_by(email="aeonflux@gmail.com").first()
+            p = Person.query.filter_by(email=data["email"]).first()
             print(p)
             print(p.id)
 
@@ -244,9 +245,9 @@ class Person(db.Model):
             newP.lastname = data["lastname"]
             newP.email = data["email"]
             # newP.contact = data["contact"]
-            newP.address = data["address"]
-            newP.education = data["education"]
-            # newP.password = data["password"]
+            # newP.address = data["address"]
+            # newP.education = data["education"]
+            newP.password = data["password"]
             newP.created_at = func.now()
             newP.status = "new"
             # newP.aadhaar = data["aadhaar"]
@@ -254,7 +255,16 @@ class Person(db.Model):
             db.session.add(newP)
             db.session.commit()
 
-            return newP.displayOne(newP.id)
+            return jsonify(
+                    {
+                        "id": newP.id,
+                        "firstname": newP.firstname,
+                        "lastname": newP.lastname,
+                        "email": newP.email,
+                        "password": newP.password,
+                        'created_at': newP.created_at,
+                    }
+                )
 
         except NoResultFound:
             return "data doesn't exist"

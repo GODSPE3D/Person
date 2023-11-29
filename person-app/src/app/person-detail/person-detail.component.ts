@@ -24,12 +24,17 @@ export class PersonDetailComponent {
   @Input() people!: Person;
   @Input() person!: Person;
   @Input() player!: boolean;
+  @Input() home!: boolean;
+  @Input() detail!: boolean;
+  @Input() ngdirectSwitch!: string;
 
   dataVar!: boolean;
 
   @ViewChild('addP') customDialog!: TemplateRef<any>;
   @ViewChild('editPerson') customDialog2!: TemplateRef<any>;
   @ViewChild('content') modalNGB!: TemplateRef<any>;
+  @ViewChild('detail') detailTemp!: TemplateRef<any>;
+  // @ViewChild('home') home!: boolean;
 
   public isLogged = false;
   public userProfile: KeycloakProfile | null = null;

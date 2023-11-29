@@ -6,3 +6,11 @@ button.dropdown-item.red:hover {
     color: white;
     background-color: red;
 }
+
+.list-group:hover {
+    background-color: primary;
+}
+
+.nav .nav-link:hover {
+    background-color: rgb(231, 231, 231);
+}
