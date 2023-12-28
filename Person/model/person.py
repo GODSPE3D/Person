@@ -2,11 +2,14 @@ from flask import jsonify
 from model.db import db
 from sqlalchemy.exc import NoResultFound, IntegrityError
 from sqlalchemy.sql import func
+from model.custom_response import customResponse
 
 
 class SameValue(Exception):
     "Same value for a variable"
 
+
+cr = customResponse
 
 class Person(db.Model):
     __tablename__ = "person"
@@ -23,28 +26,63 @@ class Person(db.Model):
     created_at = db.Column(db.DateTime(timezone=True),
                            onupdate=func.current_timestamp())
     status = db.Column(db.String(3), nullable=False)
-    profile_type = db.Column(db.String(80), unique=True, nullable=False)
+    person_profile = db.relationship("PersonProfile", back_populates="person")
 
-    # act
-    # default
-    # time, user type
     # aadhaar = db.Column(db.BigInteger, nullable=False)  # unique
 
     @property
     def serialize(self):
        # """Return object data in easily serializable format"""
         return {
-            'Id': self.id,
+            'id': self.id,
             'firstname': self.firstname,
             'lastname': self.lastname,
             'email': self.email,
-            # 'contact': self.contact,
-            'address': self.address,
+            "contact": [
+                {
+                    "id": p.id,
+                    "country_code": p.country_code,
+                    "region_code": p.region_code,
+                    "phone": p.phone,
+                    "person_id": p.person_id
+                }
+                for p in self.contact
+            ],
+            "address": [
+                {
+                    "id": p.id,
+                    "address_type": p.address_type,
+                    "flat_no": p.flat_no,
+                    "area": p.area,
+                    "locality": p.locality,
+                    "city": p.city,
+                    "state": p.state,
+                    "country": p.country,
+                    "pin": p.pin
+                }
+                for p in self.address
+            ],
             'education': self.education,
             # 'password': self.password,
             'created_at': self.created_at,
             'status': self.status,
-            # 'aadhaar': self.aadhaar,
+            "person_profile": [
+                {
+                    "profile_type": p.profile_type,
+                    "person_docs": [
+                        {
+                            "id": doc.id,
+                            "person_profile": doc.person_profile_id,
+                            "doc_type": doc.doc_type,
+                            "doc_name": doc.doc_name,
+                            "doc_img": doc.doc_img,
+                            "doc_number": doc.doc_number
+                        }
+                        for doc in p.document
+                    ]
+                }
+                for p in self.person_profile
+            ]
         }
 
     # Check ID
@@ -66,43 +104,22 @@ class Person(db.Model):
 
     # GET
     def display(self):
+        personAll = Person.query.all()
         try:
-            if Person.query.all() != []:
-                return jsonify(
-                    [
-                        {
-                            "id": person.id,
-                            "firstname": person.firstname,
-                            "lastname": person.lastname,
-                            "email": person.email,
-                            "contact": [
-                                {
-                                    "phone": p.phone,
-                                    "country_code": p.country_code,
-                                    "region_code": p.region_code
-                                }
-                                for p in person.contact
-                            ],
-                            "address": [
-                                {
-                                    "address_type": p.address_type,
-                                    "flat_no": p.flat_no,
-                                    "area": p.area,
-                                    "locality": p.locality,
-                                    "city": p.city,
-                                    "state": p.state,
-                                    "country": p.country,
-                                    "pin": p.pin,
-                                }
-                                for p in person.address
-                            ],
-                            "education": person.education,
-                            "password": person.password,
-                            "created_at": person.created_at
-                        }
-                        for person in Person.query.all()
-                    ]
-                )
+            if personAll != []:
+                # personList = []
+                
+                for person in personAll:
+                    cr.list.append(person.serialize)
+                
+                # cr.status_code = 200
+                # cr.url = "/person"
+                # cr.message = "Success"
+                # cr.list = personList
+                
+                # set all variables when returning any response
+                cr(200, "/person", "Success")
+                return cr.list
             raise NoResultFound
         except NoResultFound:
             return "Table is empty!"
@@ -119,7 +136,10 @@ class Person(db.Model):
             if self.sameID(id):
                 p = Person.query.filter_by(id=id).first()  # email
                 print(p.id)
-                return jsonify(
+                # return jsonify(
+                cr.person.update(p.serialize)
+                return cr.person
+                cr.person.update(
                     {
                         "id": p.id,
                         "firstname": p.firstname,
@@ -152,6 +172,10 @@ class Person(db.Model):
                         # "aadhaar": person.aadhaar,
                     }
                 )
+                print(cr.person.values())
+                print(cr.person.items())
+                return jsonify(cr.person)
+                # print(cr.showDetails)
                 # return p.serialize
             raise NoResultFound
         except NoResultFound:
@@ -255,6 +279,7 @@ class Person(db.Model):
             db.session.add(newP)
             db.session.commit()
 
+            return newP.serialize
             return jsonify(
                     {
                         "id": newP.id,
@@ -331,41 +356,4 @@ class Person(db.Model):
             raise NoResultFound
         except NoResultFound:
             return "No such ID exists"
-
-# class Info(db.Model):
-#     __tablename__ = "info"
-
-#     id = db.Column(db.Integer, primary_key=True, nullable=False, autoincrement=True)
-#     person_id = db.Column(db.Integer, db.ForeignKey('person.id'))
-#     person = db.relationship("Person", backref=db.backref("person", uselist=False))
-
-#     # contact = db.Column(db.Integer) class
-#     # address = db.Column(db.String(200)) class
-#     pin = db.Column(db.Integer())
-#     # bod, aadhaar
-#     city = db.Column(db.String(100))
-#     state = db.Column(db.String(100))
-#     country = db.Column(db.String(100))
-#     education = db.Column(db.String(500))
-
-#     def display(self):
-#         try:
-#             if Info.query.all() != []:
-#                 return jsonify(
-#                     [
-#                         {
-#                             "id": person.id,
-#                             "contact": person.contact,
-#                             "address": person.address,
-#                             "pin": person.pin,
-#                             "city": person.city,
-#                             'state': person.state,
-#                             "country": person.country,
-#                             "education": person.education
-#                         }
-#                         for person in Info.query.all()
-#                     ]
-#                 )
-#             raise NoResultFound
-#         except NoResultFound:
-#             return "Table is empty!"
+        
