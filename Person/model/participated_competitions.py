@@ -4,7 +4,7 @@ from flask import jsonify
 from model.person import Person
 from sqlalchemy.exc import NoResultFound
 from sqlalchemy import MetaData
-from model.athlete import Athlete
+# from model.athlete import Athlete
 from model.competitions import Competition
 # import model.athlete
 

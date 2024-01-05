@@ -1,27 +1,18 @@
 from datetime import datetime
-# from model.person import Person
+from flask import make_response, jsonify
 
 
 class customResponse:
-    status_code = 0
-    message = ""
-    url = ""
-    timestamp = datetime.now()
-    list = []
-    person = dict()
-
-
-    def __init__(self, status_code, url, message):
-        self.status_code = status_code
-        self.message = message
-        self.url = url
-        self.person
-        # self.list = personList
-        # self.person = person
-        # self.url
-        # self.message
-        # self.list
-        # self.status_code
+    def __init__(self):
+        self.status_code = 0
+        self.message = ""
+        self.url = ""
+        self.timestamp = datetime.now()
+        self.list = []
+        self.person = {}
     
-    # def showDetails(self):
-    #     print(self.status_code, self.message, self.url, self.list, self.person, self.timestamp)
+    def createResponse(self):
+        return make_response(jsonify({"data": self.list, "message": self.message, "status_code": self.status_code}))
+    
+    def createIdResponse(self):
+        return make_response(jsonify({"data": self.person, "message": self.message, "status_code": self.status_code}))

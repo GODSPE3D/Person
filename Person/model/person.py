@@ -3,13 +3,14 @@ from model.db import db
 from sqlalchemy.exc import NoResultFound, IntegrityError
 from sqlalchemy.sql import func
 from model.custom_response import customResponse
+from http import HTTPStatus
 
 
 class SameValue(Exception):
     "Same value for a variable"
 
 
-cr = customResponse
+cr = customResponse()
 
 class Person(db.Model):
     __tablename__ = "person"
@@ -105,24 +106,39 @@ class Person(db.Model):
     # GET
     def display(self):
         personAll = Person.query.all()
+        personList = []
         try:
             if personAll != []:
                 # personList = []
-                
+                # cr.list.clear()
                 for person in personAll:
-                    cr.list.append(person.serialize)
+                    personList.append(person.serialize)
                 
-                # cr.status_code = 200
-                # cr.url = "/person"
-                # cr.message = "Success"
+                cr.status_code = HTTPStatus.OK.value
+                cr.url = "/person"
+                cr.message = HTTPStatus.OK.phrase
+                cr.list = personList
+                # cr = customResponse(HTTPStatus.OK.value, "/person", HTTPStatus.OK.phrase, personList, "")
+                # print(HTTPStatus.OK.value)
                 # cr.list = personList
+                # cr.__init__()
                 
                 # set all variables when returning any response
-                cr(200, "/person", "Success")
-                return cr.list
+                # cr(HTTPStatus.OK.value, "/person", HTTPStatus.OK.phrase)
+                # print(HTTPStatus.NO_CONTENT.phrase)
+                print(cr.message)
+                # return customResponse.createResponse(cr)
+                return cr.createResponse()
+                # return (cr.list, cr.message, cr.url, str(cr.status_code))
+                return (cr.list)
             raise NoResultFound
         except NoResultFound:
-            return "Table is empty!"
+            # cr.status_code = HTTPStatus.NO_CONTENT.value
+            # cr.message = "Table is empty"
+
+            return []
+            # return (cr.status_code, cr.message)
+            # return "Table is empty!"
 
     # GET with ID
     # update
@@ -135,51 +151,59 @@ class Person(db.Model):
             # print(p)
             if self.sameID(id):
                 p = Person.query.filter_by(id=id).first()  # email
-                print(p.id)
+                # print(p.id)
                 # return jsonify(
                 cr.person.update(p.serialize)
-                return cr.person
-                cr.person.update(
-                    {
-                        "id": p.id,
-                        "firstname": p.firstname,
-                        "lastname": p.lastname,
-                        "email": p.email,
-                        "contact": [
-                            {
-                                "phone": pr.phone,
-                                "country_code": pr.country_code,
-                                "region_code": pr.region_code
-                            }
-                            for pr in p.contact
-                        ],
-                        "address": [
-                            {
-                                "address_type": pr.address_type,
-                                "flat_no": pr.flat_no,
-                                "area": pr.area,
-                                "locality": pr.locality,
-                                "city": pr.city,
-                                "state": pr.state,
-                                "country": pr.country,
-                                "pin": pr.pin,
-                            }
-                            for pr in p.address
-                        ],
-                        "education": p.education,
-                        "password": p.password,
-                        'created_at': p.created_at,
-                        # "aadhaar": person.aadhaar,
-                    }
-                )
-                print(cr.person.values())
-                print(cr.person.items())
-                return jsonify(cr.person)
+                # cr.list = cr.person
+                cr.message = HTTPStatus.OK.phrase
+                cr.status_code = HTTPStatus.OK.value
+                return cr.createIdResponse()
+
+                # return (cr.person, str(cr.status_code))
+                # cr.person.update(
+                #     {
+                #         "id": p.id,
+                #         "firstname": p.firstname,
+                #         "lastname": p.lastname,
+                #         "email": p.email,
+                #         "contact": [
+                #             {
+                #                 "phone": pr.phone,
+                #                 "country_code": pr.country_code,
+                #                 "region_code": pr.region_code
+                #             }
+                #             for pr in p.contact
+                #         ],
+                #         "address": [
+                #             {
+                #                 "address_type": pr.address_type,
+                #                 "flat_no": pr.flat_no,
+                #                 "area": pr.area,
+                #                 "locality": pr.locality,
+                #                 "city": pr.city,
+                #                 "state": pr.state,
+                #                 "country": pr.country,
+                #                 "pin": pr.pin,
+                #             }
+                #             for pr in p.address
+                #         ],
+                #         "education": p.education,
+                #         "password": p.password,
+                #         'created_at': p.created_at,
+                #         # "aadhaar": person.aadhaar,
+                #     }
+                # )
+                # print(cr.person.values())
+                # print(cr.person.items())
+                # return jsonify(cr.person)
                 # print(cr.showDetails)
-                # return p.serialize
+                return p.serialize
             raise NoResultFound
         except NoResultFound:
-            return "No such ID exists"
+            # cr.message = "No such ID exists"
+            # cr.status_code = HTTPStatus.OK.value
+            # return (str(cr.status_code), cr.message)
+            return
 
     def displayEmail(self, data):
         try:
@@ -200,6 +224,11 @@ class Person(db.Model):
             print(p)
             print(p.id)
 
+            # cr.person.update(p.serialize)
+            # cr.status_code = HTTPStatus.OK.value
+            # cr.message = HTTPStatus.OK.phrase
+            
+            # return (cr.person, str(cr.status_code))
             return jsonify(
                 {
                     "id": p.id,
@@ -234,7 +263,10 @@ class Person(db.Model):
             )
             # raise NoResultFound
         except NoResultFound:
-            return "No data exists"
+            # cr.message = "No data exists"
+            # cr.status_code = HTTPStatus.OK.value
+            # return (str(cr.status_code), cr.message)
+            return
 
     # POST
     def create(self, data):
@@ -279,6 +311,9 @@ class Person(db.Model):
             db.session.add(newP)
             db.session.commit()
 
+            # cr.status_code = HTTPStatus.CREATED.value
+            # cr.message = HTTPStatus.CREATED.phrase
+            # return (str(cr.status_code), newP.serialize)
             return newP.serialize
             return jsonify(
                     {
@@ -292,12 +327,25 @@ class Person(db.Model):
                 )
 
         except NoResultFound:
+            # cr.message = "No data exists"
+            # cr.status_code = HTTPStatus.OK.value
+            # return (str(cr.status_code), cr.message)
             return "data doesn't exist"
+
         except ValueError:
+            # cr.message = "Invalid character length"
+            # cr.status_code = HTTPStatus.OK.value
+            # return (str(cr.status_code), cr.message)
             return "invalid character length"
         except SameValue:
+            # cr.message = "email or aadhaar is same"
+            # cr.status_code = HTTPStatus.OK.value
+            # return (str(cr.status_code), cr.message)
             return "email or aadhaar is same"
         except Exception as e:
+            # cr.message = "An error occurred, please try again later"
+            # cr.status_code = HTTPStatus.OK.value
+            # return (str(cr.status_code), cr.message)
             return e
 
     def email_or_aadhaar(self, x, data):
@@ -317,6 +365,10 @@ class Person(db.Model):
                 # Person.query.filter_by(id=id).first()
                 # Person.id
                 x = Person.query.filter_by(email=data["username"]).first()
+                # cr.person.update(x.serialize)
+                # cr.message = "email or aadhaar is same"
+                # cr.status_code = HTTPStatus.OK.value
+                # return (str(cr.status_code), cr.person)
                 return jsonify(
                     {
                         "id": x.id,
