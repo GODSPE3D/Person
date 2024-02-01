@@ -1,59 +1,134 @@
 from model.db import db
 from flask import jsonify
-# from flask_sqlalchemy import fore
-from model.document import Document
-from sqlalchemy.exc import NoResultFound
-from sqlalchemy.sql import func
-from sqlalchemy.orm import relationship
-# from model.participated_competitions import association_table
-from model.competitions import Competition
 from model.role import Role
+from model.person import Person
+from sqlalchemy.sql import func
+from model.document import Document
+from sqlalchemy.orm import relationship
+from sqlalchemy.exc import NoResultFound
+from model.competitions import Competition
+from sqlalchemy.schema import ForeignKeyConstraint, UniqueConstraint
+from sqlalchemy import ForeignKey, ForeignKeyConstraint, Table, Integer, String, Column
 
-association_table = db.Table(
-    "association_table",
-    db.Column("person_profile_id", db.ForeignKey("person_profile.id"), primary_key=True),
-    db.Column("competition_id", db.ForeignKey("competition.id"), primary_key=True)
-)
+
+class Participated_Competitions(db.Model):
+    __tablename__ = "participated_competitions"
+    
+    person_id = db.Column(db.Integer, db.ForeignKey('person.id'), primary_key=True)
+    competition_id = db.Column(db.Integer, db.ForeignKey('competition.id'), primary_key=True)
+    person_profile_id = db.Column(db.Integer, db.ForeignKey('person_profile.profile_id'), primary_key=True)
+
+    competition = db.relationship("Competition", back_populates="participated_competitions")
+    person = db.relationship("Person", back_populates="participated_competitions")
+    person_profile = db.relationship("PersonProfile", back_populates="participated_competitions")
+
+    def display(self, id):
+        queryAll = Participated_Competitions.query.all()
+        if (queryAll != []):
+            return jsonify(
+                [
+                    {
+                        'person_id': details.person_id,
+                        'competition_id': details.competition_id,
+                        'person_profile_id': details.person_profile_id,
+                        'competition': 
+                            [
+                                {
+                                    "name": compi.name,
+                                    "venue": compi.venue,
+                                    "organizer": compi.organizer,
+                                    "sponsers": compi.sponsers,
+                                    "criteria": compi.criteria,
+                                    "prize": compi.prize,
+                                    "schedule": compi.schedule,
+                                    "start_date": compi.start_date,
+                                    "end_data": compi.end_data
+                                }
+                                for compi in details.competition
+                            ]
+                    }
+                    for details in Participated_Competitions.query.all()
+                ]
+            )
+        return []
+    
+    def displayOne(self, person_id, profile_id):
+        join_query = db.session.query(Participated_Competitions).filter_by(person_id = person_id).filter_by(person_profile_id = profile_id).join(Competition, Competition.id == Participated_Competitions.competition_id)
+        print(join_query)
+        print(person_id, profile_id)
+        allQuery = join_query.all()
+        print(allQuery)
+
+        return jsonify(
+            [
+                {
+                    'person_id': details.person_id,
+                    'competition_id': details.competition_id,
+                    # "conpetition": [
+                    #     {
+                    #         "name": comp.name,
+                    #         "venue": comp.venue,
+                    #         "organizer": comp.organizer,
+                    #         "sponsers": comp.sponsers,
+                    #         "criteria": comp.criteria,
+                    #         "prize": comp.prize,
+                    #     }
+                    #     for comp in 
+                    # ],
+                    # Competition.displayOneAdd(details.competition_id)
+                    'person_profile_id': details.person_profile_id
+                }
+                for details in allQuery
+            ]
+        )
+
 
 # no API
 class PersonProfile(db.Model): # universal Role table
     __tablename__ = "person_profile"
 
-    id = db.Column(db.Integer, primary_key=True,
+    profile_id = db.Column(db.Integer, primary_key=True,
                    nullable=False, autoincrement=True)
     
     person_id = db.Column(db.ForeignKey("person.id"),  primary_key=True)
     person = db.relationship("Person", back_populates="person_profile")
 
     profile_type = db.Column(db.ForeignKey("roles.role_type"))
-    # profile_type = db.relationship("Role", back_populates="person_profile")
+    role = db.relationship("Role", back_populates="person_profile")
 
     document = db.relationship("Document", back_populates="person_profile")
-    competitions = db.relationship("Competition", secondary=association_table, backref="person_profile")
+    # competitions = db.relationship("Competition", back_populates="person_profile")
+    # parti_id = db.Column(db.Integer, db.ForeignKey("participated_competitions.competition_id"))
+    participated_competitions = db.relationship("Participated_Competitions", back_populates="person_profile")
 
     @property
     def serialize(self):
        # """Return object data in easily serializable format"""
         return {
-            'Id': self.id,
+            'Id': self.profile_id,
             'person_id': self.person_id,
             # 'doc': self.document
         }
 
     def sameID(self, id):
         s = db.session.query(
-            db.session.query(PersonProfile).filter_by(id=id).exists()
+            db.session.query(PersonProfile).filter_by(profile_id=id).exists()
         ).scalar()
         if s is True:
             return True
         return False
+    
+
 
     def display(self):
         # Athlete.query.all() != []
+        # query_person_role = PersonProfile.query.join(association_table).join(Competition).filter((association_table.c.person_profile_id == PersonProfile.id) & (association_table.c.competition_id == Competition.id)).all()
+        # print(query_person_role)
+
         return jsonify(
             [
                 {
-                    "id": person.id,
+                    "profile_id": person.profile_id,
                     "person_id": person.person_id,
                     # "document": person.document,
                     "document": [
@@ -66,7 +141,51 @@ class PersonProfile(db.Model): # universal Role table
                             "doc_number": p.doc_number
                         }
                         for p in person.document
-                    ]
+                    ],
+                    # "competition": [
+                    #     {
+                    #         "id": self.id,
+                    #         "name": self.name,
+                    #         "venue": self.venue,
+                    #         "organizer": self.organizer,
+                    #         "sponsers": self.sponsers,
+                    #         "criteria": self.criteria,
+                    #         "prize": self.prize,
+                    #         "schedule": self.schedule,
+                    #         "start_date": self.start_date,
+                    #         "end_data": self.end_data
+                    #     }
+                    # ]
+                    # "participated_compi": person.parti_id,
+                    "participated_compi": [
+                        {
+                            # 'person_id': details.person_id,
+                            'competition_id': details.competition_id,
+                            "name": details.competition.name,
+                            "venue": details.competition.venue,
+                            "organizer": details.competition.organizer,
+                            "sponsers": details.competition.sponsers,
+                            "criteria": details.competition.criteria,
+                            "prize": details.competition.prize,
+                            "schedule": details.competition.schedule,
+                            "start_date": details.competition.start_date,
+                            "end_data": details.competition.end_data
+                            # 'competition': 
+                            # [
+                                # {
+                                #     "name": compi.name,
+                                # }
+                                # for compi in details.competition
+                            # ]
+                        }
+                        for details in person.participated_competitions
+                    ],
+                    # "participated": [
+                    #     {
+                    #         "person_id": 
+                    #     }
+                    #     for c in person
+                    # ]
                     # [
                         # attribute: {
                         #     value
@@ -102,15 +221,36 @@ class PersonProfile(db.Model): # universal Role table
         # except NoResultFound:
         #     return "Table is empty!"
 
-    def displayOneAdd(self, id):
+# person_id
+    def displayOneAdd(self, id, profile_id):
         try:
+            # print(id, profile_id)
             if self.sameID(id):
-                self = db.session.query(PersonProfile).filter_by(
-                    id=id).first()
+                # print(db.session.query(Participated_Competitions)
+                #       .join(PersonProfile, Participated_Competitions.person_profile_id == PersonProfile.profile_id)
+                #       .join(Competition, Participated_Competitions.competition_id == Competition.id)
+                #       .join(Person, Participated_Competitions.person_id == Person.id)
+                #       .filter(PersonProfile.profile_id == profile_id and PersonProfile.person_id == id).first())
+            # join_query = db.session.query(Participated_Competitions, Competition).join(PersonProfile, PersonProfile.profile_id == Participated_Competitions.person_profile_id and PersonProfile.person_id == Participated_Competitions.person_id).join(Competition, Participated_Competitions.competition_id == Competition.id)
+            # print(join_query)
+
+            # allQuery = join_query.all()
+            # print(allQuery)
+        
+
+                # print("(")
+
+                # for item in row:
+
+                #     print("   ", item)
+
+                # print(")")
+            # self = db.session.query(PersonProfile).filter_by(
+            #     profile_id=).first()
                 return jsonify(
                     # [
                         {
-                            "id": self.id,
+                            "id": self.profile_id,
                             "person_id": self.person_id,
                             # "document": person.document,
                             "document": [
@@ -134,14 +274,8 @@ class PersonProfile(db.Model): # universal Role table
         try:
             if (
                 not "person_id" in data
-                or not "address_type" in data
-                or not "flat_no" in data
-                or not "area" in data
-                or not "locality" in data
-                or not "city" in data
-                or not "state" in data
-                or not "country" in data
-                or not "pin" in data
+                or not "profile_type" in data
+                # or not "document" in data
             ):
                 raise NoResultFound
             if (
@@ -154,21 +288,16 @@ class PersonProfile(db.Model): # universal Role table
 
             newP = PersonProfile()
             newP.person_id = data["person_id"]
-            newP.address_type = data["address_type"]
-            newP.flat_no = data["flat_no"]
-            newP.area = data["area"]
-            newP.locality = data["locality"]
-            newP.city = data["city"]
-            newP.state = data["state"]
-            newP.country = data["country"]
-            newP.pin = data["pin"]
+            newP.profile_type = data["profile_type"]
+            # newP.document = data["document"]
 
-            print(newP.person_id)
+            print(newP.id)
             
             db.session.add(newP)
             db.session.commit()
 
-            return newP.displayOneAdd(newP.person_id)
+            return newP.serialize
+            # return newP.displayOneAdd(newP.id)
 
         except NoResultFound:
             return "Field is missing!"

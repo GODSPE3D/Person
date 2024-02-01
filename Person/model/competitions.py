@@ -5,28 +5,13 @@ from flask import jsonify
 from model.person import Person
 from sqlalchemy.exc import NoResultFound
 from sqlalchemy.sql import func
-# from model.athlete import Athlete
-# from sqlalchemy import MetaData
-# from model.athlete import Athlete
 
-# metadata_obj = MetaData()
-
-# association_table = Table(
-#     "association_table",
-#     metadata_obj,
-#     Column("athlete_id", ForeignKey("athlete.id"), primary_key=True),
-#     Column("competition_id", ForeignKey("competition.id"), primary_key=True),
-# )
-# db.session.configure(bind=engine)
 
 class Competition(db.Model):
     __tablename__ = "competition"
 
     id = db.Column(db.Integer, primary_key=True, nullable=False, autoincrement=True)
-    # athlete_id = db.Column(db.ForeignKey("athlete.id"),  primary_key=True)
-    # athlete = db.relationship("Athlete", back_populates="athlete")
-    # athelete = db.relationship("Athlete", secondary=association_table, back_populates="competition")
-
+    
     name = Column(String(100))
     venue = Column(String(10))
     organizer = Column(String(100))
@@ -36,6 +21,7 @@ class Competition(db.Model):
     schedule = Column(String(100))
     start_date = Column(Date(), nullable=False)
     end_data = Column(Date(), nullable=False)
+    participated_competitions = db.relationship("Participated_Competitions", back_populates="competition")
     # end_date = db.Column(DateTime, onupdate=func)
     # start-end date
 

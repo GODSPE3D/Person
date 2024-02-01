@@ -5,10 +5,10 @@ from model.person import Person
 # from model.info import Info
 from model.address import Address
 from model.contact import Contact
-from model.person_profile import PersonProfile
+from model.person_profile import PersonProfile, Participated_Competitions
 from model.document import Document
 from model.competitions import Competition
-from flask import Blueprint, request, Response, jsonify
+from flask import Blueprint, request, Response, jsonify, make_response
 from .middleware import token_required
 import requests
 from model.custom_response import customResponse
@@ -25,6 +25,9 @@ personProfile = PersonProfile()
 doc = Document()
 compi = Competition()
 # oidc = OpenIDConnect()
+resp = Response
+part_compi = Participated_Competitions()
+cr = customResponse
 
 
 # API
@@ -33,15 +36,12 @@ compi = Competition()
 def index():
     return {"message": "Welcome to API"}, 200
 
-
 # Person
+
 @home.route("/person")
 @cross_origin(allow_headers=['Content-Type', 'Authorization'])
 # @login_required
 def get_all():
-    # cr = customResponse(200, "Success", "/person", person, person)
-    # cr.__init__(200, "Success", "/person", person, person)
-    # cr.showDetails()
     return person.display()
 
 @home.route("/person/<id>")
@@ -58,8 +58,9 @@ def get_id(id):
 def create_user():
     try:
         data = request.get_json()
-        return person.create(data)
+        # return person.create(data)
 #    return jsonify(person.create(data))
+        # person.create(data)
         response = person.create(data)
         # p.create(data)
         # response = Response(json.dumps(person),201,mimetype='application/json')
@@ -83,7 +84,7 @@ def update_user(id):
 
 @home.route("/person/<id>", methods=["DELETE"])
 # @login_required
-# @cross_origin(allow_headers=['Content-Type','Authorization'])
+@cross_origin(allow_headers=['Content-Type','Authorization'])
 def delete_user(id):
     print(id)
     try:
@@ -106,10 +107,29 @@ def get_profile():
     # print(athlete.display())
     return personProfile.display()
 
-@home.route("/person/profile/<id>")
-def get_profile_by_id(id):
+@home.route("/person/profile/<id>/<profile_id>")
+def get_profile_by_id(id, profile_id):
     # print(athlete.display())
-    return personProfile.displayOneAdd(id)
+    return personProfile.displayOneAdd(id, profile_id)
+
+@home.route("/person/profile", methods=["POST"])
+@cross_origin(allow_headers=['Content-Type', 'Authorization'])
+def post_profile():
+    data = request.get_json()
+    print(data)
+    return personProfile.create(data)
+
+@home.route("/person/profile/partCompi")
+def get_profile_partCompi():
+    # print(athlete.display())
+    return personProfile.display()
+
+@home.route("/person/profile/partCompi", methods=["POST"])
+@cross_origin(allow_headers=['Content-Type', 'Authorization'])
+def post_partCompi():
+    data = request.get_json()
+    print(data)
+    return personProfile.create(data)
 
 
 # Competitions
@@ -146,13 +166,32 @@ def create_compi():
     return response
 
 
+# Participated Competitions
+
+@home.route("/person/profile/part_compi/<profile_id>")
+# @cross_origin(allow_headers=['Content-Type', 'Authorization'])
+def get_parti_compi(profile_id):
+    return part_compi.display(profile_id)
+
+@home.route("/person/profile/part_compi/<id>/<profile_id>")
+@cross_origin(allow_headers=['Content-Type', 'Authorization'])
+def get_one_compi(id, profile_id):
+    return part_compi.displayOne(id, profile_id)
+
+
 # Document
 
 @home.route("/person/profile/doc")
+@cross_origin(allow_headers=['Content-Type', 'Authorization'])
 def get_document():
     return doc.display()
 
-@home.route("/person/peofile/doc", methods=["POST"])
+@home.route("/person/profile/doc/<id>")
+@cross_origin(allow_headers=['Content-Type', 'Authorization'])
+def get_document_id(id):
+    return doc.displayOneAdd(id)
+
+@home.route("/person/profile/doc", methods=["POST"])
 def post_document():
     try:
         data = request.get_json()
@@ -188,33 +227,35 @@ def get_address_by_id(id):
 # @login_required
 @cross_origin(allow_headers=['Content-Type', 'Authorization'])
 def create_add():
-    try:
-        data = request.get_json()
-        print(data)
-        return address.create(data)
+    # try:
+    data = request.get_json()
+    print(data)
+    return address.create(data)
 #    return jsonify(person.create(data))
-        response = person.create(data)
+        # response = person.create(data)
         # p.create(data)
         # response = Response(json.dumps(person),201,mimetype='application/json')
         # response.headers['Person'] = "/person/" + str(data['firstname'])
-    except Exception as e:
-        print(e)
-        ErrorMessage = {
-            "error": str(e),
-            "helpString": " Refer the Client Model for Details "
-        }
-        response = Response(json.dumps(ErrorMessage),
-                            status=400, mimetype='application/json')
-    return response
+    # except Exception as e:
+    #     print(e)
+    #     ErrorMessage = {
+    #         "error": str(e),
+    #         "helpString": " Refer the Client Model for Details "
+    #     }
+    #     response = Response(json.dumps(ErrorMessage),
+    #                         status=400, mimetype='application/json')
+    # return response
 
 
 # Contact
 
 @home.route("/person/contact")
+@cross_origin(allow_headers=['Content-Type', 'Authorization'])
 def get_con():
     return contact.display()
 
 @home.route("/person/contact/<id>")
+@cross_origin(allow_headers=['Content-Type', 'Authorization'])
 def get_contact_by_id(id):
     return contact.displayOneCon(id)
 

@@ -1,29 +1,31 @@
-from sqlalchemy import Column, ForeignKey, Table
-from model.db import db
-from flask import jsonify
-from model.person import Person
-from sqlalchemy.exc import NoResultFound
-from sqlalchemy import MetaData
-# from model.athlete import Athlete
-from model.competitions import Competition
-# import model.athlete
+# from model.db import db
+# from flask import jsonify
+# from model.person_profile import PersonProfile
+# # from model.competitions import Competition
 
-metadata_obj = MetaData()
 
-association_table = Table(
-    "association_table",
-    metadata_obj,
-    Column("athlete_id", ForeignKey("athlete.id"), primary_key=True),
-    Column("competition_id", ForeignKey("competition.id"), primary_key=True)
-)
+# class Participated_Competitions(db.Model):
+#     __tablename__ = "participated_competitions"
+    
+#     person_id = db.Column(db.Integer, db.ForeignKey('person_profile.person_id'), primary_key=True)
+#     competition_id = db.Column(db.Integer, db.ForeignKey('competition.id'), primary_key=True)
+#     person_profile_id = db.Column(db.Integer, db.ForeignKey('person_profile.profile_id'), primary_key=True)
 
-# class ParticipatedCompi(db.Model):
-#     __tablename__ = "ParticipatedCompi"
+#     person = db.relationship("PersonProfile", foreign_keys=[person_id])
+#     competition = db.relationship("Competition", foreign_keys=[competition_id])
+#     person_profile = db.relationship("PersonProfile", foreign_keys=[person_profile_id])
 
-#     id = db.Column(db.Integer, primary_key=True, nullable=False, autoincrement=True)
-
-#     athlete_id = db.Column(db.ForeignKey("athlete.id"),  primary_key=True)
-#     athlete = db.relationship(back_populates="participated_compi")
-
-#     compi_id = db.Column(db.ForeignKey("competition.id"), primary_key=True)
-#     # competition = db.relationship("Competition", back_populates="participated_compi")
+#     def display(self):
+#         return jsonify(
+#             [
+#                 {
+#                     "person_id": compi.person_id,
+#                     "competition_id": compi.competition_id,
+#                     "person_profile_id": compi.person_profile_id
+#                 }
+#                 for compi in Participated_Competitions.query.all()
+#             ]
+#         )
+    
+#     # def displayOne(self, id, profile_id):
+#         # join_query = db.session.query(Participated_Competitions, Competition).join(PersonProfile, PersonProfile.profile_id == Participated_Competitions.person_profile_id and PersonProfile.person_id == Participated_Competitions.person_id).join(Competition, Participated_Competitions.competition_id == Competition.id)

@@ -3,7 +3,11 @@ from flask import jsonify
 # from model.person import Person
 # from sqlalchemy.schema import PrimaryKeyConstraint, ForeignKey
 from sqlalchemy.exc import NoResultFound
+from model.custom_response import customResponse
+from http import HTTPStatus
 
+
+cr = customResponse()
 
 class Contact(db.Model):
     __tablename__ = "contact"
@@ -18,6 +22,16 @@ class Contact(db.Model):
     region_code = db.Column(db.Integer)
     phone = db.Column(db.Integer)
 
+    @property
+    def serialize(self):
+        return {
+            "id": self.id,
+            "country_code": self.country_code,
+            "region_code": self.region_code,
+            "phone": self.phone,
+            "person_id": self.person_id
+        }
+
     def sameID(self, id):
         s = db.session.query(
             db.session.query(Contact).filter_by(person_id=id).exists()
@@ -27,8 +41,18 @@ class Contact(db.Model):
         return False
 
     def display(self):
+        contactAll = Contact.query.all()
         try:
-            if Contact.query.all() != []:
+            if contactAll() != []:
+                cr.list.clear()
+                for person in contactAll:
+                    cr.list.append(person.serialize)
+                
+                cr.status_code = HTTPStatus.OK.value
+                cr.url = "/person"
+                cr.message = HTTPStatus.OK.phrase
+
+                return (cr.list, str(cr.status_code))
                 return jsonify(
                     [
                         {
@@ -43,6 +67,10 @@ class Contact(db.Model):
                 )
             raise NoResultFound
         except NoResultFound:
+            cr.status_code = HTTPStatus.NO_CONTENT.value
+            cr.message = "Table is empty"
+
+            return (cr.status_code, cr.message)
             return "Table is empty!"
 
     def displayOneCon(self, id):
@@ -50,6 +78,13 @@ class Contact(db.Model):
             if self.sameID(id):
                 self = db.session.query(Contact).filter_by(
                     person_id=id).first()
+                
+                cr.person.update(self.serialize)
+
+                cr.message = HTTPStatus.OK.phrase
+                cr.status_code = HTTPStatus.OK.value
+
+                return (cr.person, str(cr.status_code))
                 return jsonify(
                     {
                         "id": self.id,
@@ -61,10 +96,19 @@ class Contact(db.Model):
                 )
             raise NoResultFound
         except NoResultFound:
+            cr.message = "No such ID exists"
+            cr.status_code = HTTPStatus.OK.value
+            return (str(cr.status_code), cr.message)
             return "No such ID exists"
 
     def displayOneCon2(self, id):
         self = db.session.query(Contact).filter_by(id=id).first_or_404()
+        cr.person.update(self.serialize)
+
+        cr.message = HTTPStatus.OK.phrase
+        cr.status_code = HTTPStatus.OK.value
+
+        return (cr.person, str(cr.status_code))
         return jsonify(
             [
                 {
@@ -120,6 +164,10 @@ class Contact(db.Model):
             db.session.add(newP)
             db.session.commit()
 
+            cr.status_code = HTTPStatus.CREATED.value
+            cr.message = HTTPStatus.CREATED.phrase
+            return (str(cr.status_code), newP.serialize)
+
             return jsonify(
                 {
                     "person_id": newP.person_id,
@@ -130,12 +178,21 @@ class Contact(db.Model):
             )
 
         except NoResultFound:
+            cr.message = "Field is missing!"
+            cr.status_code = HTTPStatus.OK.value
+            return (str(cr.status_code), cr.message)
             return "Field is missing!"
         except ValueError:
+            cr.message = "Invalid character length"
+            cr.status_code = HTTPStatus.OK.value
+            return (str(cr.status_code), cr.message)
             return "Invalid character length!"
         # except SameValue:
         #     return "email or aadhaar is same"
         except Exception as e:
+            cr.message = "An error occurred, please try again later"
+            cr.status_code = HTTPStatus.OK.value
+            return (str(cr.status_code), cr.message)
             return e
 
     def update(self, id, data):

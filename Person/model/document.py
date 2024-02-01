@@ -6,15 +6,14 @@ from sqlalchemy.sql import func
 from model.custom_response import customResponse
 from http import HTTPStatus
 
-
-cr = customResponse
+cr = customResponse()
 
 class Document(db.Model):
     __tablename__ = "document"
 
     id = db.Column(db.Integer, primary_key=True,
                    nullable=False, autoincrement=True)
-    person_profile_id = db.Column(db.ForeignKey("person_profile.id"),  primary_key=True)
+    person_profile_id = db.Column(db.ForeignKey("person_profile.profile_id"),  primary_key=True)
     person_profile = db.relationship("PersonProfile", back_populates="document")
 
     doc_type = db.Column(db.String(50))
@@ -36,7 +35,7 @@ class Document(db.Model):
        # """Return object data in easily serializable format"""
         return {
             'id': self.id,
-            'athlete_id': self.person_profile_id,
+            'profile_id': self.person_profile_id,
             'doc_type': self.doc_type,
             'doc_name': self.doc_name,
             'doc_number': self.doc_number,
@@ -57,49 +56,44 @@ class Document(db.Model):
         # print()
         # print(Document.query.all())
         # return jsonify ("OK")
-        docAll = Document.query.all()
 
-        cr.status_code = HTTPStatus.OK.value
-        cr.url = "/person/profile/doc"
-        cr.message = HTTPStatus.OK.phrase
-
-        cr.list.clear()
-        for doc in docAll:
-            cr.list.append(doc.serialize)
-
-        return (cr.list, str(cr.status_code))
+        # return cr.createResponse()
     
-        return jsonify(
-            [
-                {
-                    "id": doc.id,
-                    "person_profile": doc.person_profile_id,
-                    "doc_type": doc.doc_type,
-                    "doc_name": doc.doc_name,
-                    "doc_img": doc.doc_img,
-                    "doc_number": doc.doc_number
-                }
-                for doc in Document.query.all()
-                # print(doc)
-            ]
-        )
-        # try:
-        #     if Document.query.all() != []:
-        #         return jsonify(
-        #             [
-        #                 {
-        #                     "id": doc.id,
-        #                     "address_type": doc.doc_type,
-        #                     "flat_no": doc.doc_name,
-        #                     "area": doc.doc_number,
-        #                     "locality": doc.doc_img,
-        #                 }
-        #                 for doc in Document.query.all()
-        #             ]
-        #         )
-        #     raise NoResultFound
-        # except NoResultFound:
-        #     return "Table is empty!"
+        # return jsonify(
+        #     [
+        #         {
+        #             "id": doc.id,
+        #             "person_profile": doc.person_profile_id,
+        #             "doc_type": doc.doc_type,
+        #             "doc_name": doc.doc_name,
+        #             "doc_img": doc.doc_img,
+        #             "doc_number": doc.doc_number
+        #         }
+        #         for doc in Document.query.all()
+        #         # print(doc)
+        #     ]
+        # )
+        try:
+            docAll = Document.query.all()
+            if docAll != []:
+                documentList = []
+                
+                for doc in docAll:
+                    documentList.append(doc.serialize)
+
+                cr.status_code = HTTPStatus.OK.value
+                cr.url = "/person/profile/doc"
+                cr.message = HTTPStatus.OK.phrase
+                cr.list = documentList
+
+                return cr.createResponse()
+            raise NoResultFound
+        except NoResultFound:
+            cr.status_code = HTTPStatus.OK.value
+            cr.message = "Table is empty"
+
+            return cr.createResponse()
+            return "Table is empty!"
 
     def displayOneAdd(self, id):
         try:
@@ -129,7 +123,7 @@ class Document(db.Model):
         except NoResultFound:
             cr.message = "No such ID exists"
             cr.status_code = HTTPStatus.OK.value
-            return (str(cr.status_code), cr.message)
+            return cr.createIdResponse()
             return "No such ID exists"
 
     def create(self, data):
@@ -198,25 +192,25 @@ class Document(db.Model):
             return (str(cr.status_code), cr.message)
             return e
 
-    # def update(self, id, data):
-    #     # print("Update: ", self, id, data)
-    #     try:
-    #         if self.sameID(id):
-    #             self = Document.query.filter_by(id=id).first()
+    def update(self, id, data):
+        # print("Update: ", self, id, data)
+        try:
+            if self.sameID(id):
+                self = Document.query.filter_by(id=id).first()
 
-    #             if "country_code" in data:
-    #                 self.firstname = data["country_code"]
-    #             if "phone" in data:
-    #                 self.lastname = data["phone"]
+                if "country_code" in data:
+                    self.firstname = data["country_code"]
+                if "phone" in data:
+                    self.lastname = data["phone"]
 
-    #             self.status = "old"
+                self.status = "old"
 
-    #             db.session.commit()
-    #             # print(self)
-    #             return self.displayOne(id)
-    #         raise NoResultFound
-    #     except NoResultFound:
-    #         return "No such ID/data exists"
+                db.session.commit()
+                # print(self)
+                return self.displayOne(id)
+            raise NoResultFound
+        except NoResultFound:
+            return "No such ID/data exists"
 
     # def addressDelete(self, id):
     #     print(id)

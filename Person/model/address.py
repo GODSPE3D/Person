@@ -21,6 +21,22 @@ class Address(db.Model):
     country = db.Column(db.String(100))
     pin = db.Column(db.String(10))
 
+
+    @property
+    def serialize(self):
+        return {
+            "id": self.id,
+            "address_type": self.address_type,
+            "flat_no": self.flat_no,
+            "area": self.area,
+            "locality": self.locality,
+            "city": self.city,
+            "state": self.state,
+            "country": self.country,
+            "pin": self.pin
+        }
+
+
     def sameID(self, id):
         s = db.session.query(
             db.session.query(Address).filter_by(person_id=id).exists()
@@ -28,6 +44,7 @@ class Address(db.Model):
         if s is True:
             return True
         return False
+
 
     def display(self):
         try:
@@ -52,6 +69,7 @@ class Address(db.Model):
         except NoResultFound:
             return "Table is empty!"
 
+
     def displayOneAdd(self, id):
         try:
             if self.sameID(id):
@@ -75,6 +93,7 @@ class Address(db.Model):
             raise NoResultFound
         except NoResultFound:
             return "No such ID exists"
+
 
     def create(self, data):
         print(data)

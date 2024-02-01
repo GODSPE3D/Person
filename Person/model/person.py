@@ -6,6 +6,7 @@ from model.custom_response import customResponse
 from http import HTTPStatus
 
 
+
 class SameValue(Exception):
     "Same value for a variable"
 
@@ -28,6 +29,7 @@ class Person(db.Model):
                            onupdate=func.current_timestamp())
     status = db.Column(db.String(3), nullable=False)
     person_profile = db.relationship("PersonProfile", back_populates="person")
+    participated_competitions = db.relationship("Participated_Competitions", back_populates="person")
 
     # aadhaar = db.Column(db.BigInteger, nullable=False)  # unique
 
@@ -133,10 +135,10 @@ class Person(db.Model):
                 return (cr.list)
             raise NoResultFound
         except NoResultFound:
-            # cr.status_code = HTTPStatus.NO_CONTENT.value
-            # cr.message = "Table is empty"
+            cr.status_code = HTTPStatus.OK.value
+            cr.message = "Table is empty"
 
-            return []
+            return cr.createResponse()
             # return (cr.status_code, cr.message)
             # return "Table is empty!"
 
@@ -200,10 +202,9 @@ class Person(db.Model):
                 return p.serialize
             raise NoResultFound
         except NoResultFound:
-            # cr.message = "No such ID exists"
-            # cr.status_code = HTTPStatus.OK.value
-            # return (str(cr.status_code), cr.message)
-            return
+            cr.message = "No such ID exists"
+            cr.status_code = HTTPStatus.OK.value
+            return cr.createIdResponse()
 
     def displayEmail(self, data):
         try:
@@ -223,75 +224,48 @@ class Person(db.Model):
             p = Person.query.filter_by(email=data["email"]).first()
             print(p)
             print(p.id)
+            if p != {}:
 
-            # cr.person.update(p.serialize)
-            # cr.status_code = HTTPStatus.OK.value
-            # cr.message = HTTPStatus.OK.phrase
-            
-            # return (cr.person, str(cr.status_code))
-            return jsonify(
-                {
-                    "id": p.id,
-                    "firstname": p.firstname,
-                    "lastname": p.lastname,
-                    "email": p.email,
-                    "contact": [
-                        {
-                            "phone": per.phone,
-                            "country_code": per.country_code,
-                            "region_code": per.region_code
-                        }
-                        for per in p.contact
-                    ],
-                    "address": [
-                        {
-                            "address_type": per.address_type,
-                            "flat_no": per.flat_no,
-                            "area": per.area,
-                            "locality": per.locality,
-                            "city": per.city,
-                            "state": per.state,
-                            "country": per.country,
-                            "pin": per.pin,
-                        }
-                        for per in p.address
-                    ],
-                    "education": p.education,
-                    'created_at': p.created_at,
-                    'status': p.status,
-                }
-            )
-            # raise NoResultFound
+                cr.person.update(p.serialize)
+                cr.status_code = HTTPStatus.OK.value
+                cr.message = HTTPStatus.OK.phrase
+                
+                return cr.createIdResponse()
+            raise NoResultFound
+            return p.serialize
         except NoResultFound:
-            # cr.message = "No data exists"
-            # cr.status_code = HTTPStatus.OK.value
-            # return (str(cr.status_code), cr.message)
+            cr.message = "No data exists"
+            cr.status_code = HTTPStatus.OK.value
+            return cr.createIdResponse()
             return
 
     # POST
     def create(self, data):
         print(data)
         try:
-            # if (
-            #     not "firstname" in data
-            #     or not "lastname" in data
-            #     or not "email" in data
-            #     or not "aadhaar" in data
-            #     or not "contact" in data
-            #     or not "address" in data
-            # ):
-            #     raise NoResultFound
             if (
-                len(data["firstname"]) < 4
-                or len(data["lastname"]) < 4
-                or len(data["email"]) < 6
-                # or len(data["password"]) < 8
+                not "firstname" in data
+                or not "lastname" in data
+                or not "email" in data
+                or not "password" in data
+                # or not "aadhaar" in data
+                # or not "contact" in data
+                # or not "address" in data
             ):
-                # return msg.badLetter()
-                raise ValueError
-            if Person.email_or_aadhaar(self, Person.email, data["email"]):
-                # return msg.duplicate("email")
-                raise SameValue
+                raise NoResultFound
+            # if (
+            #     len(data["firstname"]) < 4
+            #     or len(data["lastname"]) < 4
+            #     or len(data["email"]) < 6
+            #     # or len(data["password"]) < 8
+            # ):
+            #     # return msg.badLetter()
+            #     print("ValueError")
+            #     raise ValueError
+            # if Person.email_or_aadhaar(self, Person.email, data["email"]):
+            #     # return msg.duplicate("email")
+            #     print("SameValue")
+            #     raise SameValue
             # if Person.email_or_aadhaar(self, Person.aadhaar, data["aadhaar"]):
             #     # return msg.duplicate("aadhaar")
             #     raise SameValue
@@ -308,13 +282,16 @@ class Person(db.Model):
             newP.status = "new"
             # newP.aadhaar = data["aadhaar"]
 
+            print(newP)
             db.session.add(newP)
             db.session.commit()
 
-            # cr.status_code = HTTPStatus.CREATED.value
-            # cr.message = HTTPStatus.CREATED.phrase
-            # return (str(cr.status_code), newP.serialize)
-            return newP.serialize
+            cr.status_code = HTTPStatus.CREATED.value
+            cr.message = HTTPStatus.CREATED.phrase
+            cr.person.update(newP.serialize)
+            return cr.createIdResponse()
+        
+            return newP
             return jsonify(
                     {
                         "id": newP.id,
@@ -327,66 +304,29 @@ class Person(db.Model):
                 )
 
         except NoResultFound:
-            # cr.message = "No data exists"
-            # cr.status_code = HTTPStatus.OK.value
-            # return (str(cr.status_code), cr.message)
+            cr.message = "Please enter all fields"
+            cr.status_code = HTTPStatus.OK.value
+            return cr.createIdResponse()
             return "data doesn't exist"
-
-        except ValueError:
-            # cr.message = "Invalid character length"
-            # cr.status_code = HTTPStatus.OK.value
-            # return (str(cr.status_code), cr.message)
-            return "invalid character length"
-        except SameValue:
-            # cr.message = "email or aadhaar is same"
-            # cr.status_code = HTTPStatus.OK.value
-            # return (str(cr.status_code), cr.message)
-            return "email or aadhaar is same"
-        except Exception as e:
-            # cr.message = "An error occurred, please try again later"
-            # cr.status_code = HTTPStatus.OK.value
-            # return (str(cr.status_code), cr.message)
-            return e
+        # except ValueError:
+        #     # cr.message = "Invalid character length"
+        #     # cr.status_code = HTTPStatus.OK.value
+        #     # return (str(cr.status_code), cr.message)
+        #     return "invalid character length"
+        # except SameValue:
+        #     # cr.message = "email or aadhaar is same"
+        #     # cr.status_code = HTTPStatus.OK.value
+        #     # return (str(cr.status_code), cr.message)
+        #     return "email or aadhaar is same"
+        # except Exception as e:
+        #     # cr.message = "An error occurred, please try again later"
+        #     # cr.status_code = HTTPStatus.OK.value
+        #     # return (str(cr.status_code), cr.message)
+        #     return e
 
     def email_or_aadhaar(self, x, data):
         exist = db.session.query(db.exists().where(x == data)).scalar()
         return exist
-
-    def loginPerson(self, data):
-        # if data["username"] in Person.email:
-        #     return "Present"
-        # if Person.query.filter_by(email=data["username"], password=data["password"]).first():
-        #     return "Present"
-        # else:
-        #     return "Not present"
-        try:
-            # self.email == Person.query.filter_by(email=data["username"]).first()
-            if Person.query.filter_by(email=data["username"],  password=data["password"]).first():
-                # Person.query.filter_by(id=id).first()
-                # Person.id
-                x = Person.query.filter_by(email=data["username"]).first()
-                # cr.person.update(x.serialize)
-                # cr.message = "email or aadhaar is same"
-                # cr.status_code = HTTPStatus.OK.value
-                # return (str(cr.status_code), cr.person)
-                return jsonify(
-                    {
-                        "id": x.id,
-                        "firstname": x.firstname,
-                        "lastname": x.lastname,
-                        "email": x.email,
-                        # "contact": x.contact,
-                        # "address": x.address,
-                        "education": x.education,
-                        # "aadhaar": self.aadhaar,
-                    }
-                )
-                return print(Person.id, "present")
-            # if self.email_or_aadhaar(Person.email, data["username"]):
-            #     return self
-            raise NoResultFound
-        except NoResultFound:
-            return "Data doesn't exist"
 
     # def existAadhaar(self, data):
     #     exist = db.session.query(db.exists().where(Person.aadhaar == data)).scalar()
@@ -400,7 +340,9 @@ class Person(db.Model):
                 if self.status == "tbd":
                     # db.session.delete(self)
                     db.session.commit()
-                    return "Data deleted successfully!"
+                    cr.message = "Data deleted successfully!"
+                    # cr.status_code = 200
+                    return cr.createIdResponse()
                 else:
                     self.status = "tbd"
                     db.session.commit()
