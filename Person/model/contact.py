@@ -1,13 +1,12 @@
 from model.db import db
 from flask import jsonify
-# from model.person import Person
-# from sqlalchemy.schema import PrimaryKeyConstraint, ForeignKey
 from sqlalchemy.exc import NoResultFound
 from model.custom_response import customResponse
 from http import HTTPStatus
 
 
 cr = customResponse()
+
 
 class Contact(db.Model):
     __tablename__ = "contact"
@@ -17,7 +16,6 @@ class Contact(db.Model):
     person_id = db.Column(db.ForeignKey("person.id"),
                           primary_key=True, nullable=False)
     person = db.relationship("Person", back_populates="contact")
-
     country_code = db.Column(db.Integer)
     region_code = db.Column(db.Integer)
     phone = db.Column(db.Integer)
@@ -47,7 +45,7 @@ class Contact(db.Model):
                 cr.list.clear()
                 for person in contactAll:
                     cr.list.append(person.serialize)
-                
+
                 cr.status_code = HTTPStatus.OK.value
                 cr.url = "/person"
                 cr.message = HTTPStatus.OK.phrase
@@ -78,7 +76,7 @@ class Contact(db.Model):
             if self.sameID(id):
                 self = db.session.query(Contact).filter_by(
                     person_id=id).first()
-                
+
                 cr.person.update(self.serialize)
 
                 cr.message = HTTPStatus.OK.phrase

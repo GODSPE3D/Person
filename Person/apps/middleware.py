@@ -38,5 +38,4 @@ def token_required(f):
             }, 500
 
         return f(current_user, *args, **kwargs)
-    
     return decorated

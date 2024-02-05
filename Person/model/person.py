@@ -6,7 +6,6 @@ from model.custom_response import customResponse
 from http import HTTPStatus
 
 
-
 class SameValue(Exception):
     "Same value for a variable"
 
@@ -26,7 +25,7 @@ class Person(db.Model):
     education = db.Column(db.String(500))
     password = db.Column(db.String(200), nullable=False)
     created_at = db.Column(db.DateTime(timezone=True),
-                           onupdate=func.current_timestamp())
+                           onupdate=func.current_timestamp)
     status = db.Column(db.String(3), nullable=False)
     person_profile = db.relationship("PersonProfile", back_populates="person")
     participated_competitions = db.relationship("Participated_Competitions", back_populates="person")
@@ -291,23 +290,23 @@ class Person(db.Model):
             cr.person.update(newP.serialize)
             return cr.createIdResponse()
         
-            return newP
-            return jsonify(
-                    {
-                        "id": newP.id,
-                        "firstname": newP.firstname,
-                        "lastname": newP.lastname,
-                        "email": newP.email,
-                        "password": newP.password,
-                        'created_at': newP.created_at,
-                    }
-                )
+            # return newP
+            # return jsonify(
+            #         {
+            #             "id": newP.id,
+            #             "firstname": newP.firstname,
+            #             "lastname": newP.lastname,
+            #             "email": newP.email,
+            #             "password": newP.password,
+            #             'created_at': newP.created_at,
+            #         }
+            #     )
 
         except NoResultFound:
             cr.message = "Please enter all fields"
             cr.status_code = HTTPStatus.OK.value
             return cr.createIdResponse()
-            return "data doesn't exist"
+            # return "data doesn't exist"
         # except ValueError:
         #     # cr.message = "Invalid character length"
         #     # cr.status_code = HTTPStatus.OK.value

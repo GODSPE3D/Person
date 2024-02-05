@@ -1,17 +1,14 @@
-from sqlalchemy import Column, Date, DateTime, ForeignKey, String, Table
-# from model.participated_competitions import association_table
+from sqlalchemy import Column, Date, String
 from model.db import db
 from flask import jsonify
-from model.person import Person
 from sqlalchemy.exc import NoResultFound
-from sqlalchemy.sql import func
 
 
 class Competition(db.Model):
     __tablename__ = "competition"
 
-    id = db.Column(db.Integer, primary_key=True, nullable=False, autoincrement=True)
-    
+    id = db.Column(db.Integer, primary_key=True,
+                   nullable=False, autoincrement=True)
     name = Column(String(100))
     venue = Column(String(10))
     organizer = Column(String(100))
@@ -21,9 +18,8 @@ class Competition(db.Model):
     schedule = Column(String(100))
     start_date = Column(Date(), nullable=False)
     end_data = Column(Date(), nullable=False)
-    participated_competitions = db.relationship("Participated_Competitions", back_populates="competition")
-    # end_date = db.Column(DateTime, onupdate=func)
-    # start-end date
+    participated_competitions = db.relationship(
+        "Participated_Competitions", back_populates="competition")
 
     # def sameID(self, id):
     #     s = db.session.query(
@@ -35,8 +31,6 @@ class Competition(db.Model):
 
     def display(self):
         try:
-            # for attribute, value in self.__dict__.items():
-            #     print(attribute, value)
             if Competition.query.all() != []:
                 return jsonify(
                     [
@@ -63,8 +57,6 @@ class Competition(db.Model):
         try:
             # if self.sameID(id):
             self = db.session.query(Competition).filter_by(id=id).first()
-            for attribute, value in self.__dict__.items():
-                print(attribute, value)
             return jsonify(
                 [
                     {
@@ -79,12 +71,6 @@ class Competition(db.Model):
                         "start_date": self.start_date,
                         "end_data": self.end_data
                     }
-                    # self
-                    # {
-                    #     attribute: value,
-                    # }
-                    # for attribute, value in self.
-                        # print(attribute, value)
                 ]
             )
             # raise NoResultFound
@@ -126,7 +112,7 @@ class Competition(db.Model):
             newP.end_data = data["end_data"]
 
             print(newP.id)
-            
+
             db.session.add(newP)
             db.session.commit()
 

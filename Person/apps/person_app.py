@@ -1,16 +1,16 @@
 import json
+# import requests
 from flask_cors import cross_origin
-from flask_login import login_required
-from model.person import Person
-# from model.info import Info
+# from flask_login import login_required
+# from Person.apps.middleware import token_required
+from flask import Blueprint, request, Response
+# , jsonify, make_response
 from model.address import Address
-from model.contact import Contact
-from model.person_profile import PersonProfile, Participated_Competitions
-from model.document import Document
 from model.competitions import Competition
-from flask import Blueprint, request, Response, jsonify, make_response
-from .middleware import token_required
-import requests
+from model.contact import Contact
+from model.document import Document
+from model.person import Person
+from model.person_profile import PersonProfile, Participated_Competitions
 from model.custom_response import customResponse
 # from flask_oidc import OpenIDConnect
 
@@ -25,9 +25,9 @@ personProfile = PersonProfile()
 doc = Document()
 compi = Competition()
 # oidc = OpenIDConnect()
-resp = Response
+Resp = Response
 part_compi = Participated_Competitions()
-cr = customResponse
+Cr = customResponse
 
 
 # API
@@ -44,13 +44,13 @@ def index():
 def get_all():
     return person.display()
 
-@home.route("/person/<id>")
+@home.route("/person/<person_id>")
 @cross_origin(allow_headers=['Content-Type', 'Authorization'])
 # @token_required
 # @login_required
 # @oidc.accept_token()
-def get_id(id):
-    return person.displayOne(id)
+def get_id(person_id):
+    return person.displayOne(person_id)
 
 @home.route("/person", methods=["POST"])
 # @login_required
@@ -75,20 +75,20 @@ def create_user():
                             status=400, mimetype='application/json')
     return response
 
-@home.route("/person/<id>", methods=["PUT"])
+@home.route("/person/<person_id>", methods=["PUT"])
 # @login_required
-def update_user(id):
+def update_user(person_id):
     data = request.get_json()
     print(data)
-    return person.update(id, data)
+    return person.update(person_id, data)
 
-@home.route("/person/<id>", methods=["DELETE"])
+@home.route("/person/<person_id>", methods=["DELETE"])
 # @login_required
 @cross_origin(allow_headers=['Content-Type','Authorization'])
-def delete_user(id):
-    print(id)
+def delete_user(person_id):
+    print(person_id)
     try:
-        response = person.personDelete(id)
+        response = person.personDelete(person_id)
     except Exception as e:
         print(e)
         ErrorMessage = {
@@ -107,10 +107,10 @@ def get_profile():
     # print(athlete.display())
     return personProfile.display()
 
-@home.route("/person/profile/<id>/<profile_id>")
-def get_profile_by_id(id, profile_id):
+@home.route("/person/profile/<person_id>/<profile_id>")
+def get_profile_by_id(person_id, profile_id):
     # print(athlete.display())
-    return personProfile.displayOneAdd(id, profile_id)
+    return personProfile.displayOneAdd(person_id, profile_id)
 
 @home.route("/person/profile", methods=["POST"])
 @cross_origin(allow_headers=['Content-Type', 'Authorization'])
@@ -138,9 +138,9 @@ def post_partCompi():
 def get_compi():
     return compi.display()
 
-@home.route("/person/compi/<id>")
-def get_compi_by_id(id):
-    return compi.displayOneAdd(id)
+@home.route("/person/compi/<compi_id>")
+def get_compi_by_id(compi_id):
+    return compi.displayOneAdd(compi_id)
 
 @home.route("/person/compi", methods=["POST"]) # person_id/role_id/route_name
 # @login_required
@@ -186,10 +186,10 @@ def get_one_compi(id, profile_id):
 def get_document():
     return doc.display()
 
-@home.route("/person/profile/doc/<id>")
+@home.route("/person/profile/doc/<doc_id>")
 @cross_origin(allow_headers=['Content-Type', 'Authorization'])
-def get_document_id(id):
-    return doc.displayOneAdd(id)
+def get_document_id(doc_id):
+    return doc.displayOneAdd(doc_id)
 
 @home.route("/person/profile/doc", methods=["POST"])
 def post_document():
@@ -219,9 +219,9 @@ def post_document():
 def get_address():
     return address.display()
 
-@home.route("/person/address/<id>")
-def get_address_by_id(id):
-    return address.displayOneAdd(id)
+@home.route("/person/address/<address_id>")
+def get_address_by_id(address_id):
+    return address.displayOneAdd(address_id)
 
 @home.route("/person/address", methods=["POST"])
 # @login_required
@@ -254,10 +254,10 @@ def create_add():
 def get_con():
     return contact.display()
 
-@home.route("/person/contact/<id>")
+@home.route("/person/contact/<contact_id>")
 @cross_origin(allow_headers=['Content-Type', 'Authorization'])
-def get_contact_by_id(id):
-    return contact.displayOneCon(id)
+def get_contact_by_id(contact_id):
+    return contact.displayOneCon(contact_id)
 
 @home.route("/person/contact", methods=["POST"])
 # @login_required
@@ -268,7 +268,7 @@ def create_cont():
         print(data)
         return contact.create(data)
 #    return jsonify(person.create(data))
-        response = person.create(data)
+        # response = person.create(data)
         # p.create(data)
         # response = Response(json.dumps(person),201,mimetype='application/json')
         # response.headers['Person'] = "/person/" + str(data['firstname'])
@@ -281,31 +281,4 @@ def create_cont():
         response = Response(json.dumps(ErrorMessage),
                             status=400, mimetype='application/json')
     return response
-
 #     return person.displayEmail()
-
-@home.route("/person/login", methods=["POST"])
-@cross_origin(allow_headers=['Content-Type', 'Authorization'])
-# @token_required
-# @login_required
-# @oidc.accept_token()
-def post_email():
-    data = request.get_json()
-    # if data:
-    # response = Response(json.dumps(person),201,mimetype='application/json')
-    # response.headers['Content-Type'] = "/person/login" + str(data['email'])
-    print(data)
-    return person.displayEmail(data)
-
-
-# @home.route("/person/login", methods=["GET"])
-# @cross_origin(allow_headers=['Content-Type', 'Authorization'])
-# # @token_required
-# # @login_required
-# # @oidc.accept_token()
-# def get_email():
-#     # data = request.get_json()
-#     # if data:
-#     # response = Response(json.dumps(person),201,mimetype='application/json')
-#     # response.headers['Content-Type'] = "/person/login" + str(data['email'])
-#     # print(data)

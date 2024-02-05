@@ -20,12 +20,8 @@ class Role(db.Model): # universal Role table
 
     id = db.Column(db.Integer, primary_key=True,
                    nullable=False, autoincrement=True)
-    role_type = db.Column(db.String(50), nullable=False)
-    # person_id = db.Column(db.ForeignKey("person.id"),  primary_key=True)
-    # role_id = db.Column(db.ForeignKey("role.id"), primary_key=True)
-    profile_role = db.relationship("profile_role", back_populates="profile_role")
-    # document = db.relationship("Document", back_populates="athlete")
-    # competitions = db.relationship("Competition", secondary=association_table, backref="athlete")
+    role_type = db.Column(db.String(50), nullable=False) # default values
+    person_profile = db.relationship("PersonProfile", back_populates="role")
 
     @property
     def serialize(self):

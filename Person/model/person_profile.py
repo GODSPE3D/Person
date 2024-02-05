@@ -23,8 +23,8 @@ class Participated_Competitions(db.Model):
     person_profile = db.relationship("PersonProfile", back_populates="participated_competitions")
 
     def display(self, id):
-        queryAll = Participated_Competitions.query.all()
-        if (queryAll != []):
+        query_all = Participated_Competitions.query.all()
+        if (query_all != []):
             return jsonify(
                 [
                     {
@@ -278,13 +278,13 @@ class PersonProfile(db.Model): # universal Role table
                 # or not "document" in data
             ):
                 raise NoResultFound
-            if (
+            # if (
                 # len(data["person_id"]) < 1
                 # len(data["country_code"]) < 1
                 # or len(data["region_code"]) < 1
                 # or len(data["phone"]) < 1
-            ):
-                raise ValueError
+            # ):
+                # raise ValueError
 
             newP = PersonProfile()
             newP.person_id = data["person_id"]

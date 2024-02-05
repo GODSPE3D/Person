@@ -21,7 +21,6 @@ class Address(db.Model):
     country = db.Column(db.String(100))
     pin = db.Column(db.String(10))
 
-
     @property
     def serialize(self):
         return {
@@ -36,7 +35,6 @@ class Address(db.Model):
             "pin": self.pin
         }
 
-
     def sameID(self, id):
         s = db.session.query(
             db.session.query(Address).filter_by(person_id=id).exists()
@@ -45,10 +43,13 @@ class Address(db.Model):
             return True
         return False
 
-
     def display(self):
+        address_query_all = Address.query.all()
         try:
-            if Address.query.all() != []:
+            if address_query_all != []:
+                # address_list = []
+                # for person in address_query_all:
+                #     address_list.append(person.serialize())
                 return jsonify(
                     [
                         {
@@ -62,13 +63,12 @@ class Address(db.Model):
                             "country": person.country,
                             "pin": person.pin,
                         }
-                        for person in Address.query.all()
+                        for person in address_query_all
                     ]
                 )
             raise NoResultFound
         except NoResultFound:
             return "Table is empty!"
-
 
     def displayOneAdd(self, id):
         try:
@@ -94,7 +94,6 @@ class Address(db.Model):
         except NoResultFound:
             return "No such ID exists"
 
-
     def create(self, data):
         print(data)
         try:
@@ -110,13 +109,13 @@ class Address(db.Model):
                 or not "pin" in data
             ):
                 raise NoResultFound
-            if (
+            # if (
                 # len(data["person_id"]) < 1
                 # len(data["country_code"]) < 1
                 # or len(data["region_code"]) < 1
                 # or len(data["phone"]) < 1
-            ):
-                raise ValueError
+            # ):
+            #     raise ValueError
 
             newP = Address()
             newP.person_id = data["person_id"]
@@ -130,7 +129,7 @@ class Address(db.Model):
             newP.pin = data["pin"]
 
             print(newP.person_id)
-            
+
             db.session.add(newP)
             db.session.commit()
 
