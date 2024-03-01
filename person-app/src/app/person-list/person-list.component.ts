@@ -30,7 +30,7 @@ export class PersonListComponent implements OnInit {
 
   public newP = <Person>{};
 
-  @ViewChild(PersonDetailComponent) child!: PersonDetailComponent;
+  // @ViewChild(PersonDetailComponent) child!: PersonDetailComponent;
 
   constructor(public personService: PersonService, public dialog: MatDialog) {
     this.refreshCountries();
